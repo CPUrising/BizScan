@@ -207,7 +207,9 @@ private struct EditCardView: View {
             Form {
                 Section("基本信息") {
                     TextField("姓名", text: $viewModel.name)
+                        .accessibilityIdentifier("BizScan.Edit.Name")
                     TextField("公司", text: $viewModel.company)
+                        .accessibilityIdentifier("BizScan.Edit.Company")
                     TextField("职位", text: $viewModel.jobTitle)
                     TextField("部门", text: $viewModel.department)
                 }

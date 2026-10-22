@@ -45,7 +45,8 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 | `Services/OCRService` | T07 原始文本与坐标 | `OCRServiceTests` | 未开始 | 需模拟器 + fixture |
 | `Services/ScanPipeline` | 检测→校正→OCR→解析接线 | `ScanPipelineTests` | 未开始 | 注入替身 |
 | `Services/VCardExporter` | 文件写出与分享 | `VCardExporterTests` | 未开始 | 文件系统 |
-| `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`（已写）+ 其余 T02–T20 待写 | 代码完成，未执行 | 需模拟器 |
+| `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`、`CardListUITests`、`DetailUITests`、`SearchTagsUITests`、`CaptureUITests`（已写）；检测/校正/持久化/导出 UI 测试待写 | 代码完成，未执行 | 需模拟器 |
+| `BizScanApp` 种子数据 | T12–T17 的确定性初始状态 | 通过 `-ui-testing-seed` 注入 3 张名片 | 代码完成，未执行 | 仅内存容器 |
 | `project.yml` | XcodeGen 生成与编译 | `xcodebuild build` | 未执行 | G0 冒烟 |
 
 ### 2.3 L3：只能人工确认

@@ -147,6 +147,7 @@ BizScan/
 - 场景名必须以 `Txx` 开头，便于 `docs/traceability.md` 追踪。
 - 增量变更使用 `## ADDED Requirements` / `## MODIFIED Requirements` / `## REMOVED Requirements`。
 - **禁止直接修改 `openspec/specs/`**（P1 冻结期除外）；行为变化必须走 change。
+- **实现类 change 使用 `skip_specs: true`**：当 change 只是实现既有基线规范、不改变任何行为合同时，在 `.openspec.yaml` 中声明 `skip_specs: true`，只提交 `proposal.md` / `design.md` / `tasks.md`，不写增量规范。一旦涉及行为变化（新增字段、改变状态或异常行为），必须改为带 `## ADDED / MODIFIED Requirements` 的增量规范。
 
 ### 6.3 变更命名
 

@@ -33,6 +33,7 @@
 - Build 阶段只允许改 `tasks.md` 列出的文件；需要越界时先更新 tasks.md 并说明原因。
 - Verify 阶段禁止通过"改测试断言"让失败变绿；必须说明是测试错误还是实现错误。
 - Merge 只能由人类批准后执行。
+- 若 change 只是实现既有基线规范、不改变行为合同，必须在 `.openspec.yaml` 写 `skip_specs: true`，且**不得**凭空发明需求来满足校验；任何行为变化则必须写 `## ADDED / MODIFIED Requirements` 增量。
 
 ## 3. 命名与规模
 

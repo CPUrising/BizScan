@@ -95,6 +95,7 @@ OCR 选型依据：参考项目 `CardScanner/Classes/CardScanner.swift:288` 使�
 1. `openspec/specs/` 是唯一基线。**禁止在实施阶段直接编辑它**，任何行为变化必须通过 change 的 `## MODIFIED / ## ADDED` 增量表达，并在 `openspec archive` 时合并。
 2. 每个 change 的 `tasks.md` 必须能独立验证；一个 change 只解决一个可命名的行为增量。
 3. 需求标识使用 `### Requirement: <英文名>`；场景使用 `#### Scenario: Txx <中文描述>`，Txx 必须能在 `docs/traceability.md` 找到。
+4. 只实现既有基线、不改变行为的 change，在 `.openspec.yaml` 声明 `skip_specs: true`（禁止为通过校验而虚构需求）；行为变化必须写 `## ADDED / MODIFIED Requirements` 增量，并在 `openspec archive` 时合并回基线。
 
 ## 7. 命令
 
