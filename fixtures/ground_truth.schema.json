@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BizScan Ground Truth",
+  "description": "单张测试名片的唯一期望结果。未出现的字段必须省略或为 null。",
+  "type": "object",
+  "required": ["id"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^c[0-9]{3}$",
+      "description": "与 manifest.json 的 case id 一致"
+    },
+    "name": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "jobTitle": { "type": ["string", "null"] },
+    "department": { "type": ["string", "null"] },
+    "mobiles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "手机号码，保留原始写法"
+    },
+    "officePhones": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "faxes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "emails": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "website": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "postalCode": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "ocrText": {
+      "type": ["string", "null"],
+      "description": "可选：人工标注的完整文本，用于字符级评估"
+    }
+  }
+}

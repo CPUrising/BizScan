@@ -1,0 +1,99 @@
+name: BizScan
+
+options:
+  bundleIdPrefix: com.bizscan
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEVELOPMENT_TEAM: ""
+
+packages:
+  BizScanCore:
+    path: Packages/BizScanCore
+
+targets:
+  BizScan:
+    type: application
+    platform: iOS
+    sources:
+      - path: BizScan
+    dependencies:
+      - package: BizScanCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bizscan.app
+        PRODUCT_NAME: BizScan
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: BizScan/Support/Info.plist
+      properties:
+        CFBundleDisplayName: BizScan
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSCameraUsageDescription: BizScan 需要使用相机拍摄名片。
+        NSPhotoLibraryUsageDescription: BizScan 需要访问照片库以导入名片图片。
+        NSPhotoLibraryAddUsageDescription: BizScan 需要将名片图片保存到照片库。
+        NSContactsUsageDescription: BizScan 需要访问通讯录以导出名片联系人。
+
+  BizScanTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: BizScanTests
+    dependencies:
+      - target: BizScan
+      - package: BizScanCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bizscan.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  BizScanUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: BizScanUITests
+    dependencies:
+      - target: BizScan
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bizscan.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  BizScan:
+    build:
+      targets:
+        BizScan: all
+        BizScanTests: [test]
+        BizScanUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - name: BizScanTests
+          parallelizable: false
+        - name: BizScanUITests
+          parallelizable: false

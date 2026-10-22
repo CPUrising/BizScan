@@ -1,0 +1,49 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+build/
+DerivedData/
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+timeline.xctimeline
+playground.xcworkspace
+BizScan/Support/Info.plist
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# 验证输出（证据文件除外）
+artifacts/
+logs/
+*.log
+
+# Node / OpenSpec
+node_modules/
+npm-debug.log*
+
+# 编辑器
+.vscode/
+.idea/
+
+# 本地环境
+.env
+.env.local

@@ -1,0 +1,34 @@
+{
+  "datasetVersion": "synthetic-2026-10",
+  "source": "synthetic",
+  "note": "教师测试集下发后请替换本文件，并把 source 改为 teacher-<版本>。",
+  "cases": [
+    {
+      "id": "c001",
+      "images": ["cards/c001.jpg"],
+      "language": "en",
+      "orientation": "landscape",
+      "condition": ["front"],
+      "expectedDetection": true,
+      "notes": "基准用例：英文名片，字段齐全"
+    },
+    {
+      "id": "c002",
+      "images": ["cards/c002.jpg"],
+      "language": "zh-Hans",
+      "orientation": "landscape",
+      "condition": ["tilt"],
+      "expectedDetection": true,
+      "notes": "倾斜拍摄 + 字段缺失（无 website）"
+    },
+    {
+      "id": "c003",
+      "images": ["cards/c003.jpg"],
+      "language": "mixed",
+      "orientation": "portrait",
+      "condition": ["front", "shadow"],
+      "expectedDetection": true,
+      "notes": "竖版 + 中英混排 + 多电话"
+    }
+  ]
+}
