@@ -35,8 +35,9 @@
 |---|---|---|---|
 | OCR 文本质量 | `specs/ocr` | 字符准确率 / 行召回 | `docs/eval/ocr-field-baseline.md`（合成）、`docs/eval/real-card-baseline.md`（真实，含 OCR 非空 12/14） |
 | 字段抽取质量 | `specs/field-extraction` | 字段级精确率 / 召回率 / 虚构率 | `docs/eval/ocr-field-baseline.md`、`docs/eval/real-card-baseline.md`（虚构字段 0） |
-| 边界检测质量 | `specs/card-detection` | 检测成功率 / 角点平均误差 | `docs/eval/real-card-baseline.md` 第 4 节（成功率 11/14）；角点误差报告未产出 |
+| 边界检测质量 | `specs/card-detection` | 检测成功率 / 角点平均误差 | `docs/eval/detection-report.md`（成功率 11/14；角点误差未度量） |
 | 人工校正成本 | `specs/verification` | 平均修改字段数 | 未产出（`correction-report.md` 待补） |
+| AI 能力边界 | `要求/01.md` 第八章 | 五类边界的实测表现 | `docs/eval/ai-capability-boundary.md` |
 
 ## 3. 维护规则
 

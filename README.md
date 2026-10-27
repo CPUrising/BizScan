@@ -249,6 +249,7 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 
 > 已产出基线：[`docs/eval/ocr-field-baseline.md`](docs/eval/ocr-field-baseline.md)（`synthetic-001`，15 例自建合成数据，虚构字段 0；样本 < 30 只报绝对值，教师数据集到位后需重跑替换）。
 > 真实名片基线：[`docs/eval/real-card-baseline.md`](docs/eval/real-card-baseline.md)（`real-001`，14 张本机名片，虚构字段 0；检测 11/14、OCR 12/14；样本 < 30 只报绝对值，未与 CamCard 比较）。
+> 检测与能力边界：[`docs/eval/detection-report.md`](docs/eval/detection-report.md)（检测 11/14，八类拍摄条件覆盖 3/8 完整、2/8 缺失）、[`docs/eval/ai-capability-boundary.md`](docs/eval/ai-capability-boundary.md)（五类边界实测）。
 
 准确率不达标不阻断归档，但必须记录原因与改进项；**虚构字段**视为阻断缺陷。
 
@@ -261,6 +262,7 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 - AI 代码进入主线前必须通过 `openspec validate --strict` 与 `bash scripts/verify.sh`。
 - 对 AI 的高风险判断做专门记录：字段歧义（`Apple`）、人名/公司混淆（`Jordan Lee` / `Lee Consulting`）、无标签多号码、字段缺失时的"合理猜测"。
 - 结论写入 `docs/ai-collaboration/`（按 change 建文件）。
+- 当前记录：[`docs/ai-collaboration/README.md`](docs/ai-collaboration/README.md)（索引 + 四类高风险判断）；`0001`–`0008` 无独立 prompt 留痕，不补造。
 
 ---
 
