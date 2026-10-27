@@ -12,7 +12,7 @@ help:
 	@echo "  make clean     清理生成物"
 
 project:
-	xcodegen generate --spec project.yml --project BizScan.xcodeproj
+	xcodegen generate
 
 core:
 	swift test --package-path Packages/BizScanCore

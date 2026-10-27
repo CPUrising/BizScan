@@ -41,14 +41,14 @@
 
 | 阶段 | 内容 | 关键 change | 状态 | 证据 |
 |---|---|---|---|---|
-| P0 | 基线、工程契约、跨机验证链路 | — | 完成（G0 待真实验证） | `project.yml` / `bash scripts/verify.sh` |
+| P0 | 基线、工程契约、跨机验证链路 | — | 完成；G0 已验证通过（macOS 26.3.1 + Xcode 26.1.1 + iPhone 16/iOS 18.0） | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) / `bash scripts/verify.sh` |
 | P1 | 黑盒观察与规范冻结（11 份能力规范、T01–T20） | — | 规范完成；观察待补 | `openspec/specs/`、`docs/traceability.md` |
-| P2a | 逻辑层 `BizScanCore`（模型、解析、vCard、搜索、标签） | 待建 | **代码完成，未验证** | `Packages/BizScanCore/`、`docs/verification-debt.md` |
-| P2b | 应用骨架与数据层 | `0001-app-skeleton` | 代码完成，未验证 | `BizScan/App`、`Repositories/` |
-| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 代码完成，未验证 | `Services/CameraService`、`CardDetection`、`ImageCorrection` |
-| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 代码完成，未验证 | `Services/OCRService`、`Packages/BizScanCore` |
-| P5 | 人工校正与落库 | `0006-verification-save` | 代码完成，未验证 | `Views/ReviewView`、`Repositories/` |
-| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | 代码完成，未验证 | `Views/DetailView`、`SearchView`、`Services/VCardExporter` |
+| P2a | 逻辑层 `BizScanCore`（模型、解析、vCard、搜索、标签） | `0010-toolchain-compile-fixes` | **单元测试通过（62/62）** | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) |
+| P2b | 应用骨架与数据层 | `0001-app-skeleton` | 编译通过；单元测试部分通过（7/7，UI 未跑） | `BizScan/App`、`Repositories/` |
+| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 编译通过；服务层测试未写 | `Services/CameraService`、`CardDetection`、`ImageCorrection` |
+| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析单元测试通过（13/13）；OCR 未验证 | `Services/OCRService`、`Packages/BizScanCore` |
+| P5 | 人工校正与落库 | `0006-verification-save` | 编译通过；UI 测试未执行 | `Views/ReviewView`、`Repositories/` |
+| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | 编译通过；vCard 单测通过（7/7），UI 测试未执行 | `Views/DetailView`、`SearchView`、`Services/VCardExporter` |
 | P7 | 验收、回归与归档 | `0009-acceptance-hardening` | 未开始 | — |
 
 > 「未验证」不是完成。所有未执行的测试登记在 **[`docs/verification-debt.md`](docs/verification-debt.md)**，必须由真实执行结果关闭。

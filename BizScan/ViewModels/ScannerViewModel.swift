@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import AVFoundation
 import PhotosUI
+import SwiftUI
 import UIKit
 
 @Observable

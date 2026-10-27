@@ -20,7 +20,7 @@ cd "$ROOT"
 SCOPE="all"
 CHANGE="local"
 SCHEME="${SCHEME:-BizScan}"
-DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 15,OS=latest}"
+DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 16,OS=18.0}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -68,7 +68,7 @@ command -v xcodegen >/dev/null 2>&1 || fail "未找到 xcodegen，请执行：br
 run_core
 
 echo "-> xcodegen generate" | tee -a "$LOG"
-xcodegen generate --spec project.yml --project BizScan.xcodeproj | tee -a "$LOG"
+xcodegen generate | tee -a "$LOG"
 
 RESULT="artifacts/verify-${CHANGE}-${STAMP}.xcresult"
 

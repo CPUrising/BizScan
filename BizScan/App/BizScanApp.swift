@@ -74,8 +74,8 @@ struct BizScanApp: App {
                 company: "Northwind Studio",
                 jobTitle: "Designer",
                 emails: ["alice@example.com"],
-                notes: "Follow up next week",
-                tags: ["Partner"]
+                tags: ["Partner"],
+                notes: "Follow up next week"
             )
         ]
 

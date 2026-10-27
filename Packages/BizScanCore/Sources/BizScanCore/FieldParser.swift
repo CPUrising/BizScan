@@ -261,7 +261,7 @@ public struct FieldParser: Sendable {
 
     private func containsKeyword(_ line: String, in keywords: [String]) -> Bool {
         keywords.contains { keyword in
-            if keyword.containsCJK {
+            if containsCJK(keyword) {
                 return line.contains(keyword)
             }
             return containsLatinWord(line, keyword)
@@ -270,7 +270,7 @@ public struct FieldParser: Sendable {
 
     private func isJobTitleToken(_ token: String) -> Bool {
         FieldLabels.jobTitleKeywords.contains { keyword in
-            if keyword.containsCJK {
+            if containsCJK(keyword) {
                 return token.contains(keyword)
             }
             return token.lowercased() == keyword

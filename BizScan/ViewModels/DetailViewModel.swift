@@ -139,14 +139,14 @@ final class DetailViewModel {
     func addTag() {
         let trimmed = ContactNormalizer.trimming(ContactNormalizer.halfWidth(newTag))
         guard !trimmed.isEmpty else { return }
-        if !tags.contains(where: { .caseInsensitiveCompare(trimmed) == .orderedSame }) {
+        if !tags.contains(where: { $0.caseInsensitiveCompare(trimmed) == .orderedSame }) {
             tags.append(trimmed)
         }
         newTag = ""
     }
 
     func removeTag(_ tag: String) {
-        tags.removeAll { .caseInsensitiveCompare(tag) == .orderedSame }
+        tags.removeAll { $0.caseInsensitiveCompare(tag) == .orderedSame }
     }
 
     private func splitLines(_ text: String) -> [String] {
