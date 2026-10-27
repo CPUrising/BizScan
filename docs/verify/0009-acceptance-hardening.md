@@ -102,3 +102,20 @@
 1. 本轮证明的是「已编写的 11 条 UI 用例 + 62 条 L1 单测全绿」，**不等于** T01–T20 全部通过：T03–T07、T11、T12、T18、T19（UI）、T20（重拍/空名片）尚无测试。
 2. 归档前必须补齐：`tasks.md` 1.3–1.9（8 个测试文件）、2.1–2.4（四份评估报告）、3.2（`--scope unit`）、3.3（全量）。补齐后重跑 `bash scripts/verify.sh --change 0009-acceptance-hardening` 并更新本报告。
 3. 本报告依据 `artifacts/verify-0009-acceptance-hardening-20261027-175053.log` 与同名 `.xcresult` 的实际输出填写，未预填任何结论。
+
+## 6. 归档前复核（追加，2026-10-27 20:15）
+
+第 5 节的判定针对 `175053` 批次，保持不变。此后由 `0011`、`0013`、`0014` 三个 change 补齐了本 change 未完成的部分，归档前逐项对照如下：
+
+| 第 5 节待补项 | 现状 | 证据 |
+|---|---|---|
+| tasks 3.2 `--scope unit` | 已执行 | `0011`（29 项）、`0013`（50 项） |
+| tasks 3.3 全量 | 已执行 | `0014` 批次 20:03:20–20:05:09，core 62 + L2 50 + UI 11 全绿 |
+| tasks 1.9 `OCRServiceTests`/`VCardExporterTests`/`ScanPipelineTests` | 已写 | `0011` 5 项、`0013` 3 + 4 项 |
+| tasks 2.1–2.4 评估 | 部分完成 | `docs/eval/ocr-field-baseline.md`（`synthetic-001`，15 例，虚构字段 0）；检测/校正专项报告未做 |
+| tasks 1.1–1.8 UI 测试 | 部分完成 | T01/T02/T13/T14/T15/T16/T17/T20 有 UI 证据；T03–T05、T06、T11、T12、T18、T19 的 UI 行改由 L2 + `docs/verify/manual-device-checklist.md` 承接 |
+
+仍属未执行、且**必须真机**才能关闭的项：T03–T05 权限/拍摄/导入、T06 真机倾斜拍摄、T18 真机杀进程、T19 系统分享面板、T20 校正页重拍。这五项已写入人工清单，未执行前 `docs/traceability.md` 一律记「未执行 / 部分通过」，不宣称 G7 通过。
+
+最终判定：本 change 的**自动化部分**（core 62 + L2 50 + UI 11）已全部通过，可以归档；**真机部分**转由人工清单结算，不在本 change 的自动化范围内。
+
