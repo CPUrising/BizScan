@@ -44,12 +44,12 @@
 | P0 | 基线、工程契约、跨机验证链路 | — | 完成；G0 已验证通过（macOS 26.3.1 + Xcode 26.1.1 + iPhone 16/iOS 18.0） | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) / `bash scripts/verify.sh` |
 | P1 | 黑盒观察与规范冻结（11 份能力规范、T01–T20） | — | 规范完成；观察待补 | `openspec/specs/`、`docs/traceability.md` |
 | P2a | 逻辑层 `BizScanCore`（模型、解析、vCard、搜索、标签） | `0010-toolchain-compile-fixes` | **单元测试通过（62/62）** | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) |
-| P2b | 应用骨架与数据层 | `0001-app-skeleton` | 编译通过；单元测试部分通过（7/7，UI 未跑） | `BizScan/App`、`Repositories/` |
-| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 编译通过；服务层测试未写 | `Services/CameraService`、`CardDetection`、`ImageCorrection` |
-| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析单元测试通过（13/13）；OCR 未验证 | `Services/OCRService`、`Packages/BizScanCore` |
-| P5 | 人工校正与落库 | `0006-verification-save` | 编译通过；UI 测试未执行 | `Views/ReviewView`、`Repositories/` |
-| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | 编译通过；vCard 单测通过（7/7），UI 测试未执行 | `Views/DetailView`、`SearchView`、`Services/VCardExporter` |
-| P7 | 验收、回归与归档 | `0009-acceptance-hardening` | 未开始 | — |
+| P2b | 应用骨架与数据层 | `0001-app-skeleton` | 单元测试通过（L2 29/29）；UI 覆盖 T01/T13/T17 通过 | [`docs/verify/0001-app-skeleton.md`](docs/verify/0001-app-skeleton.md) |
+| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 编译通过；服务层测试未写 | [`0002-capture-import.md`](docs/verify/0002-capture-import.md) / [`0003-boundary-perspective.md`](docs/verify/0003-boundary-perspective.md) |
+| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析单元测试通过（13/13）；OCR 未验证 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md) |
+| P5 | 人工校正与落库 | `0006-verification-save` | T20（中途退出）通过；T11/T12/T18 部分通过（L2，UI 未执行） | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md) |
+| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | vCard 单测 L1 7/7 + L2 5/5；UI 覆盖 T14/T15/T16 通过；T19 分享面板未测 | [`docs/verify/0008-export.md`](docs/verify/0008-export.md) |
+| P7 | 验收、回归与归档 | `0009-acceptance-hardening`、`0011-l2-test-coverage`、`0012-evidence-and-doc-alignment` | 进行中：core 62 + L2 29 + UI 11 全绿；`0001`–`0008` 验证报告已回填；T03–T07、T18 真机、T19 分享面板待补；评估报告未做 | [`docs/verify/0011-l2-test-coverage.md`](docs/verify/0011-l2-test-coverage.md) |
 
 > 「未验证」不是完成。所有未执行的测试登记在 **[`docs/verification-debt.md`](docs/verification-debt.md)**，必须由真实执行结果关闭。
 
@@ -62,7 +62,7 @@ Gate 定义见第 8 节。
 实现行为以锁定的参考版本为准，不跟随 CamCard 升级。逐项填写 `docs/reference-env.md`：
 参考版本、iOS 版本、设备/模拟器、App 语言、登录状态、免费功能边界、测试名片集、Reference Test Suite。
 
-> 状态：**待填写**。P1 Gate 要求该表冻结后才允许进入实现阶段。
+> 状态：**部分填写**。实现环境已在 P0 冻结（macOS 26.3.1 + Xcode 26.1.1 + iPhone 16 / iOS 18.0）；参考 App 列与测试资产列仍为「待填写」，属 P1 观察缺口。未填写期间不得据此声明 OCR/字段准确率，自动化测试结论不受影响。
 
 ---
 
@@ -111,7 +111,7 @@ BizScan/
 ├─ BizScan/                   # 应用源码（App/Models/ViewModels/Views/Services/Repositories）
 ├─ BizScanTests/              # 单元测试
 ├─ BizScanUITests/            # UI 测试（T01–T20）
-├─ bash scripts/verify.sh          # 唯一验证入口（macOS）
+├─ scripts/verify.sh           # 唯一验证入口（macOS）
 ├─ project.yml                # XcodeGen 工程定义
 ├─ Makefile                   # 快捷命令
 └─ .trae/                     # OpenSpec 生成的 Trae skills/commands
@@ -159,12 +159,14 @@ BizScan/
 
 ## 7. 跨机协作（本机编辑 / 他机验证）
 
-本机为 Windows，**无法执行 iOS 构建**。因此约定：
+编辑机可以不是 macOS（例如 Windows），此时**无法执行 iOS 构建**，验证必须交给 macOS 或 CI。因此约定：
 
 | 角色 | 可以做 | 禁止 |
 |---|---|---|
-| Windows（编辑机） | 写规范、写 Swift 源码与测试、`openspec validate`、Git 提交 | 声称"已验证"、手写 `.xcodeproj` |
+| 非 macOS 编辑机（如 Windows） | 写规范、写 Swift 源码与测试、`openspec validate`、Git 提交 | 声称"已验证"、手写 `.xcodeproj` |
 | macOS（验证机）或 GitHub Actions | `xcodegen generate`、`xcodebuild test`、产出证据 | 直接改规范（除非新开 change） |
+
+> 当前仓库的 G0 与 P7 证据均在 macOS 本机（26.3.1 + Xcode 26.1.1）产出；同一台机器也可承担编辑，此时两个角色合并，仍须遵守「不直接改规范」。 
 
 ### 7.1 macOS 验证流程
 
@@ -186,7 +188,7 @@ bash scripts/verify.sh --scope unit --change <change-id>
 ### 7.3 交接规则
 
 1. 编辑机提交前必须通过：`openspec validate --all --strict`。
-2. 验证机拉取后不修改源码；只产出证据并提交 `docs/verify/<id>.md`。
+2. 验证机默认只产出证据；若测试暴露缺陷，按 `openspec/AGENTS.md` 修复后重跑，并在报告偏差表登记（**禁止**放宽断言使其变绿）。
 3. 证据必须包含环境（Xcode、模拟器、设备）与每条场景的 PASS/FAIL。
 4. 验证失败时：先修实现或测试，再重跑；**禁止**通过放宽断言变绿。
 

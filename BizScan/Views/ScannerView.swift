@@ -183,6 +183,7 @@ struct ScannerView: View {
                 dismiss()
             }
             .foregroundStyle(.white)
+            .accessibilityIdentifier("BizScan.Scanner.Close")
         }
     }
 }

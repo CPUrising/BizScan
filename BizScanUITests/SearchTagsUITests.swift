@@ -23,8 +23,10 @@ final class SearchTagsUITests: XCTestCase {
         field.tap()
         field.typeText("David")
 
-        XCTAssertTrue(app.staticTexts["David Chen"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.staticTexts["Alice Wu"].exists)
+        // 搜索结果被 .sheet 覆盖，背景名片夹仍在 AX 树中，断言必须限定到结果列表
+        let results = app.collectionViews["BizScan.Search.Results"]
+        XCTAssertTrue(results.staticTexts["David Chen"].waitForExistence(timeout: 5))
+        XCTAssertFalse(results.staticTexts["Alice Wu"].exists)
     }
 
     func testT15SearchByCompany() {
@@ -37,8 +39,9 @@ final class SearchTagsUITests: XCTestCase {
         field.tap()
         field.typeText("Northwind")
 
-        XCTAssertTrue(app.staticTexts["Alice Wu"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.staticTexts["David Chen"].exists)
+        let results = app.collectionViews["BizScan.Search.Results"]
+        XCTAssertTrue(results.staticTexts["Alice Wu"].waitForExistence(timeout: 5))
+        XCTAssertFalse(results.staticTexts["David Chen"].exists)
     }
 
     func testT16TagFilterShowsOnlyTaggedCards() {

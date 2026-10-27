@@ -1,6 +1,6 @@
 # 验证债台账
 
-> 背景：当前开发机为 Windows，无 macOS、无 iPhone，代码先行的同时无法执行 iOS 构建与测试。
+> 背景：验证在 macOS 26.3.1 + Xcode 26.1.1 + iPhone 16 模拟器（iOS 18.0）上执行；早期仅有 Windows 编辑端，可读代码但无法构建 iOS 工程，那段时期产出的代码现已由 `0009`–`0011` 补跑。
 > 本台账把"未执行的验证"显式记账，避免把未验证代码当成已通过。
 > 结算规则：每一行必须由真实执行结果关闭；关闭时把证据链接写入 `docs/verify/`。
 
@@ -41,15 +41,26 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 
 | 模块 | 应测项 | 计划测试 | 状态 | 备注 |
 |---|---|---|---|---|
-| `Persistence/BusinessCardRepository` | T12/T17/T18、重启保持、文件清理 | `RepositoryTests`（内存实现已写）+ `PersistenceUITests`（待写） | 部分通过 | `RepositoryTests` 6 项通过（`0010`）；`PersistenceUITests` 未写，SwiftData 真实落盘未验证 |
+| `Persistence/BusinessCardRepository` | T12/T17/T18、重启保持、文件清理 | `RepositoryTests`（6 项）+ `PersistenceTests`（4 项）+ `PersistenceUITests`（待写） | 部分通过 | `RepositoryTests` 6 项（`0010`）与 `PersistenceTests` 4 项（`0011`，SwiftData 真实落盘、同 URL 重建容器）均通过；真机 kill 进程未验证 |
+| `ViewModels/ReviewViewModel` | T11 校正落库、T12 首次保存写图、空名片二次确认、连点不重复 | `ReviewViewModelTests`（5 项） | 通过 | `0011`，L2；校正页 UI 未自动化 |
+| `ViewModels/DetailViewModel` | T13/T14/T16/T17、备注 | `DetailViewModelTests`（5 项） | 部分通过 | `0011`，L2；备注新增/编辑/清空未测 |
+| `ViewModels/HomeViewModel` | 列表排序、删除、标签筛选 | `HomeViewModelTests`（3 项） | 通过 | `0011`，L2 |
 | `Services/CardDetector` | T06 边界检测、八类拍摄条件 | `CardDetectorTests` | 未开始 | Vision |
 | `Services/ImageCorrector` | 透视/方向校正 | `ImageCorrectorTests` | 未开始 | Core Image |
 | `Services/OCRService` | T07 原始文本与坐标 | `OCRServiceTests` | 未开始 | 需模拟器 + fixture |
 | `Services/ScanPipeline` | 检测→校正→OCR→解析接线 | `ScanPipelineTests` | 未开始 | 注入替身 |
-| `Services/VCardExporter` | 文件写出与分享 | `VCardExporterTests` | 未开始 | 文件系统 |
-| `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`、`CardListUITests`、`DetailUITests`、`SearchTagsUITests`、`CaptureUITests`（已写）；检测/校正/持久化/导出 UI 测试待写 | 代码完成，未执行 | 需模拟器 |
-| `BizScanApp` 种子数据 | T12–T17 的确定性初始状态 | 通过 `-ui-testing-seed` 注入 3 张名片 | 代码完成，未执行 | 仅内存容器 |
+| `Services/VCardExporter` | 文件写出与分享 | `VCardExporterTests`（5 项） | 通过 | `0011`，L2；系统分享面板未自动化 |
+| `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`、`CardListUITests`、`DetailUITests`、`SearchTagsUITests`、`CaptureUITests`（已写）；检测/校正/持久化/导出 UI 测试待写 | 部分通过 | 11 个用例全绿（`0009`），覆盖 T01/T02/T13/T14/T15/T16/T17/T20（中途退出）；其余场景待写 |
+| `BizScanApp` 种子数据 | T12–T17 的确定性初始状态 | 通过 `-ui-testing-seed` 注入 3 张名片 | 部分通过 | 内存容器；T13–T17 已用种子数据跑通（`0009`） |
 | `project.yml` | XcodeGen 生成与编译 | `xcodebuild build` | 通过 | G0 冒烟通过，单层工程，编译 0 error（`0010` 验证） |
+
+证据：[docs/verify/0009-acceptance-hardening.md](verify/0009-acceptance-hardening.md)（core 62 + UI 11 全绿）、[docs/verify/0011-l2-test-coverage.md](verify/0011-l2-test-coverage.md)（L2 29 项全绿；T03–T07、T18 真机 kill、T19 分享面板仍未覆盖）
+
+已知产品偏差（不属测试缺口，但会影响判定）：
+
+| 编号 | 现象 | 影响 | 状态 |
+|---|---|---|---|
+| K1 | `ReviewViewModel.isEmptyCard` 未统计 `faxes`，仅含传真号的名片会被判为空卡并触发二次确认 | T20「空名片保存」的判定边界 | 未修复，需单独立项 |
 
 ### 2.3 L3：只能人工确认
 

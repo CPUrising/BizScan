@@ -68,11 +68,11 @@
 - 评估报告必须包含错误分类（字段歧义、人名/公司混淆、多号码、中英混排、字段缺失、OCR 错字）。
 - 测试数据必须为合成数据；不得提交真实个人信息。
 
-## 7. 交接（Windows ↔ macOS）
+## 7. 交接（编辑端 ↔ 验证端）
 
-Windows 端（本机）只允许：写规范、写 Swift 源码、写测试、跑 `openspec validate`、提交 Git。
+编辑端（Windows 或 macOS）只允许：写规范、写 Swift 源码、写测试、跑 `openspec validate`、提交 Git；不得声称"已验证"。
 
-macOS 端执行：
+验证端（macOS + Xcode）执行：
 
 ```bash
 git pull
@@ -80,4 +80,7 @@ brew install xcodegen        # 首次
 bash scripts/verify.sh --change <id>
 ```
 
-验证结果回填到 `docs/verify/<id>.md` 并再次提交。README 的"阶段看板"是唯一进度口径。
+- 验证失败的两种情况必须区分：**测试自身错误**（断言/选择器写错）可修测试；**实现错误**必须修实现，禁止通过放宽断言、跳过用例或改 `DESTINATION` 掩盖。
+- 单轮失败最多自愈 3 次，仍失败则停止，把堆栈与假设写入 `docs/verify/<id>.md` 第 4 节。
+- 模拟器状态损坏（`simctl install/launch` 挂起、测试运行器 `hung before establishing connection`、模拟器白屏）属环境故障：先 `xcrun simctl shutdown all` + `xcrun simctl erase <udid>` 重建，再重跑；该过程必须作为偏差记入报告。
+- 验证结果回填到 `docs/verify/<id>.md` 并再次提交。README 的"阶段看板"是唯一进度口径。

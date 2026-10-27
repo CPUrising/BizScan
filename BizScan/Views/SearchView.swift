@@ -47,6 +47,7 @@ struct SearchView: View {
             }
         }
         .listStyle(.plain)
+        .accessibilityIdentifier("BizScan.Search.Results")
         .overlay {
             if viewModel.results.isEmpty {
                 VStack(spacing: 8) {

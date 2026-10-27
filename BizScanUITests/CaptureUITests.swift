@@ -13,6 +13,14 @@ final class CaptureUITests: XCTestCase {
         return app
     }
 
+    /// 模拟器无可用相机时，扫描页会先弹出「出错了」提示，需先关闭才能操作页面按钮
+    private func dismissCameraUnavailableAlertIfNeeded(_ app: XCUIApplication) {
+        let done = app.alerts.buttons["完成"]
+        if done.waitForExistence(timeout: 5) {
+            done.tap()
+        }
+    }
+
     func testT02OpenScannerAndReturn() {
         let app = launchSeeded()
 
@@ -26,6 +34,7 @@ final class CaptureUITests: XCTestCase {
 
         app.buttons["BizScan.Home.Scan"].tap()
         app.tap()
+        dismissCameraUnavailableAlertIfNeeded(app)
 
         let closeButton = app.buttons["BizScan.Scanner.Close"]
         XCTAssertTrue(closeButton.waitForExistence(timeout: 15), "进入扫描页后应可关闭")
@@ -39,6 +48,7 @@ final class CaptureUITests: XCTestCase {
 
         app.buttons["BizScan.Home.Scan"].tap()
         app.tap()
+        dismissCameraUnavailableAlertIfNeeded(app)
 
         let closeButton = app.buttons["BizScan.Scanner.Close"]
         XCTAssertTrue(closeButton.waitForExistence(timeout: 15))

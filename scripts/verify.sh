@@ -97,7 +97,7 @@ echo
 if [[ $STATUS -eq 0 ]]; then
   echo "✓ 验证通过：$CHANGE"
 else
-  echo "✗ 验证失败（exit $STATUS）：$CHANGE"
+  echo "✗ 验证失败（exit ${STATUS}）：$CHANGE"
   echo "  日志：$LOG"
 fi
 
