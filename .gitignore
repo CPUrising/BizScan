@@ -50,3 +50,6 @@ npm-debug.log*
 
 # 真实名片测试素材（含真实个人信息，禁止入库；见 docs/eval/real-card-eval-handoff.md）
 card_test/
+
+# 本地计划草稿（不入库）
+.trae/documents/
