@@ -9,6 +9,7 @@
 
 | 2026-10-27 | `0013-service-layer-coverage` | T06,T07,T20(旋转/回退) + 62 core + 50 L2（新增 19） | 0 | UI（本轮 `--scope unit`）；T03–T05,T18 真机,T19 分享面板 | [verify/0013](verify/0013-service-layer-coverage.md) |
 | 2026-10-27 | `0014-ocr-eval-baseline` | T07 + 评估基线 15 例（虚构字段 0） + 62 core + 50 L2 + 11 UI | 0 | T03–T05,T18 真机,T19 分享面板 | [verify/0014](verify/0014-ocr-eval-baseline.md) |
+| 2026-10-27 | `0015-real-card-eval` | T07 + 真实名片基线 14 例（虚构字段 0） + 62 core + 52 L2 + 11 UI | 0 | CamCard 对比、30–50 张、T03–T05/T18/T19 真机 | [verify/0015](verify/0015-real-card-eval.md) |
 
 ## 使用规则
 

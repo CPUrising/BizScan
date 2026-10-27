@@ -1,0 +1,120 @@
+{
+  "datasetVersion": "real-001",
+  "source": "local-card_test",
+  "imagesCommitted": false,
+  "localRoot": "card_test",
+  "cases": [
+    {
+      "id": "c001",
+      "image": "english/images (4).jpg",
+      "language": "en",
+      "orientation": "landscape",
+      "tags": ["low-res", "multi-phone"],
+      "notes": "400x243 低清设计图，tel 行两组重复号码，fax 行第二组末段待核。"
+    },
+    {
+      "id": "c002",
+      "image": "english/images (5).jpg",
+      "language": "en",
+      "orientation": "landscape",
+      "tags": ["low-res", "print-artwork"],
+      "notes": "与 c001 同一人的低清平面设计稿，tel 行两组重复号码，gaitu 为 logo 文字。"
+    },
+    {
+      "id": "c003",
+      "image": "english/images.jpg",
+      "language": "en",
+      "orientation": "portrait",
+      "tags": ["design-mockup", "two-sided"],
+      "notes": "灰底双面设计稿，公司名取自第二面 Grill Gaúcho，电话类型无标签。"
+    },
+    {
+      "id": "c004",
+      "image": "english/images.png",
+      "language": "en",
+      "orientation": "landscape",
+      "tags": ["template", "placeholder"],
+      "notes": "英文模板样张，LOGO 占位、邮箱与网址为示例值，地址行含邮编 100006。"
+    },
+    {
+      "id": "c005",
+      "image": "english/emily-thompson-business-card-designed-by-zoviz-business-card-maker.jpg",
+      "language": "en",
+      "orientation": "portrait",
+      "tags": ["design-mockup"],
+      "notes": "粉底双面 mockup；单一号码仅有电话图标，座机/手机归属待确认。"
+    },
+    {
+      "id": "c006",
+      "image": "english/v2-794c286327e512b81ce509900c115863_720w.jpg",
+      "language": "en",
+      "orientation": "landscape",
+      "tags": ["photo"],
+      "notes": "实拍叠放名片，底部有卖家水印，德国地址含邮编 55743 与括号国家码电话。"
+    },
+    {
+      "id": "c007",
+      "image": "zh_sp/1453727871316.jpg",
+      "language": "zh-Hans",
+      "orientation": "square",
+      "tags": ["photo", "rotated", "multi-phone"],
+      "notes": "斜放实拍需旋转阅读；云小印疑为品牌名，两组 400 号码图标难辨。"
+    },
+    {
+      "id": "c008",
+      "image": "zh_sp/7515_list.jpg",
+      "language": "zh-Hans",
+      "orientation": "landscape",
+      "tags": ["design-mockup", "placeholder"],
+      "notes": "叠放 mockup + YOUR LOGO 占位；公司名小字不可辨，邮箱域名 123CM 疑为占位。"
+    },
+    {
+      "id": "c010",
+      "image": "zh_sp/images (2).jpg",
+      "language": "zh-Hans",
+      "orientation": "landscape",
+      "tags": ["design-mockup", "template", "placeholder"],
+      "notes": "Canva 模板稿，公司名/邮箱/号码均为占位，中英文名同人。"
+    },
+    {
+      "id": "c011",
+      "image": "zh_sp/images——zh.png",
+      "language": "zh-Hans",
+      "orientation": "landscape",
+      "tags": ["template", "placeholder"],
+      "notes": "c004 的中文模板版，LOGO 占位、邮箱与网址为示例值。"
+    },
+    {
+      "id": "c012",
+      "image": "zh_tw/8e04a800adc6fdee7ebb90bdc070a0e2.jpg",
+      "language": "zh-Hant",
+      "orientation": "square",
+      "tags": ["photo", "rotated", "multi-phone"],
+      "notes": "斜放实拍；公司名首字被裁切，传真图标号码与門牌號写法人需复核。"
+    },
+    {
+      "id": "c013",
+      "image": "zh_tw/BUA1LS0009-letterpress名片正面模擬-20231019.jpg",
+      "language": "zh-Hant",
+      "orientation": "square",
+      "tags": ["design-mockup"],
+      "notes": "凸版模拟设计稿；0900 号码无标签，邮箱为 companyname.com 占位。"
+    },
+    {
+      "id": "c014",
+      "image": "zh_tw/images (1).jpg",
+      "language": "zh-Hant",
+      "orientation": "square",
+      "tags": ["design-mockup", "template", "placeholder"],
+      "notes": "木纹背景模板样张；公司名与邮箱为占位，地址区名路名可疑。"
+    },
+    {
+      "id": "c015",
+      "image": "zh_tw/images (3).jpg",
+      "language": "zh-Hant",
+      "orientation": "square",
+      "tags": ["photo", "multi-phone"],
+      "notes": "手持实拍，底部有设计方水印；東海大學法律系为学历非部门。"
+    }
+  ]
+}

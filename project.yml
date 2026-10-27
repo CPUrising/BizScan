@@ -60,6 +60,16 @@ targets:
     platform: iOS
     sources:
       - path: BizScanTests
+      # 本机真实名片素材（含个人信息，已被 .gitignore 忽略）；CI 上不存在时自动跳过
+      - path: card_test
+        type: folder
+        optional: true
+        buildPhase: resources
+      - path: docs/eval/real-cards
+        type: folder
+        name: real-cards
+        optional: true
+        buildPhase: resources
     dependencies:
       - target: BizScan
       - package: BizScanCore

@@ -14,7 +14,7 @@
 | T04 | 拍摄标准名片 → 进入识别 | `specs/capture` → `T04 Capture 确认进入识别` | 人工：`manual-device-checklist.md` 第 3 节（`CaptureUITests.testCaptureAndConfirm` 未写） | 未执行（人工清单 `0013`） |
 | T05 | 相册导入 → 进入识别 | `specs/capture` → `T05 Import` | 人工：`manual-device-checklist.md` 第 4 节（`CaptureUITests.testImportFromLibrary` 未写） | 未执行（人工清单 `0013`） |
 | T06 | 倾斜名片 → 检测并显示区域 | `specs/card-detection` → `T06 倾斜名片自动识别` | `BizScanTests/CardDetectorTests.testT06DetectsClearCardOnContrastBackground`、`testT06DetectsTiltedCard`；`CropViewModelTests.testT06KeepsDefaultPointsWhenDetectionReturnsNil`（回退） | 部分通过（`0013`，L2 Vision 检测；真机倾斜拍摄未执行） |
-| T07 | 标准名片 → OCR 原始文本 | `specs/ocr` → `T07 标准名片产生原始文本` | `BizScanTests/OCRServiceTests.testT07RecognizesSyntheticCardText`、`testObservationsUseNormalizedBoundingBox`；`OCREvaluationTests`（15 例，`0014`） | 部分通过（`0013`/`0014`，L2 + 评估基线；真机拍摄未执行） |
+| T07 | 标准名片 → OCR 原始文本 | `specs/ocr` → `T07 标准名片产生原始文本` | `BizScanTests/OCRServiceTests.testT07RecognizesSyntheticCardText`、`testObservationsUseNormalizedBoundingBox`；`OCREvaluationTests`（15 例合成，`0014`）；`RealCardEvaluationTests`（14 例真实，`0015`） | 部分通过（`0013`/`0014`/`0015`，L2 + 两份评估基线；真机拍摄未执行） |
 | T08 | OCR → 八字段分类 | `specs/field-extraction` → `T08 标准名片字段分类` | `FieldParserTests.testT08StandardEnglishCard` | 通过（`0009`，L1 单测） |
 | T09 | 无 Website → 不得虚构 | `specs/field-extraction` → `T09 无 Website` | `FieldParserTests.testT09MissingWebsiteIsNotFabricated`、`NoFabricationTests` | 通过（`0009`，虚构字段 0） |
 | T10 | 多电话 → Mobile/Office/Fax 分流 | `specs/field-extraction` → `T10 多号码分流` | `FieldParserTests.testT10MultiplePhonesAreClassified`、`PhoneClassifierTests` | 通过（`0009`，L1 单测） |
@@ -33,10 +33,10 @@
 
 | 评价项 | 规范位置 | 度量 | 报告位置 |
 |---|---|---|---|
-| OCR 文本质量 | `specs/ocr` | 字符准确率 / 行召回 | `docs/eval/ocr-report.md` |
-| 字段抽取质量 | `specs/field-extraction` | 字段级精确率 / 召回率 / 虚构率 | `docs/eval/field-report.md` |
-| 边界检测质量 | `specs/card-detection` | 检测成功率 / 角点平均误差 | `docs/eval/detection-report.md` |
-| 人工校正成本 | `specs/verification` | 平均修改字段数 | `docs/eval/correction-report.md` |
+| OCR 文本质量 | `specs/ocr` | 字符准确率 / 行召回 | `docs/eval/ocr-field-baseline.md`（合成）、`docs/eval/real-card-baseline.md`（真实，含 OCR 非空 12/14） |
+| 字段抽取质量 | `specs/field-extraction` | 字段级精确率 / 召回率 / 虚构率 | `docs/eval/ocr-field-baseline.md`、`docs/eval/real-card-baseline.md`（虚构字段 0） |
+| 边界检测质量 | `specs/card-detection` | 检测成功率 / 角点平均误差 | `docs/eval/real-card-baseline.md` 第 4 节（成功率 11/14）；角点误差报告未产出 |
+| 人工校正成本 | `specs/verification` | 平均修改字段数 | 未产出（`correction-report.md` 待补） |
 
 ## 3. 维护规则
 
