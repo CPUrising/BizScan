@@ -1,0 +1,50 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Lee Consulting"
+    ],
+    "emails" : [
+      "jordan@example.com"
+    ],
+    "jobTitle" : [
+      "Founder"
+    ],
+    "name" : [
+      "Jordan Lee"
+    ]
+  },
+  "id" : "e11",
+  "parsed" : {
+    "address" : "",
+    "company" : "Lee Consulting",
+    "department" : "",
+    "emails" : [
+      "jordan@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Founder",
+    "mobiles" : [
+
+    ],
+    "name" : "Jordan Lee",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Jordan Lee",
+    "Founder",
+    "Lee Consulting",
+    "Email:jordan@example.com"
+  ],
+  "tags" : [
+    "name-company-ambiguity"
+  ]
+}

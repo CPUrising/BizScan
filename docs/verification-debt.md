@@ -45,16 +45,17 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 | `ViewModels/ReviewViewModel` | T11 校正落库、T12 首次保存写图、空名片二次确认、连点不重复 | `ReviewViewModelTests`（5 项） | 通过 | `0011`，L2；校正页 UI 未自动化 |
 | `ViewModels/DetailViewModel` | T13/T14/T16/T17、备注 | `DetailViewModelTests`（5 项） | 部分通过 | `0011`，L2；备注新增/编辑/清空未测 |
 | `ViewModels/HomeViewModel` | 列表排序、删除、标签筛选 | `HomeViewModelTests`（3 项） | 通过 | `0011`，L2 |
-| `Services/CardDetector` | T06 边界检测、八类拍摄条件 | `CardDetectorTests` | 未开始 | Vision |
-| `Services/ImageCorrector` | 透视/方向校正 | `ImageCorrectorTests` | 未开始 | Core Image |
-| `Services/OCRService` | T07 原始文本与坐标 | `OCRServiceTests` | 未开始 | 需模拟器 + fixture |
-| `Services/ScanPipeline` | 检测→校正→OCR→解析接线 | `ScanPipelineTests` | 未开始 | 注入替身 |
+| `Services/CardDetector` | T06 边界检测、八类拍摄条件 | `CardDetectorTests`（4 项） | 通过 | `0013`，L2；清晰/倾斜/无边界/错误透传；八类拍摄条件靠真机人工清单补充 |
+| `Services/ImageCorrector` | 透视/方向校正 | `ImageCorrectorTests`（3 项） | 通过 | `0013`，L2；透视输出尺寸、四档旋转、nil quad 原样 |
+| `Services/OCRService` | T07 原始文本与坐标 | `OCRServiceTests`（3 项）+ `OCREvaluationTests`（15 例） | 通过 | `0013`/`0014`，L2；真实 Vision，评估基线见 `docs/eval/ocr-field-baseline.md` |
+| `Services/ScanPipeline` | 检测→校正→OCR→解析接线 | `ScanPipelineTests`（4 项） | 通过 | `0013`，L2；替身接线、OCR 失败保留原图、无效图拒绝 |
+| OCR/字段准确率基线 | 字段级精确率/召回率、虚构字段计数 | `OCREvaluationTests`（15 例合成） | 通过 | `0014`，`synthetic-001`；虚构字段 0，样本 < 30 只报绝对值；待教师数据集重跑 |
 | `Services/VCardExporter` | 文件写出与分享 | `VCardExporterTests`（5 项） | 通过 | `0011`，L2；系统分享面板未自动化 |
 | `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`、`CardListUITests`、`DetailUITests`、`SearchTagsUITests`、`CaptureUITests`（已写）；检测/校正/持久化/导出 UI 测试待写 | 部分通过 | 11 个用例全绿（`0009`），覆盖 T01/T02/T13/T14/T15/T16/T17/T20（中途退出）；其余场景待写 |
 | `BizScanApp` 种子数据 | T12–T17 的确定性初始状态 | 通过 `-ui-testing-seed` 注入 3 张名片 | 部分通过 | 内存容器；T13–T17 已用种子数据跑通（`0009`） |
 | `project.yml` | XcodeGen 生成与编译 | `xcodebuild build` | 通过 | G0 冒烟通过，单层工程，编译 0 error（`0010` 验证） |
 
-证据：[docs/verify/0009-acceptance-hardening.md](verify/0009-acceptance-hardening.md)（core 62 + UI 11 全绿）、[docs/verify/0011-l2-test-coverage.md](verify/0011-l2-test-coverage.md)（L2 29 项全绿；T03–T07、T18 真机 kill、T19 分享面板仍未覆盖）
+证据：[docs/verify/0009-acceptance-hardening.md](verify/0009-acceptance-hardening.md)（core 62 + UI 11 全绿）、[docs/verify/0011-l2-test-coverage.md](verify/0011-l2-test-coverage.md)（L2 29 项全绿）、[docs/verify/0013-service-layer-coverage.md](verify/0013-service-layer-coverage.md)（服务层 19 项，L2 累计 50 项）、[docs/verify/0014-ocr-eval-baseline.md](verify/0014-ocr-eval-baseline.md)（评估基线 + 全量回归）。T03–T05、T18 真机 kill、T19 分享面板仍待人工执行，步骤见 [manual-device-checklist.md](verify/manual-device-checklist.md)。
 
 已知产品偏差（不属测试缺口，但会影响判定）：
 

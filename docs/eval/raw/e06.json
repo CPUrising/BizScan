@@ -1,0 +1,65 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Bright Group"
+    ],
+    "emails" : [
+      "wang.fang@example.com"
+    ],
+    "faxes" : [
+      "021-8888-0001"
+    ],
+    "jobTitle" : [
+      "Manager"
+    ],
+    "mobiles" : [
+      "138 0000 0000",
+      "139 1111 1111"
+    ],
+    "name" : [
+      "Wang Fang"
+    ],
+    "officePhones" : [
+      "021-8888-0000"
+    ]
+  },
+  "id" : "e06",
+  "parsed" : {
+    "address" : "",
+    "company" : "Bright Group",
+    "department" : "",
+    "emails" : [
+      "wana.fanq@example.com"
+    ],
+    "faxes" : [
+      "021-8888-0001"
+    ],
+    "jobTitle" : "Manager",
+    "mobiles" : [
+      "138 0000 0000",
+      "139 1111 1111"
+    ],
+    "name" : "Wang Fang",
+    "officePhones" : [
+      "021-8888-0000"
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Wang Fang",
+    "Manager",
+    "Bright Group",
+    "Mobile: 138 0000 0000",
+    "Mobile: 139 1111 1111",
+    "Tel: 021-8888-0000",
+    "Fax:021-8888-0001",
+    "Email: wana.fanq@example.com"
+  ],
+  "tags" : [
+    "multi-phone"
+  ]
+}

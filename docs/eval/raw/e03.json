@@ -1,0 +1,58 @@
+{
+  "groundTruth" : {
+    "address" : [
+      "500 Market Street, San Francisco"
+    ],
+    "company" : [
+      "Northwind Studios"
+    ],
+    "emails" : [
+      "alice@example.com"
+    ],
+    "jobTitle" : [
+      "Designer"
+    ],
+    "mobiles" : [
+      "136 0000 0000"
+    ],
+    "name" : [
+      "Alice Wu"
+    ]
+  },
+  "id" : "e03",
+  "parsed" : {
+    "address" : "500 Market Street, San Francisco",
+    "company" : "Northwind Studios",
+    "department" : "",
+    "emails" : [
+      "alice@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Designer",
+    "mobiles" : [
+      "136 0000 0000"
+    ],
+    "name" : "Alice Wu",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Alice Wu",
+    "Designer",
+    "Northwind Studios",
+    "手机：136 0000 0000",
+    "Email: alice@example.com",
+    "Address: 500 Market Street, San Francisco"
+  ],
+  "tags" : [
+    "mixed"
+  ]
+}

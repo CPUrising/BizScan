@@ -1,0 +1,54 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Ocean Group"
+    ],
+    "emails" : [
+      "li.wei@example.com"
+    ],
+    "jobTitle" : [
+      "Manager"
+    ],
+    "mobiles" : [
+      "137 0000 0000"
+    ],
+    "name" : [
+      "Li Wei"
+    ]
+  },
+  "id" : "e07",
+  "parsed" : {
+    "address" : "",
+    "company" : "Ocean Group",
+    "department" : "",
+    "emails" : [
+      "li.wei@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Manager",
+    "mobiles" : [
+      "137 0000 0000"
+    ],
+    "name" : "Li Wei",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Li Wei",
+    "Manager",
+    "Ocean Group",
+    "Mobile: 137 0000 0000",
+    "Email: li.wei@example.com"
+  ],
+  "tags" : [
+    "portrait"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "groundTruth" : {
+    "address" : [
+      "123 Market Street, San Francisco"
+    ],
+    "company" : [
+      "ABC Technologies"
+    ],
+    "emails" : [
+      "david.chen@example.com"
+    ],
+    "jobTitle" : [
+      "Technical Director"
+    ],
+    "mobiles" : [
+      "138 0000 0000"
+    ],
+    "name" : [
+      "David Chen"
+    ],
+    "postalCode" : [
+      "200000"
+    ],
+    "website" : [
+      "www.example.com"
+    ]
+  },
+  "id" : "e01",
+  "parsed" : {
+    "address" : "123 Market Street, San Francisco",
+    "company" : "ABC Technologies",
+    "department" : "",
+    "emails" : [
+      "david.chen@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Technical Director",
+    "mobiles" : [
+      "138 0000 0000"
+    ],
+    "name" : "David Chen",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "200000",
+    "unresolvedLines" : [
+
+    ],
+    "website" : "example.com"
+  },
+  "rawLines" : [
+    "David Chen",
+    "Technical Director",
+    "ABC Technologies",
+    "Mobile: 138 0000 0000",
+    "Email:david.chen@example.com",
+    "Web:www.example.com",
+    "Address: 123 Market Street, San Francisco",
+    "Postal: 200000"
+  ],
+  "tags" : [
+    "en",
+    "full"
+  ]
+}

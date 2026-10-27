@@ -1,0 +1,55 @@
+{
+  "groundTruth" : {
+    "address" : [
+      "Suite 1201, 88 Jianguo Road"
+    ],
+    "company" : [
+      "Data Labs"
+    ],
+    "jobTitle" : [
+      "Analyst"
+    ],
+    "name" : [
+      "Chen Jie"
+    ],
+    "postalCode" : [
+      "100022"
+    ]
+  },
+  "id" : "e10",
+  "parsed" : {
+    "address" : "Suite 1201, 88 Jianguo Road",
+    "company" : "Data Labs",
+    "department" : "",
+    "emails" : [
+
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Analyst",
+    "mobiles" : [
+
+    ],
+    "name" : "Chen Jie",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "100022",
+    "unresolvedLines" : [
+      "Chaoyang District, Beijing"
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Chen Jie",
+    "Analyst",
+    "Data Labs",
+    "Address: Suite 1201, 88 Jianguo Road",
+    "Chaoyang District, Beijing",
+    "Postal:100022"
+  ],
+  "tags" : [
+    "two-line-address"
+  ]
+}

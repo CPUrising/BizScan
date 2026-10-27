@@ -1,0 +1,54 @@
+{
+  "groundTruth" : {
+    "address" : [
+      "6 Lake Avenue, Suzhou"
+    ],
+    "company" : [
+      "Delta Consulting"
+    ],
+    "jobTitle" : [
+      "Manager"
+    ],
+    "mobiles" : [
+      "134 0000 0000"
+    ],
+    "name" : [
+      "Grace Lin"
+    ]
+  },
+  "id" : "e05",
+  "parsed" : {
+    "address" : "6 Lake Avenue, Suzhou",
+    "company" : "Delta Consulting",
+    "department" : "",
+    "emails" : [
+
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Manager",
+    "mobiles" : [
+      "134 0000 0000"
+    ],
+    "name" : "Grace Lin",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Grace Lin",
+    "Manager",
+    "Delta Consulting",
+    "Mobile: 134 0000 0000",
+    "Address: 6 Lake Avenue, Suzhou"
+  ],
+  "tags" : [
+    "missing-email"
+  ]
+}

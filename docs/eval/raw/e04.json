@@ -1,0 +1,58 @@
+{
+  "groundTruth" : {
+    "address" : [
+      "18 River Road, Hangzhou"
+    ],
+    "company" : [
+      "Sigma Group"
+    ],
+    "emails" : [
+      "kevin.zhao@example.com"
+    ],
+    "jobTitle" : [
+      "Analyst"
+    ],
+    "mobiles" : [
+      "135 0000 0000"
+    ],
+    "name" : [
+      "Kevin Zhao"
+    ]
+  },
+  "id" : "e04",
+  "parsed" : {
+    "address" : "18 River Road, Hangzhou",
+    "company" : "Sigma Group",
+    "department" : "",
+    "emails" : [
+      "kevin.zhao@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Analyst",
+    "mobiles" : [
+      "135 0000 0000"
+    ],
+    "name" : "Kevin Zhao",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Kevin Zhao",
+    "Analyst",
+    "Sigma Group",
+    "Mobile: 135 0000 0000",
+    "Email: kevin.zhao@example.com",
+    "Address: 18 River Road, Hangzhou"
+  ],
+  "tags" : [
+    "missing-website"
+  ]
+}

@@ -49,7 +49,7 @@
 | P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析单元测试通过（13/13）；OCR 未验证 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md) |
 | P5 | 人工校正与落库 | `0006-verification-save` | T20（中途退出）通过；T11/T12/T18 部分通过（L2，UI 未执行） | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md) |
 | P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | vCard 单测 L1 7/7 + L2 5/5；UI 覆盖 T14/T15/T16 通过；T19 分享面板未测 | [`docs/verify/0008-export.md`](docs/verify/0008-export.md) |
-| P7 | 验收、回归与归档 | `0009-acceptance-hardening`、`0011-l2-test-coverage`、`0012-evidence-and-doc-alignment` | 进行中：core 62 + L2 29 + UI 11 全绿；`0001`–`0008` 验证报告已回填；T03–T07、T18 真机、T19 分享面板待补；评估报告未做 | [`docs/verify/0011-l2-test-coverage.md`](docs/verify/0011-l2-test-coverage.md) |
+| P7 | 验收、回归与归档 | `0009`、`0011`、`0012`、`0013`、`0014` | 进行中：core 62 + L2 50 + UI 11 全绿；T06/T07 服务层与评估基线完成；`0001`–`0008` 报告已回填；仅剩 T03–T05、T18 真机、T19 分享面板待人工执行 | [`docs/verify/0014-ocr-eval-baseline.md`](docs/verify/0014-ocr-eval-baseline.md) |
 
 > 「未验证」不是完成。所有未执行的测试登记在 **[`docs/verification-debt.md`](docs/verification-debt.md)**，必须由真实执行结果关闭。
 
@@ -246,6 +246,8 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 3. 统计每字段精确率/召回率；**虚构字段单独计数并惩罚**。
 4. 错误分类：字段歧义、人名/公司混淆、多号码、中英混排、字段缺失、OCR 错字。
 5. 报告写入 `docs/eval/`，并在 README 阶段看板登记。
+
+> 已产出基线：[`docs/eval/ocr-field-baseline.md`](docs/eval/ocr-field-baseline.md)（`synthetic-001`，15 例自建合成数据，虚构字段 0；样本 < 30 只报绝对值，教师数据集到位后需重跑替换）。
 
 准确率不达标不阻断归档，但必须记录原因与改进项；**虚构字段**视为阻断缺陷。
 

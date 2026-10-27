@@ -1,0 +1,54 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Star Technologies"
+    ],
+    "emails" : [
+      "tom.li@example.com"
+    ],
+    "jobTitle" : [
+      "Director"
+    ],
+    "mobiles" : [
+      "138 0000 0000"
+    ],
+    "name" : [
+      "Tom Li"
+    ]
+  },
+  "id" : "e15",
+  "parsed" : {
+    "address" : "",
+    "company" : "Star Technologies",
+    "department" : "",
+    "emails" : [
+
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Director",
+    "mobiles" : [
+      "13800000000"
+    ],
+    "name" : "",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+      "TomLi"
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "TomLi",
+    "Director",
+    "Star Technologies",
+    "Mobile:13800000000",
+    "Email:tom.li@examp le.com"
+  ],
+  "tags" : [
+    "full-width"
+  ]
+}

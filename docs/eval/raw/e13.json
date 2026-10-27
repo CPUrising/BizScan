@@ -1,0 +1,54 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Nova Technologies"
+    ],
+    "department" : [
+      "Platform"
+    ],
+    "emails" : [
+      "emily@example.com"
+    ],
+    "jobTitle" : [
+      "Engineer"
+    ],
+    "name" : [
+      "Emily Chen"
+    ]
+  },
+  "id" : "e13",
+  "parsed" : {
+    "address" : "",
+    "company" : "Nova Technologies",
+    "department" : "Platform",
+    "emails" : [
+      "emily@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Engineer",
+    "mobiles" : [
+
+    ],
+    "name" : "Emily Chen",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Emily Chen",
+    "Engineer",
+    "Nova Technologies",
+    "Department: Platform",
+    "Email: emily@example.com"
+  ],
+  "tags" : [
+    "department"
+  ]
+}

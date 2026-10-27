@@ -1,0 +1,42 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Lumen Labs"
+    ],
+    "name" : [
+      "Sarah Kim"
+    ]
+  },
+  "id" : "e14",
+  "parsed" : {
+    "address" : "",
+    "company" : "Lumen Labs",
+    "department" : "",
+    "emails" : [
+
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "",
+    "mobiles" : [
+
+    ],
+    "name" : "Sarah Kim",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Sarah Kim",
+    "Lumen Labs"
+  ],
+  "tags" : [
+    "minimal"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Iota Studios"
+    ],
+    "emails" : [
+      "nina.gao@example.com"
+    ],
+    "jobTitle" : [
+      "Designer"
+    ],
+    "mobiles" : [
+      "132 0000 0000"
+    ],
+    "name" : [
+      "Nina Gao"
+    ]
+  },
+  "id" : "e09",
+  "parsed" : {
+    "address" : "",
+    "company" : "lota Studios",
+    "department" : "",
+    "emails" : [
+      "nina.gao@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Designer",
+    "mobiles" : [
+      "132 0000 0000"
+    ],
+    "name" : "Nina Gao",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Nina Gao",
+    "Designer",
+    "lota Studios",
+    "Mobile: 132 0000 0000",
+    "Email: nina.gao@example.com"
+  ],
+  "tags" : [
+    "complex-background"
+  ]
+}

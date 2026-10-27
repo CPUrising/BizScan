@@ -1,0 +1,54 @@
+{
+  "groundTruth" : {
+    "company" : [
+      "Gamma Technologies"
+    ],
+    "emails" : [
+      "peter.sun@example.com"
+    ],
+    "jobTitle" : [
+      "Engineer"
+    ],
+    "mobiles" : [
+      "133 0000 0000"
+    ],
+    "name" : [
+      "Peter Sun"
+    ]
+  },
+  "id" : "e08",
+  "parsed" : {
+    "address" : "",
+    "company" : "Gamma Technologies",
+    "department" : "",
+    "emails" : [
+      "peter.sun@example.com"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "Engineer",
+    "mobiles" : [
+      "133 0000 0000"
+    ],
+    "name" : "Peter Sun",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "",
+    "unresolvedLines" : [
+
+    ],
+    "website" : ""
+  },
+  "rawLines" : [
+    "Peter Sun",
+    "Engineer",
+    "Gamma Technologies",
+    "Mobile: 133 0000 0000",
+    "Email: peter.sun@example.com"
+  ],
+  "tags" : [
+    "low-contrast"
+  ]
+}

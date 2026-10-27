@@ -1,0 +1,67 @@
+{
+  "groundTruth" : {
+    "address" : [
+      "上海市杨浦区四平路1239号"
+    ],
+    "company" : [
+      "同济大学"
+    ],
+    "emails" : [
+      "zhu@example.edu"
+    ],
+    "jobTitle" : [
+      "教授"
+    ],
+    "mobiles" : [
+      "139 0000 0000"
+    ],
+    "name" : [
+      "朱宏明"
+    ],
+    "postalCode" : [
+      "200092"
+    ],
+    "website" : [
+      "www.tongji.example.edu"
+    ]
+  },
+  "id" : "e02",
+  "parsed" : {
+    "address" : "上海市杨浦区四平路1239号",
+    "company" : "同济大学",
+    "department" : "",
+    "emails" : [
+      "zhu@example.edu"
+    ],
+    "faxes" : [
+
+    ],
+    "jobTitle" : "教授",
+    "mobiles" : [
+      "139 0000 0000"
+    ],
+    "name" : "朱宏明",
+    "officePhones" : [
+
+    ],
+    "postalCode" : "200092",
+    "unresolvedLines" : [
+
+    ],
+    "website" : "tongji.example.edu"
+  },
+  "rawLines" : [
+    "朱宏明",
+    "教授",
+    "同济大学",
+    "手机：139 0000 0000",
+    "邮箱：zhu@example.edu",
+    "网址：www.tongji.example.edu",
+    "地址：上海市杨浦区四平路1239号",
+    "邮编：200092"
+  ],
+  "tags" : [
+    "zh",
+    "full"
+  ]
+}
