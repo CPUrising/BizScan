@@ -13,33 +13,39 @@ final class CaptureUITests: XCTestCase {
         return app
     }
 
-    /// 模拟器无可用相机时，扫描页会先弹出「出错了」提示，需先关闭才能操作页面按钮
-    private func dismissCameraUnavailableAlertIfNeeded(_ app: XCUIApplication) {
-        let done = app.alerts.buttons["完成"]
-        if done.waitForExistence(timeout: 5) {
-            done.tap()
+    /// 首次进入扫描页会依次出现系统相机权限弹窗与 App 的「出错了」弹窗；
+    /// 两者顺序不稳定，统一轮询处理，直到关闭按钮可点击。
+    private func waitForScannerCloseButton(_ app: XCUIApplication, timeout: TimeInterval = 30) -> Bool {
+        let close = app.buttons["BizScan.Scanner.Close"]
+        let appAlertDone = app.alerts.buttons["完成"]
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let systemAllow = springboard.buttons.matching(
+            NSPredicate(format: "label IN %@", ["允许", "Allow", "好", "OK"])
+        ).firstMatch
+
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if close.exists && close.isHittable { return true }
+            if systemAllow.exists {
+                systemAllow.tap()
+                continue
+            }
+            if appAlertDone.exists {
+                appAlertDone.tap()
+                continue
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.2))
         }
+        return close.exists && close.isHittable
     }
 
     func testT02OpenScannerAndReturn() {
         let app = launchSeeded()
 
-        addUIInterruptionMonitor(withDescription: "Camera permission") { alert in
-            for title in ["允许", "Allow", "好", "OK"] where alert.buttons[title].exists {
-                alert.buttons[title].tap()
-                return true
-            }
-            return false
-        }
-
         app.buttons["BizScan.Home.Scan"].tap()
-        app.tap()
-        dismissCameraUnavailableAlertIfNeeded(app)
+        XCTAssertTrue(waitForScannerCloseButton(app), "进入扫描页后应可关闭")
 
-        let closeButton = app.buttons["BizScan.Scanner.Close"]
-        XCTAssertTrue(closeButton.waitForExistence(timeout: 15), "进入扫描页后应可关闭")
-
-        closeButton.tap()
+        app.buttons["BizScan.Scanner.Close"].tap()
         XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 10))
     }
 
@@ -47,12 +53,9 @@ final class CaptureUITests: XCTestCase {
         let app = launchSeeded()
 
         app.buttons["BizScan.Home.Scan"].tap()
-        app.tap()
-        dismissCameraUnavailableAlertIfNeeded(app)
+        XCTAssertTrue(waitForScannerCloseButton(app), "进入扫描页后应可关闭")
 
-        let closeButton = app.buttons["BizScan.Scanner.Close"]
-        XCTAssertTrue(closeButton.waitForExistence(timeout: 15))
-        closeButton.tap()
+        app.buttons["BizScan.Scanner.Close"].tap()
 
         XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.staticTexts["David Chen"].exists, true, "退出扫描不应影响已有名片")
