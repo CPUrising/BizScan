@@ -41,7 +41,7 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 
 | 模块 | 应测项 | 计划测试 | 状态 | 备注 |
 |---|---|---|---|---|
-| `Persistence/BusinessCardRepository` | T12/T17/T18、重启保持、文件清理 | `RepositoryTests`（6 项）+ `PersistenceTests`（4 项）+ `PersistenceUITests`（待写） | 部分通过 | `RepositoryTests` 6 项（`0010`）与 `PersistenceTests` 4 项（`0011`，SwiftData 真实落盘、同 URL 重建容器）均通过；真机 kill 进程未验证 |
+| `Persistence/BusinessCardRepository` | T12/T17/T18、重启保持、文件清理 | `RepositoryTests`（6 项）+ `PersistenceTests`（4 项）+ `PersistenceUITests`（1 项） | 部分通过 | `RepositoryTests` 6 项（`0010`）、`PersistenceTests` 4 项（`0011`，SwiftData 真实落盘、同 URL 重建容器）、`PersistenceUITests.testT18DataSurvivesRelaunch`（`0016`，模拟器 terminate/relaunch）均通过；真机 kill 进程未验证 |
 | `ViewModels/ReviewViewModel` | T11 校正落库、T12 首次保存写图、空名片二次确认、连点不重复 | `ReviewViewModelTests`（5 项） | 通过 | `0011`，L2；校正页 UI 未自动化 |
 | `ViewModels/DetailViewModel` | T13/T14/T16/T17、备注 | `DetailViewModelTests`（5 项） | 部分通过 | `0011`，L2；备注新增/编辑/清空未测 |
 | `ViewModels/HomeViewModel` | 列表排序、删除、标签筛选 | `HomeViewModelTests`（3 项） | 通过 | `0011`，L2 |
@@ -52,11 +52,11 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 | OCR/字段准确率基线 | 字段级精确率/召回率、虚构字段计数 | `OCREvaluationTests`（15 例合成） | 通过 | `0014`，`synthetic-001`；虚构字段 0，样本 < 30 只报绝对值；待教师数据集重跑 |
 | 真实名片准确率基线 | 真实拍摄条件下的字段指标 | `RealCardEvaluationTests`（14 例本机真实名片） | 通过 | `0015`，`real-001`；虚构字段 0，检测 11/14、OCR 12/14；图片不入库，CI 跳过 |
 | `Services/VCardExporter` | 文件写出与分享 | `VCardExporterTests`（5 项） | 通过 | `0011`，L2；系统分享面板未自动化 |
-| `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`、`CardListUITests`、`DetailUITests`、`SearchTagsUITests`、`CaptureUITests`（已写）；检测/校正/持久化/导出 UI 测试待写 | 部分通过 | 11 个用例全绿（`0009`），覆盖 T01/T02/T13/T14/T15/T16/T17/T20（中途退出）；其余场景待写 |
-| `BizScanApp` 种子数据 | T12–T17 的确定性初始状态 | 通过 `-ui-testing-seed` 注入 3 张名片 | 部分通过 | 内存容器；T13–T17 已用种子数据跑通（`0009`） |
+| `Views/*` + `ViewModels/*` | T01–T20 全链路 | `LaunchUITests`、`CardListUITests`、`DetailUITests`、`SearchTagsUITests`、`CaptureUITests`、`PersistenceUITests`（已写）；检测/校正/导出 UI 测试待写 | 部分通过 | 12 个用例全绿（`0009`/`0016`），覆盖 T01/T02/T13/T14/T15/T16/T17/T18（模拟器重启）/T20（中途退出）；其余场景待写 |
+| `BizScanApp` 种子数据 | T12–T17 的确定性初始状态 | 通过 `-ui-testing-seed` 注入 3 张名片 | 部分通过 | 内存容器或专用测试 store；T13–T17 已用种子数据跑通（`0009`），T18 重启用持久化 store（`0016`） |
 | `project.yml` | XcodeGen 生成与编译 | `xcodebuild build` | 通过 | G0 冒烟通过，单层工程，编译 0 error（`0010` 验证） |
 
-证据：[docs/verify/0009-acceptance-hardening.md](verify/0009-acceptance-hardening.md)（core 62 + UI 11 全绿）、[docs/verify/0011-l2-test-coverage.md](verify/0011-l2-test-coverage.md)（L2 29 项全绿）、[docs/verify/0013-service-layer-coverage.md](verify/0013-service-layer-coverage.md)（服务层 19 项，L2 累计 50 项）、[docs/verify/0014-ocr-eval-baseline.md](verify/0014-ocr-eval-baseline.md)（合成评估基线）、[docs/verify/0015-real-card-eval.md](verify/0015-real-card-eval.md)（真实名片基线，L2 累计 52 项）。T03–T05、T18 真机 kill、T19 分享面板仍待人工执行，步骤见 [manual-device-checklist.md](verify/manual-device-checklist.md)。
+证据：[docs/verify/0009-acceptance-hardening.md](verify/0009-acceptance-hardening.md)（core 62 + UI 11 全绿）、[docs/verify/0011-l2-test-coverage.md](verify/0011-l2-test-coverage.md)（L2 29 项全绿）、[docs/verify/0013-service-layer-coverage.md](verify/0013-service-layer-coverage.md)（服务层 19 项，L2 累计 50 项）、[docs/verify/0014-ocr-eval-baseline.md](verify/0014-ocr-eval-baseline.md)（合成评估基线）、[docs/verify/0015-real-card-eval.md](verify/0015-real-card-eval.md)（真实名片基线，L2 累计 52 项）、[docs/verify/0016-persistence-hardening.md](verify/0016-persistence-hardening.md)（持久化加固 + T18 重启，UI 累计 12 项）。T03–T05、T18 真机 kill、T19 分享面板仍待人工执行，步骤见 [manual-device-checklist.md](verify/manual-device-checklist.md)。
 
 已知产品偏差（不属测试缺口，但会影响判定）：
 
