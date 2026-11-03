@@ -30,6 +30,12 @@ struct BizScanApp: App {
         let arguments = ProcessInfo.processInfo.arguments
 
         if arguments.contains("-ui-testing") {
+            if arguments.contains("-ui-testing-persistent") {
+                return makePersistentTestContainer(
+                    reset: arguments.contains("-ui-testing-reset"),
+                    seed: arguments.contains("-ui-testing-seed")
+                )
+            }
             let container = makeInMemoryContainer()
             if arguments.contains("-ui-testing-seed") {
                 seed(container)
@@ -38,13 +44,55 @@ struct BizScanApp: App {
         }
 
         do {
+            try ensureApplicationSupportDirectory()
             return try ModelContainer(for: BusinessCardEntity.self, TagEntity.self)
         } catch {
-            return makeInMemoryContainer()
+            fatalError("无法创建 SwiftData 容器：\(error)")
         }
     }
 
-    /// UI 测试用的确定性数据；只在内存容器中写入，不影响真实用户数据。
+    @discardableResult
+    private static func ensureApplicationSupportDirectory() throws -> URL {
+        let directory = try FileManager.default.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        return directory
+    }
+
+    private static func makePersistentTestContainer(reset: Bool, seed: Bool) -> ModelContainer {
+        let directory: URL
+        do {
+            directory = try ensureApplicationSupportDirectory()
+        } catch {
+            fatalError("无法准备 UI 测试存储目录：\(error)")
+        }
+
+        let storeURL = directory.appendingPathComponent("BizScanUITests.store")
+
+        if reset {
+            for suffix in ["", "-shm", "-wal"] {
+                try? FileManager.default.removeItem(at: URL(fileURLWithPath: storeURL.path + suffix))
+            }
+        }
+
+        let schema = Schema([BusinessCardEntity.self, TagEntity.self])
+        let configuration = ModelConfiguration(schema: schema, url: storeURL)
+        do {
+            let container = try ModelContainer(for: schema, configurations: configuration)
+            if seed {
+                seed(container)
+            }
+            return container
+        } catch {
+            fatalError("无法创建 UI 测试 SwiftData 容器：\(error)")
+        }
+    }
+
+    /// UI 测试用的确定性数据；只写入内存容器或专用测试 store，不影响真实用户数据。
     private static func seed(_ container: ModelContainer) {
         let context = ModelContext(container)
         let cards = [
