@@ -33,7 +33,7 @@ struct BizScanApp: App {
             if arguments.contains("-ui-testing-persistent") {
                 return makePersistentTestContainer(
                     reset: arguments.contains("-ui-testing-reset"),
-                    seed: arguments.contains("-ui-testing-seed")
+                    shouldSeed: arguments.contains("-ui-testing-seed")
                 )
             }
             let container = makeInMemoryContainer()
@@ -63,7 +63,7 @@ struct BizScanApp: App {
         return directory
     }
 
-    private static func makePersistentTestContainer(reset: Bool, seed: Bool) -> ModelContainer {
+    private static func makePersistentTestContainer(reset: Bool, shouldSeed: Bool) -> ModelContainer {
         let directory: URL
         do {
             directory = try ensureApplicationSupportDirectory()
@@ -83,7 +83,7 @@ struct BizScanApp: App {
         let configuration = ModelConfiguration(schema: schema, url: storeURL)
         do {
             let container = try ModelContainer(for: schema, configurations: configuration)
-            if seed {
+            if shouldSeed {
                 seed(container)
             }
             return container
