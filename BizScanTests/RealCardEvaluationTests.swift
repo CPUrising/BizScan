@@ -122,9 +122,18 @@ final class RealCardEvaluationTests: XCTestCase {
     // MARK: - 辅助
 
     private func requireLocalDataset() throws {
+        let root = RealCardEvaluationDataset.cardTestRoot
         try XCTSkipIf(
-            RealCardEvaluationDataset.cardTestRoot == nil,
+            root == nil,
             "card_test/ 仅本机存在（已 .gitignore），CI 跳过真实名片评估"
+        )
+        guard let root else { return }
+        let truthDirectory = root.appendingPathComponent("ground_truth", isDirectory: true)
+        let truthFiles = (try? FileManager.default.contentsOfDirectory(atPath: truthDirectory.path))?
+            .filter { $0.hasSuffix(".json") } ?? []
+        try XCTSkipIf(
+            truthFiles.isEmpty,
+            "card_test/ground_truth 仅本机存在（已 .gitignore），CI 跳过真实名片评估"
         )
     }
 

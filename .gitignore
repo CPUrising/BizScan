@@ -49,7 +49,9 @@ npm-debug.log*
 .env.local
 
 # 真实名片测试素材（含真实个人信息，禁止入库；见 docs/eval/real-card-eval-handoff.md）
-card_test/
+# 仅保留 .gitkeep，确保 XcodeGen 的资源拷贝目录在 CI 上也存在
+card_test/*
+!card_test/.gitkeep
 
 # 本地计划草稿（不入库）
 .trae/documents/

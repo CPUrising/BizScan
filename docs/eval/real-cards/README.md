@@ -1,7 +1,7 @@
 # 真实名片评估数据集（real-001）
 
 > 用途：用本机 `card_test/` 的 14 张真实名片补 OCR/字段准确率证据。
-> 图片**不入库**（`card_test/` 已在 `.gitignore`）。本目录只保存索引与标注规则。
+> 图片**不入库**（`card_test/` 除 `.gitkeep` 外均在 `.gitignore`）。本目录只保存索引与标注规则。
 > 基线关系：与 `synthetic-001` **并列**，不替换。
 
 ## 1. 目录与文件
@@ -11,12 +11,12 @@ docs/eval/real-cards/
 ├─ README.md              # 本文件：标注规则与交接说明（入库）
 └─ index.json             # case id → 本机图片相对路径 + 语言/方向/标签（入库，不含个人信息）
 
-card_test/                 # 本机独有，.gitignore
+card_test/                 # 本机独有，除 .gitkeep 外 .gitignore
 ├─ english|zh_sp|zh_tw/   # 14 张原图（c009 已由所有者删除）
 └─ ground_truth/          # c001.json … c015.json（c009 除外），含真实个人信息，禁止入库
 ```
 
-构建时 `project.yml` 把 `card_test/` 与本目录作为**可选资源**打进测试 bundle（仅本机构建产物，`build/` 已忽略）；逐例原始输出写到模拟器临时目录并作为附件留在 `.xcresult`。
+构建时 `project.yml` 把 `card_test/` 与本目录作为**可选资源**打进测试 bundle（仅本机构建产物，`build/` 已忽略）；`.gitkeep` 保证 CI 上资源目录存在，真实名片与 GT 缺失时评估测试自动跳过；逐例原始输出写到模拟器临时目录并作为附件留在 `.xcresult`。
 
 ## 2. case id 映射
 
