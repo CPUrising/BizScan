@@ -25,6 +25,12 @@ final class ScannerViewModel {
     var session: AVCaptureSession { camera.session }
 
     func prepare() async {
+        if ProcessInfo.processInfo.arguments.contains("-ui-testing-capture") {
+            state = .denied
+            capturedImage = Self.makeUITestCardImage()
+            return
+        }
+
         camera.refreshAuthorization()
 
         switch camera.authorizationStatus {
@@ -86,6 +92,31 @@ final class ScannerViewModel {
         } catch {
             errorMessage = error.localizedDescription
             state = .denied
+        }
+    }
+}
+
+private extension ScannerViewModel {
+    /// UI 测试用：模拟器无相机，注入一张合成名片，直接进入「校正 → 识别」链路。
+    static func makeUITestCardImage() -> UIImage {
+        let size = CGSize(width: 1000, height: 600)
+        return UIGraphicsImageRenderer(size: size).image { context in
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+            let text = """
+            David Chen
+            ABC Technologies
+            Technical Director
+            Mobile: +86 138 0000 0000
+            Email: david.chen@example.com
+            """
+            text.draw(
+                at: CGPoint(x: 80, y: 90),
+                withAttributes: [
+                    .font: UIFont.systemFont(ofSize: 52, weight: .semibold),
+                    .foregroundColor: UIColor.black
+                ]
+            )
         }
     }
 }
