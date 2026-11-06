@@ -4,15 +4,18 @@
 > 方法论：Specification-Driven Development（OpenSpec 1.14，spec-driven schema）
 > 平台：iOS 17+ / SwiftUI / Swift 5.9
 
+> 完成报告: [`docs/report/project-completion-report.md`](docs/report/project-completion-report.md)
+> ai聊天记录文件夹：[`chat_history`](chat_history)
+
 本仓库不是「一个能识别的名片 App 演示」，而是一条可审查、可验证、可归档的工程链路：
 
 ```
 黑盒观察 → Specification → Architecture → Implementation → Test → 差异分析 → 修正 → 回归
 ```
 
-**代码只是产物之一；`openspec/` 下的规范、`docs/verify/` 下的证据，与代码等价重要。**
+**代码只是产物之一；`openspec/`** **下的规范、`docs/verify/`** **下的证据，与代码等价重要。**
 
----
+***
 
 ## 1. 复刻范围
 
@@ -28,29 +31,29 @@
 
 验收定义：
 
-| 类别 | 范围 | 标准 |
-|---|---|---|
-| 确定性功能 | UI、导航、状态、保存、编辑、删除、搜索、标签、导出 | T01–T20 **100% 通过** |
-| 概率性功能 | OCR、姓名/公司/职位/电话/邮箱/地址识别 | 固定测试集 + Ground Truth，计算字段级准确率，保留全部中间结果 |
+| 类别    | 范围                         | 标准                                     |
+| ----- | -------------------------- | -------------------------------------- |
+| 确定性功能 | UI、导航、状态、保存、编辑、删除、搜索、标签、导出 | T01–T20 **100% 通过**                    |
+| 概率性功能 | OCR、姓名/公司/职位/电话/邮箱/地址识别    | 固定测试集 + Ground Truth，计算字段级准确率，保留全部中间结果 |
 
----
+***
 
 ## 2. 当前阶段
 
 > 唯一进度口径。每个 Gate 必须能点开到证据文件。
 
-| 阶段 | 内容 | 关键 change | 状态 | 证据 |
-|---|---|---|---|---|
-| P0 | 基线、工程契约、跨机验证链路 | — | 完成；G0 已验证通过（macOS 26.3.1 + Xcode 26.1.1 + iPhone 16/iOS 18.0） | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) / `bash scripts/verify.sh` |
-| P1 | 黑盒观察与规范冻结（11 份能力规范、T01–T20） | — | 规范完成；观察待补 | `openspec/specs/`、`docs/traceability.md` |
-| P2a | 逻辑层 `BizScanCore`（模型、解析、vCard、搜索、标签） | `0010-toolchain-compile-fixes` | **单元测试通过（62/62）** | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) |
-| P2b | 应用骨架与数据层 | `0001-app-skeleton` | 单元测试通过（L2 29/29）；UI 覆盖 T01/T13/T17 通过 | [`docs/verify/0001-app-skeleton.md`](docs/verify/0001-app-skeleton.md) |
-| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 服务层测试已补（`0013`）；真机拍摄为 B 类 | [`0002-capture-import.md`](docs/verify/0002-capture-import.md) / [`docs/verify/0013-service-layer-coverage.md`](docs/verify/0013-service-layer-coverage.md) |
-| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析 L1 全绿；OCR 由 `0013` + 两份评估基线覆盖，真实拍摄为 B 类 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md) |
-| P5 | 人工校正与落库 | `0006-verification-save` | T20（中途退出）A 类；T11/T12 由 L2 覆盖（B 类）；T18 由 `0016` 补模拟器重启（A 类） | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md) |
-| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | vCard L1 7/7 + L2 5/5（B 类，分享面板未验证）；UI 覆盖 T14/T15/T16（A 类） | [`docs/verify/0008-export.md`](docs/verify/0008-export.md) |
-| P7 | 验收、回归与归档 | `0009`、`0011`、`0012`、`0013`、`0014`、`0015`、`0016` | 完成（自动化范围）：core 62 + L2 54 + UI 12 基线全绿；T06/T07 服务层、合成基线与真实名片基线（`real-001`，14 例，虚构字段 0）；`0016` 持久化加固与 T18 模拟器重启；`local-20261106` 关闭 K1 与备注缺口；`0001`–`0008` 报告已回填。真机项与教师数据集按 B/C 类登记，不再计为"待执行" | [`docs/verify/local-20261106.md`](docs/verify/local-20261106.md) / [`docs/acceptance-report.md`](docs/acceptance-report.md) |
-| P8 | 名片 UI 改版（分组 → 手动新建 → 主页 → 详情 → 待核对 → 通讯录） | `0017`、`0018`、`0019`、`0020`、`0021`、`0022` | 可执行范围内完成：core 69 + L2 89 + UI 26 全绿（T21–T29、T34–T35 为 A 类；T30、T31–T33 为 B 类） | [`docs/acceptance-report.md`](docs/acceptance-report.md) / [`docs/verify/0022-save-to-contacts.md`](docs/verify/0022-save-to-contacts.md) |
+| 阶段  | 内容                                        | 关键 change                                         | 状态                                                                                                                                                                                           | 证据                                                                                                                                                          |
+| --- | ----------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P0  | 基线、工程契约、跨机验证链路                            | —                                                 | 完成；G0 已验证通过（macOS 26.3.1 + Xcode 26.1.1 + iPhone 16/iOS 18.0）                                                                                                                                | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) / `bash scripts/verify.sh`                                     |
+| P1  | 黑盒观察与规范冻结（11 份能力规范、T01–T20）               | —                                                 | 规范完成；观察待补                                                                                                                                                                                    | `openspec/specs/`、`docs/traceability.md`                                                                                                                    |
+| P2a | 逻辑层 `BizScanCore`（模型、解析、vCard、搜索、标签）      | `0010-toolchain-compile-fixes`                    | **单元测试通过（62/62）**                                                                                                                                                                            | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md)                                                                |
+| P2b | 应用骨架与数据层                                  | `0001-app-skeleton`                               | 单元测试通过（L2 29/29）；UI 覆盖 T01/T13/T17 通过                                                                                                                                                        | [`docs/verify/0001-app-skeleton.md`](docs/verify/0001-app-skeleton.md)                                                                                      |
+| P3  | 采集与几何校正                                   | `0002-capture-import`、`0003-boundary-perspective` | 服务层测试已补（`0013`）；真机拍摄为 B 类                                                                                                                                                                    | [`0002-capture-import.md`](docs/verify/0002-capture-import.md) / [`docs/verify/0013-service-layer-coverage.md`](docs/verify/0013-service-layer-coverage.md) |
+| P4  | OCR 与字段结构化                                | `0004-ocr-pipeline`、`0005-field-parser`           | 字段解析 L1 全绿；OCR 由 `0013` + 两份评估基线覆盖，真实拍摄为 B 类                                                                                                                                                 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md)                                     |
+| P5  | 人工校正与落库                                   | `0006-verification-save`                          | T20（中途退出）A 类；T11/T12 由 L2 覆盖（B 类）；T18 由 `0016` 补模拟器重启（A 类）                                                                                                                                   | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md)                                                                            |
+| P6  | 管理闭环与导出                                   | `0007-manage-search-tags`、`0008-export`           | vCard L1 7/7 + L2 5/5（B 类，分享面板未验证）；UI 覆盖 T14/T15/T16（A 类）                                                                                                                                    | [`docs/verify/0008-export.md`](docs/verify/0008-export.md)                                                                                                  |
+| P7  | 验收、回归与归档                                  | `0009`、`0011`、`0012`、`0013`、`0014`、`0015`、`0016`  | 完成（自动化范围）：core 62 + L2 54 + UI 12 基线全绿；T06/T07 服务层、合成基线与真实名片基线（`real-001`，14 例，虚构字段 0）；`0016` 持久化加固与 T18 模拟器重启；`local-20261106` 关闭 K1 与备注缺口；`0001`–`0008` 报告已回填。真机项与教师数据集按 B/C 类登记，不再计为"待执行" | [`docs/verify/local-20261106.md`](docs/verify/local-20261106.md) / [`docs/acceptance-report.md`](docs/acceptance-report.md)                                 |
+| P8  | 名片 UI 改版（分组 → 手动新建 → 主页 → 详情 → 待核对 → 通讯录） | `0017`、`0018`、`0019`、`0020`、`0021`、`0022`         | 可执行范围内完成：core 69 + L2 89 + UI 26 全绿（T21–T29、T34–T35 为 A 类；T30、T31–T33 为 B 类）                                                                                                                 | [`docs/acceptance-report.md`](docs/acceptance-report.md) / [`docs/verify/0022-save-to-contacts.md`](docs/verify/0022-save-to-contacts.md)                   |
 
 > 「未验证」不是完成。所有未执行的测试登记在 **[`docs/verification-debt.md`](docs/verification-debt.md)**，必须由真实执行结果关闭。
 
@@ -58,17 +61,17 @@
 
 唯一对外结论见 **[`docs/acceptance-report.md`](docs/acceptance-report.md)**。结论分三类，不可混用：
 
-| 类别 | 含义 | 计入通过率 |
-|---|---|---|
-| **A 已验证** | 有真实执行证据（L1 / L2 / UI） | 是 |
-| **B 行为已覆盖，系统集成未验证** | 判定逻辑有测试；剩余依赖真机硬件或系统 App | 否 |
-| **C 环境不可达** | 基准或测试资产缺失（如教师 RTS 未下发） | 否 |
+| 类别                  | 含义                      | 计入通过率 |
+| ------------------- | ----------------------- | ----- |
+| **A 已验证**           | 有真实执行证据（L1 / L2 / UI）   | 是     |
+| **B 行为已覆盖，系统集成未验证** | 判定逻辑有测试；剩余依赖真机硬件或系统 App | 否     |
+| **C 环境不可达**         | 基准或测试资产缺失（如教师 RTS 未下发）  | 否     |
 
 三条环境约束固定在此声明：**无 iOS 真机**、**模拟器无相机与通讯录**、**教师未下发 Reference Test Suite 与 30–50 张正式测试名片**。这三项属外部约束，不构成交付缺口，处理方式见验收结论书第 4 节。
 
 Gate 定义见第 8 节。
 
----
+***
 
 ## 3. 参考环境（必须先冻结）
 
@@ -77,26 +80,26 @@ Gate 定义见第 8 节。
 
 > 状态：**实现环境已冻结；教师资产未下发**。实现环境为 macOS 26.3.1 + Xcode 26.1.1 + iPhone 16 / iOS 18.0；参考 App 版本列待填写，Reference Test Suite 与 30–50 张正式测试名片**确认未下发**（非"未获取"）。未下发期间不得据此声明教师口径的准确率，自动化测试结论不受影响。
 
----
+***
 
 ## 4. 技术栈
 
-| 项 | 选择 |
-|---|---|
-| UI / 架构 | SwiftUI + MVVM（`@Observable`）+ Repository |
-| 并发 | Swift Concurrency（`@MainActor` + 后台 `Task`） |
-| 持久化 | SwiftData；图像存沙盒相对路径 |
-| 相机 | AVFoundation |
-| 几何 | Vision 矩形检测 + Core Image 透视校正 |
-| OCR | Vision `VNRecognizeTextRequest`（`zh-Hans` + `en-US`，`.accurate`） |
-| 导出 | vCard（首选，可自动化测试）；系统通讯录为可选 |
-| 工程生成 | XcodeGen（`project.yml`，`.xcodeproj` 不入库） |
-| 测试 | XCTest（单测）+ XCUITest（T01–T20） |
-| 规范 | OpenSpec 1.14.3（`spec-driven` schema） |
+| 项       | 选择                                                               |
+| ------- | ---------------------------------------------------------------- |
+| UI / 架构 | SwiftUI + MVVM（`@Observable`）+ Repository                        |
+| 并发      | Swift Concurrency（`@MainActor` + 后台 `Task`）                      |
+| 持久化     | SwiftData；图像存沙盒相对路径                                              |
+| 相机      | AVFoundation                                                     |
+| 几何      | Vision 矩形检测 + Core Image 透视校正                                    |
+| OCR     | Vision `VNRecognizeTextRequest`（`zh-Hans` + `en-US`，`.accurate`） |
+| 导出      | vCard（首选，可自动化测试）；系统通讯录为可选                                        |
+| 工程生成    | XcodeGen（`project.yml`，`.xcodeproj` 不入库）                         |
+| 测试      | XCTest（单测）+ XCUITest（T01–T20）                                    |
+| 规范      | OpenSpec 1.14.3（`spec-driven` schema）                            |
 
 选型依据：参考项目 `CardScanner` 使用 Apple Vision（`CardScanner/Classes/CardScanner.swift:288`），无第三方依赖、可离线、可回归；本项目沿用并补足中文语言参数、名片矩形检测与字段解析。
 
----
+***
 
 ## 5. 目录结构
 
@@ -130,19 +133,19 @@ BizScan/
 └─ .trae/                     # OpenSpec 生成的 Trae skills/commands
 ```
 
----
+***
 
 ## 6. SDD 工作流
 
 ### 6.1 五阶段闭环
 
-| 阶段 | 本仓库动作 | 命令 | 产物 |
-|---|---|---|---|
-| Specify | 观察并写基线规范 | 编辑 `openspec/specs/`（仅 P1 允许）、`openspec validate --all --strict` | 11 份能力规范 + T01–T20 |
-| Plan | 发起增量变更 | `openspec new change <id>` 或 Trae `/opsx-propose` | `proposal.md` / `design.md` / `tasks.md` / `specs/<cap>/spec.md` |
-| Tasks | 原子任务拆解 | 同上 | `tasks.md` 勾选清单 |
-| Implement & Test | 受控编码 + 自愈 | Trae `/opsx-apply <id>`；macOS `bash scripts/verify.sh --change <id>` | 代码 + 测试 + `docs/verify/<id>.md` |
-| Archive | 合并增量规范 | `openspec archive <id>` | 更新 `openspec/specs/` |
+| 阶段               | 本仓库动作     | 命令                                                                   | 产物                                                               |
+| ---------------- | --------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Specify          | 观察并写基线规范  | 编辑 `openspec/specs/`（仅 P1 允许）、`openspec validate --all --strict`     | 11 份能力规范 + T01–T20                                               |
+| Plan             | 发起增量变更    | `openspec new change <id>` 或 Trae `/opsx-propose`                    | `proposal.md` / `design.md` / `tasks.md` / `specs/<cap>/spec.md` |
+| Tasks            | 原子任务拆解    | 同上                                                                   | `tasks.md` 勾选清单                                                  |
+| Implement & Test | 受控编码 + 自愈 | Trae `/opsx-apply <id>`；macOS `bash scripts/verify.sh --change <id>` | 代码 + 测试 + `docs/verify/<id>.md`                                  |
+| Archive          | 合并增量规范    | `openspec archive <id>`                                              | 更新 `openspec/specs/`                                             |
 
 ### 6.2 规范语法（OpenSpec 约定）
 
@@ -159,8 +162,8 @@ BizScan/
 - 需求名英文、正文中文、`SHALL/MUST` 保留英文关键字。
 - 场景名必须以 `Txx` 开头，便于 `docs/traceability.md` 追踪。
 - 增量变更使用 `## ADDED Requirements` / `## MODIFIED Requirements` / `## REMOVED Requirements`。
-- **禁止直接修改 `openspec/specs/`**（P1 冻结期除外）；行为变化必须走 change。
-- **实现类 change 使用 `skip_specs: true`**：当 change 只是实现既有基线规范、不改变任何行为合同时，在 `.openspec.yaml` 中声明 `skip_specs: true`，只提交 `proposal.md` / `design.md` / `tasks.md`，不写增量规范。一旦涉及行为变化（新增字段、改变状态或异常行为），必须改为带 `## ADDED / MODIFIED Requirements` 的增量规范。
+- **禁止直接修改** **`openspec/specs/`**（P1 冻结期除外）；行为变化必须走 change。
+- **实现类 change 使用** **`skip_specs: true`**：当 change 只是实现既有基线规范、不改变任何行为合同时，在 `.openspec.yaml` 中声明 `skip_specs: true`，只提交 `proposal.md` / `design.md` / `tasks.md`，不写增量规范。一旦涉及行为变化（新增字段、改变状态或异常行为），必须改为带 `## ADDED / MODIFIED Requirements` 的增量规范。
 
 ### 6.3 变更命名
 
@@ -168,18 +171,18 @@ BizScan/
 
 一个 change = 一个可命名的行为增量；超过 8 个任务必须拆分。
 
----
+***
 
 ## 7. 跨机协作（本机编辑 / 他机验证）
 
 编辑机可以不是 macOS（例如 Windows），此时**无法执行 iOS 构建**，验证必须交给 macOS 或 CI。因此约定：
 
-| 角色 | 可以做 | 禁止 |
-|---|---|---|
-| 非 macOS 编辑机（如 Windows） | 写规范、写 Swift 源码与测试、`openspec validate`、Git 提交 | 声称"已验证"、手写 `.xcodeproj` |
-| macOS（验证机）或 GitHub Actions | `xcodegen generate`、`xcodebuild test`、产出证据 | 直接改规范（除非新开 change） |
+| 角色                         | 可以做                                          | 禁止                      |
+| -------------------------- | -------------------------------------------- | ----------------------- |
+| 非 macOS 编辑机（如 Windows）     | 写规范、写 Swift 源码与测试、`openspec validate`、Git 提交 | 声称"已验证"、手写 `.xcodeproj` |
+| macOS（验证机）或 GitHub Actions | `xcodegen generate`、`xcodebuild test`、产出证据   | 直接改规范（除非新开 change）      |
 
-> 当前仓库的 G0 与 P7 证据均在 macOS 本机（26.3.1 + Xcode 26.1.1）产出；同一台机器也可承担编辑，此时两个角色合并，仍须遵守「不直接改规范」。 
+> 当前仓库的 G0 与 P7 证据均在 macOS 本机（26.3.1 + Xcode 26.1.1）产出；同一台机器也可承担编辑，此时两个角色合并，仍须遵守「不直接改规范」。
 
 ### 7.1 macOS 验证流程
 
@@ -205,24 +208,24 @@ bash scripts/verify.sh --scope unit --change <change-id>
 3. 证据必须包含环境（Xcode、模拟器、设备）与每条场景的 PASS/FAIL。
 4. 验证失败时：先修实现或测试，再重跑；**禁止**通过放宽断言变绿。
 
----
+***
 
 ## 8. 质量门禁（Gate）
 
-| Gate | 准入条件 | 通过标准 |
-|---|---|---|
-| G0 | P0 完成 | macOS/CI 能生成工程并跑通冒烟测试；README 交接流程可照做 |
-| G1 | P1 完成 | `openspec validate --all --strict` 全绿；T01–T20 全部有规范场景与测试映射；参考环境冻结；测试资产入库 |
-| G2 | P2 完成 | 单测 + T01/T13 通过；列表/空态/详情与规范一致 |
-| G3 | P3 完成 | T02–T06、T20 相关路径通过；八类拍摄条件有检测报告 |
-| G4 | P4 完成 | T07–T10 通过；字段级准确率基线报告产出；虚构字段测试为 0 |
-| G5 | P5 完成 | T11/T12/T18 通过；Kill App 后图像、字段、标签、备注完整 |
-| G6 | P6 完成 | T14–T17、T19 通过 |
-| G7 | P7 完成 | **A 类全部通过**（当前 23/35，0 失败）；B 类 12 项逐项登记且无阻断偏差；C 类基准缺口已声明；全量回归通过；全部 change 归档；`openspec/specs/` 与实现一致 |
+| Gate | 准入条件  | 通过标准                                                                                                 |
+| ---- | ----- | ---------------------------------------------------------------------------------------------------- |
+| G0   | P0 完成 | macOS/CI 能生成工程并跑通冒烟测试；README 交接流程可照做                                                                 |
+| G1   | P1 完成 | `openspec validate --all --strict` 全绿；T01–T20 全部有规范场景与测试映射；参考环境冻结；测试资产入库                             |
+| G2   | P2 完成 | 单测 + T01/T13 通过；列表/空态/详情与规范一致                                                                        |
+| G3   | P3 完成 | T02–T06、T20 相关路径通过；八类拍摄条件有检测报告                                                                       |
+| G4   | P4 完成 | T07–T10 通过；字段级准确率基线报告产出；虚构字段测试为 0                                                                    |
+| G5   | P5 完成 | T11/T12/T18 通过；Kill App 后图像、字段、标签、备注完整                                                               |
+| G6   | P6 完成 | T14–T17、T19 通过                                                                                       |
+| G7   | P7 完成 | **A 类全部通过**（当前 23/35，0 失败）；B 类 12 项逐项登记且无阻断偏差；C 类基准缺口已声明；全量回归通过；全部 change 归档；`openspec/specs/` 与实现一致 |
 
 每个 Gate 完成后必须更新第 2 节的状态表并链接证据。
 
----
+***
 
 ## 9. 验证与证据规范
 
@@ -232,7 +235,7 @@ bash scripts/verify.sh --scope unit --change <change-id>
 - 偏差等级：**阻断**（不能归档）、**严重**（可归档但必须新开 change 修复）、**一般**（记录即可）。
 - 产物目录：`artifacts/`（日志与 `.xcresult`，不入库）。
 
----
+***
 
 ## 10. 测试矩阵
 
@@ -240,13 +243,13 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 
 分层策略：
 
-| 层 | 范围 | 数量级 |
-|---|---|---|
-| 单元测试 | 字段解析、号码分类、vCard 映射、排序、模型约束 | 快，每次提交都跑 |
-| 集成测试 | 检测 → 校正 → OCR 管线（固定图片 fixture） | 中等 |
-| UI 测试 | T01–T20 全链路 | 慢，提交前与 CI 跑 |
+| 层     | 范围                             | 数量级         |
+| ----- | ------------------------------ | ----------- |
+| 单元测试  | 字段解析、号码分类、vCard 映射、排序、模型约束     | 快，每次提交都跑    |
+| 集成测试  | 检测 → 校正 → OCR 管线（固定图片 fixture） | 中等          |
+| UI 测试 | T01–T20 全链路                    | 慢，提交前与 CI 跑 |
 
----
+***
 
 ## 11. 概率性功能评估
 
@@ -268,7 +271,7 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 
 > 教师未下发 30–50 张正式测试名片与 Ground Truth，因此当前所有指标均为**自建数据集绝对值**（合成 15 例、真实 14 例，样本 < 30 不报百分比），不得表述为教师口径或 CamCard 对比结果。
 
----
+***
 
 ## 12. AI 协作与能力边界
 
@@ -279,20 +282,20 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 - 结论写入 `docs/ai-collaboration/`（按 change 建文件）。
 - 当前记录：[`docs/ai-collaboration/README.md`](docs/ai-collaboration/README.md)（索引 + 四类高风险判断）；`0001`–`0008` 无独立 prompt 留痕，不补造。
 
----
+***
 
 ## 13. 常见问题
 
-| 现象 | 排查 |
-|---|---|
-| `xcodegen: command not found` | `brew install xcodegen` |
-| 模拟器找不到 | `xcrun simctl list devices available`，改 `DESTINATION` 环境变量 |
-| UI 测试点不到元素 | 为关键控件补 `accessibilityIdentifier`，命名统一 `BizScan.<区域>.<元素>` |
-| `openspec validate` 报 Purpose 过短 | Purpose ≥ 50 字符；严格模式会把 warning 当失败 |
-| `openspec validate` 报需求文本过长 | 把表格/示例移到 `## 数据模型` 或场景中 |
-| OCR 无输出 | 确认方向校正结果、语言参数、图像对比度；查看 `docs/eval/` 原始文本 |
+| 现象                               | 排查                                                         |
+| -------------------------------- | ---------------------------------------------------------- |
+| `xcodegen: command not found`    | `brew install xcodegen`                                    |
+| 模拟器找不到                           | `xcrun simctl list devices available`，改 `DESTINATION` 环境变量 |
+| UI 测试点不到元素                       | 为关键控件补 `accessibilityIdentifier`，命名统一 `BizScan.<区域>.<元素>`  |
+| `openspec validate` 报 Purpose 过短 | Purpose ≥ 50 字符；严格模式会把 warning 当失败                         |
+| `openspec validate` 报需求文本过长      | 把表格/示例移到 `## 数据模型` 或场景中                                    |
+| OCR 无输出                          | 确认方向校正结果、语言参数、图像对比度；查看 `docs/eval/` 原始文本                   |
 
----
+***
 
 ## 14. 已知限制
 
@@ -303,7 +306,7 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 - 教师 Reference Test Suite 未下发，验收以 `要求/01.md` 原文为条目来源，结论口径见 [`docs/acceptance-report.md`](docs/acceptance-report.md)。
 - 参考项目 `CardScanner` 仅演示"固定取景框 + Vision OCR"，**不含**矩形检测、透视校正、持久化与分层架构；本项目在其基础上重写，不复用其单文件结构。
 
----
+***
 
 ## 15. 参考与致谢
 
@@ -312,7 +315,7 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 - SDD / OpenSpec / Agentic Coding 方法论：`要求/03SDD.md`
 - 相机与 Vision 集成参考：[`CardScanner`](../CardScanner)（MIT），差异见第 14 节
 
----
+***
 
 ## 16. 许可
 
