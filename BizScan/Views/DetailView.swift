@@ -16,8 +16,8 @@ struct DetailView: View {
 
     var body: some View {
         Group {
-            if let viewModel, let card = viewModel.card {
-                content(viewModel, card: card)
+            if let viewModel, viewModel.card != nil {
+                content(viewModel)
             } else {
                 ProgressView()
             }
@@ -102,7 +102,7 @@ struct DetailView: View {
         }
     }
 
-    private func content(_ viewModel: DetailViewModel, card: BusinessCard) -> some View {
+    private func content(_ viewModel: DetailViewModel) -> some View {
         List {
             if let image = viewModel.image() {
                 Section {
@@ -125,21 +125,9 @@ struct DetailView: View {
                 }
             }
 
-            if !card.tags.isEmpty {
-                Section(AppCopy.tagsTitle) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(card.tags, id: \.self) { tag in
-                                Text(tag)
-                                    .font(.footnote)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
-                                    .background(Color.accentColor.opacity(0.15))
-                                    .clipShape(Capsule())
-                            }
-                        }
-                    }
-                }
+            Section {
+                Label(viewModel.groupDisplayName, systemImage: "person.crop.circle")
+                    .accessibilityIdentifier("BizScan.Detail.Group")
             }
         }
         .listStyle(.insetGrouped)

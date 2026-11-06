@@ -40,4 +40,13 @@ final class DetailUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts["手机"].exists)
         XCTAssertFalse(app.staticTexts["网址"].exists)
     }
+
+    func testT23DetailShowsGroup() {
+        let app = launchSeeded()
+
+        app.staticTexts["David Chen"].tap()
+        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 10))
+
+        XCTAssertTrue(app.staticTexts["客户"].waitForExistence(timeout: 5))
+    }
 }

@@ -10,10 +10,10 @@ final class HomeViewModel {
     private let imageStore: ImageStoring
 
     private(set) var cards: [BusinessCard] = []
-    private(set) var tags: [String] = []
+    private(set) var groups: [String] = []
     private(set) var isLoading = false
 
-    var selectedTag: String?
+    var selectedGroup: String?
     var errorMessage: String?
 
     init(repository: BusinessCardRepository, imageStore: ImageStoring) {
@@ -22,10 +22,12 @@ final class HomeViewModel {
     }
 
     var visibleCards: [BusinessCard] {
-        guard let selectedTag else { return cards }
-        return cards.filter { card in
-            card.tags.contains { $0.caseInsensitiveCompare(selectedTag) == .orderedSame }
-        }
+        guard let selectedGroup else { return cards }
+        return cards.filter { $0.group?.caseInsensitiveCompare(selectedGroup) == .orderedSame }
+    }
+
+    var currentGroupTitle: String {
+        selectedGroup ?? AppCopy.allGroups
     }
 
     var isEmpty: Bool { cards.isEmpty }
@@ -35,7 +37,11 @@ final class HomeViewModel {
         defer { isLoading = false }
         do {
             cards = try repository.fetchAll()
-            tags = try repository.allTags()
+            groups = try repository.allGroups()
+            if let selectedGroup,
+               !groups.contains(where: { $0.caseInsensitiveCompare(selectedGroup) == .orderedSame }) {
+                self.selectedGroup = nil
+            }
             errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
@@ -51,8 +57,22 @@ final class HomeViewModel {
         }
     }
 
-    func toggleTagFilter(_ tag: String) {
-        selectedTag = selectedTag == tag ? nil : tag
+    func selectGroup(_ group: String?) {
+        selectedGroup = group
+    }
+
+    func move(_ card: BusinessCard, to group: String?) {
+        do {
+            try repository.setGroup(cardID: card.id, to: group)
+            reload()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func count(in group: String?) -> Int {
+        guard let group else { return cards.count }
+        return cards.filter { $0.group?.caseInsensitiveCompare(group) == .orderedSame }.count
     }
 
     func thumbnail(for card: BusinessCard) -> UIImage? {
@@ -60,6 +80,7 @@ final class HomeViewModel {
            let image = imageStore.image(forRelativePath: processed) {
             return image
         }
-        return imageStore.image(forRelativePath: card.originalImagePath)
+        guard let original = card.originalImagePath else { return nil }
+        return imageStore.image(forRelativePath: original)
     }
 }

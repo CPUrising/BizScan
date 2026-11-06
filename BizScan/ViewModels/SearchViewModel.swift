@@ -36,6 +36,7 @@ final class SearchViewModel {
            let image = imageStore.image(forRelativePath: processed) {
             return image
         }
-        return imageStore.image(forRelativePath: card.originalImagePath)
+        guard let original = card.originalImagePath else { return nil }
+        return imageStore.image(forRelativePath: original)
     }
 }

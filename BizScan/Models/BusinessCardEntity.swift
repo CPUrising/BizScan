@@ -6,7 +6,7 @@ import BizScanCore
 @Model
 final class BusinessCardEntity {
     @Attribute(.unique) var id: UUID
-    var originalImagePath: String
+    var originalImagePath: String?
     var processedImagePath: String?
 
     var name: String?
@@ -24,6 +24,7 @@ final class BusinessCardEntity {
     var postalCode: String?
 
     var tags: [String]
+    var groupName: String?
     var notes: String?
 
     var createdAt: Date
@@ -45,6 +46,7 @@ final class BusinessCardEntity {
         self.address = card.address
         self.postalCode = card.postalCode
         self.tags = card.tags
+        self.groupName = card.group
         self.notes = card.notes
         self.createdAt = card.createdAt
         self.updatedAt = card.updatedAt
@@ -67,6 +69,7 @@ final class BusinessCardEntity {
             address: address,
             postalCode: postalCode,
             tags: tags,
+            group: groupName,
             notes: notes,
             createdAt: createdAt,
             updatedAt: updatedAt
@@ -88,6 +91,7 @@ final class BusinessCardEntity {
         address = card.address
         postalCode = card.postalCode
         tags = card.tags
+        groupName = card.group
         notes = card.notes
         createdAt = card.createdAt
         updatedAt = card.updatedAt
@@ -97,6 +101,18 @@ final class BusinessCardEntity {
 /// 标签独立建表，避免从名片数组反推标签导致删除/重命名困难。
 @Model
 final class TagEntity {
+    @Attribute(.unique) var name: String
+    var createdAt: Date
+
+    init(name: String, createdAt: Date = Date()) {
+        self.name = name
+        self.createdAt = createdAt
+    }
+}
+
+/// 分组独立建表，保证「还没有名片的分组」也能存在、重命名与删除。
+@Model
+final class CardGroupEntity {
     @Attribute(.unique) var name: String
     var createdAt: Date
 

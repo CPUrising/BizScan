@@ -6,7 +6,7 @@ import Foundation
 /// 未识别字段必须保持 `nil` 或空数组，禁止使用空字符串或推测值占位。
 public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
     public var id: UUID
-    public var originalImagePath: String
+    public var originalImagePath: String?
     public var processedImagePath: String?
 
     public var name: String?
@@ -24,6 +24,8 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
     public var postalCode: String?
 
     public var tags: [String]
+    /// 单一分组；`nil` 表示未分组。
+    public var group: String?
     public var notes: String?
 
     public var createdAt: Date
@@ -31,7 +33,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
 
     public init(
         id: UUID = UUID(),
-        originalImagePath: String,
+        originalImagePath: String?,
         processedImagePath: String? = nil,
         name: String? = nil,
         company: String? = nil,
@@ -45,6 +47,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
         address: String? = nil,
         postalCode: String? = nil,
         tags: [String] = [],
+        group: String? = nil,
         notes: String? = nil,
         createdAt: Date = Date(),
         updatedAt: Date? = nil
@@ -64,6 +67,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
         self.address = address
         self.postalCode = postalCode
         self.tags = tags
+        self.group = group
         self.notes = notes
         self.createdAt = createdAt
         self.updatedAt = updatedAt ?? createdAt

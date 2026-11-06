@@ -32,12 +32,17 @@ final class SwiftDataBusinessCardRepository: BusinessCardRepository {
         for tag in card.tags {
             _ = try createTag(tag)
         }
+        if let group = card.group, !group.isEmpty {
+            _ = try createGroup(group)
+        }
         try context.save()
     }
 
     func delete(id: UUID) throws {
         guard let entity = try fetchEntity(id: id) else { return }
-        imageStore.delete(relativePath: entity.originalImagePath)
+        if let original = entity.originalImagePath {
+            imageStore.delete(relativePath: original)
+        }
         if let processed = entity.processedImagePath {
             imageStore.delete(relativePath: processed)
         }
@@ -79,6 +84,100 @@ final class SwiftDataBusinessCardRepository: BusinessCardRepository {
         }
 
         try context.save()
+    }
+
+    func allGroups() throws -> [String] {
+        let entities = try context.fetch(FetchDescriptor<CardGroupEntity>())
+        let cards = try context.fetch(FetchDescriptor<BusinessCardEntity>())
+
+        var names = entities.map(\.name)
+        var seen = Set(names.map { $0.lowercased() })
+        for card in cards {
+            guard let raw = card.groupName else { continue }
+            let name = Self.normalizedGroupName(raw)
+            guard let name, !seen.contains(name.lowercased()) else { continue }
+            names.append(name)
+            seen.insert(name.lowercased())
+        }
+        return names.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+    }
+
+    func createGroup(_ name: String) throws -> String {
+        guard let trimmed = Self.normalizedGroupName(name) else {
+            throw RepositoryError.emptyGroup
+        }
+
+        let key = trimmed.lowercased()
+        let all = try context.fetch(FetchDescriptor<CardGroupEntity>())
+        if let existing = all.first(where: { $0.name.lowercased() == key }) {
+            return existing.name
+        }
+
+        context.insert(CardGroupEntity(name: trimmed))
+        try context.save()
+        return trimmed
+    }
+
+    func renameGroup(from oldName: String, to newName: String) throws {
+        guard let trimmed = Self.normalizedGroupName(newName) else {
+            throw RepositoryError.emptyGroup
+        }
+
+        let key = ContactNormalizer.halfWidth(oldName).lowercased()
+        let all = try context.fetch(FetchDescriptor<CardGroupEntity>())
+        guard let entity = all.first(where: { $0.name.lowercased() == key }) else { return }
+        let current = entity.name
+        if current.caseInsensitiveCompare(trimmed) == .orderedSame { return }
+        if all.contains(where: { $0.name.caseInsensitiveCompare(trimmed) == .orderedSame }) {
+            throw RepositoryError.duplicateGroup
+        }
+
+        entity.name = trimmed
+        let cards = try context.fetch(FetchDescriptor<BusinessCardEntity>())
+        for card in cards where card.groupName?.caseInsensitiveCompare(current) == .orderedSame {
+            card.groupName = trimmed
+        }
+        try context.save()
+    }
+
+    func deleteGroup(_ name: String) throws {
+        let key = ContactNormalizer.halfWidth(name).lowercased()
+
+        let groups = try context.fetch(FetchDescriptor<CardGroupEntity>())
+        for group in groups where ContactNormalizer.halfWidth(group.name).lowercased() == key {
+            context.delete(group)
+        }
+
+        let cards = try context.fetch(FetchDescriptor<BusinessCardEntity>())
+        for card in cards where ContactNormalizer.halfWidth(card.groupName ?? "").lowercased() == key {
+            card.groupName = nil
+        }
+
+        try context.save()
+    }
+
+    func setGroup(cardID: UUID, to group: String?) throws {
+        guard let entity = try fetchEntity(id: cardID) else {
+            throw RepositoryError.cardNotFound
+        }
+        if let group, let trimmed = Self.normalizedGroupName(group) {
+            entity.groupName = trimmed
+            _ = try createGroup(trimmed)
+        } else {
+            entity.groupName = nil
+        }
+        try context.save()
+    }
+
+    func fetchCards(group: String?) throws -> [BusinessCard] {
+        let all = try fetchAll()
+        guard let group else { return all }
+        return all.filter { $0.group?.caseInsensitiveCompare(group) == .orderedSame }
+    }
+
+    private static func normalizedGroupName(_ name: String) -> String? {
+        let trimmed = ContactNormalizer.trimming(ContactNormalizer.halfWidth(name))
+        return trimmed.isEmpty ? nil : trimmed
     }
 
     private func fetchEntity(id: UUID) throws -> BusinessCardEntity? {

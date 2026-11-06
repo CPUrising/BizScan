@@ -44,15 +44,24 @@ final class SearchTagsUITests: XCTestCase {
         XCTAssertFalse(results.staticTexts["David Chen"].exists)
     }
 
-    func testT16TagFilterShowsOnlyTaggedCards() {
+    func testT16TagIsEditableAndHiddenOnHome() {
         let app = launchSeeded()
 
-        app.buttons["Customer"].tap()
+        XCTAssertFalse(app.staticTexts["Customer"].exists)
 
-        XCTAssertTrue(app.staticTexts["David Chen"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.staticTexts["Alice Wu"].exists)
+        app.staticTexts["David Chen"].tap()
+        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 10))
+        app.buttons["编辑"].tap()
+        XCTAssertTrue(app.navigationBars["编辑"].waitForExistence(timeout: 5))
 
-        app.buttons["全部"].tap()
-        XCTAssertTrue(app.staticTexts["Alice Wu"].waitForExistence(timeout: 5))
+        for _ in 0..<4 {
+            if app.staticTexts["Customer"].exists { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(app.staticTexts["Customer"].waitForExistence(timeout: 5))
+
+        app.buttons["取消"].tap()
+        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Customer"].exists)
     }
 }

@@ -30,6 +30,17 @@ enum AppCopy {
     static let allTags = "全部"
     static let addTag = "新建标签"
 
+    static let allGroups = "全部名片"
+    static let groupManagement = "分组管理"
+    static let groupTitle = "分组"
+    static let ungrouped = "未分组"
+    static let newGroup = "新建分组"
+    static let renameGroup = "重命名"
+    static let deleteGroup = "删除分组"
+    static let moveToGroup = "移动到分组"
+    static let groupNamePlaceholder = "分组名称"
+    static let deleteGroupConfirmTitle = "删除分组后名片会回到「未分组」，确认删除？"
+
     static let permissionTitle = "需要相机权限"
     static let permissionMessage = "请在系统设置中允许 BizScan 使用相机。"
     static let openSettings = "前往设置"
@@ -40,6 +51,7 @@ enum AppCopy {
     static let saveEmptyWarning = "未填写任何字段，仍要保存吗？"
 
     static let detailTitle = "名片详情"
+    static let newCard = "新建名片"
     static let deleteConfirmTitle = "删除这张名片？"
     static let deleteConfirmMessage = "删除后无法恢复。"
     static let errorTitle = "出错了"

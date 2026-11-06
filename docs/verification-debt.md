@@ -44,7 +44,10 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 | `Persistence/BusinessCardRepository` | T12/T17/T18、重启保持、文件清理 | `RepositoryTests`（6 项）+ `PersistenceTests`（4 项）+ `PersistenceUITests`（1 项） | 部分通过 | `RepositoryTests` 6 项（`0010`）、`PersistenceTests` 4 项（`0011`，SwiftData 真实落盘、同 URL 重建容器）、`PersistenceUITests.testT18DataSurvivesRelaunch`（`0016`，模拟器 terminate/relaunch）均通过；真机 kill 进程未验证 |
 | `ViewModels/ReviewViewModel` | T11 校正落库、T12 首次保存写图、空名片二次确认、连点不重复 | `ReviewViewModelTests`（6 项） | 通过 | `0011`，L2；校正页 UI 未自动化；仅传真号判定由 `local-20261106` 补测（K1） |
 | `ViewModels/DetailViewModel` | T13/T14/T16/T17、备注 | `DetailViewModelTests`（6 项） | 通过 | `0011`，L2；备注新增/编辑/清空由 `local-20261106` 补测 |
-| `ViewModels/HomeViewModel` | 列表排序、删除、标签筛选 | `HomeViewModelTests`（3 项） | 通过 | `0011`，L2 |
+| `ViewModels/HomeViewModel` | 列表排序、删除、分组筛选与移动 | `HomeViewModelTests`（6 项） | 通过 | `0011`/`0017`，L2；标签筛选用例已替换为分组筛选 |
+| `ViewModels/GroupViewModel` | 分组计数、新建去重、重命名冲突、删除后计数 | `GroupViewModelTests`（4 项） | 通过 | `0017`，L2 |
+| `ViewModels/NewCardViewModel` | 无图保存、空卡确认、分组写入、标签编辑 | `NewCardViewModelTests`（4 项） | 通过 | `0018`，L2；UI 层未覆盖多行手机号输入 |
+| `Views/EditCardView` | 编辑页标签删除按钮 | 无 | 未执行 | `0017` 起标签仅保留编辑能力，删除按钮缺少 UI 用例；仅仓储层 `testDeleteTagRemovesItFromCards` 覆盖 |
 | `Services/CardDetector` | T06 边界检测、八类拍摄条件 | `CardDetectorTests`（4 项） | 通过 | `0013`，L2；清晰/倾斜/无边界/错误透传；八类拍摄条件靠真机人工清单补充 |
 | `Services/ImageCorrector` | 透视/方向校正 | `ImageCorrectorTests`（3 项） | 通过 | `0013`，L2；透视输出尺寸、四档旋转、nil quad 原样 |
 | `Services/OCRService` | T07 原始文本与坐标 | `OCRServiceTests`（3 项）+ `OCREvaluationTests`（15 例） | 通过 | `0013`/`0014`，L2；真实 Vision，评估基线见 `docs/eval/ocr-field-baseline.md` |

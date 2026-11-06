@@ -8,7 +8,10 @@ struct HomeView: View {
     @State private var viewModel: HomeViewModel?
     @State private var isScannerPresented = false
     @State private var isSearchPresented = false
+    @State private var isNewCardPresented = false
+    @State private var isGroupManagementPresented = false
     @State private var pendingDelete: BusinessCard?
+    @State private var movingCard: BusinessCard?
 
     var body: some View {
         NavigationStack {
@@ -18,6 +21,14 @@ struct HomeView: View {
                     DetailView(cardID: id)
                 }
                 .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isNewCardPresented = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                        .accessibilityIdentifier("BizScan.Home.Add")
+                    }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             isSearchPresented = true
@@ -36,6 +47,31 @@ struct HomeView: View {
                 }
                 .sheet(isPresented: $isSearchPresented, onDismiss: { viewModel?.reload() }) {
                     SearchView()
+                }
+                .sheet(isPresented: $isNewCardPresented, onDismiss: { viewModel?.reload() }) {
+                    NewCardView()
+                }
+                .sheet(isPresented: $isGroupManagementPresented, onDismiss: { viewModel?.reload() }) {
+                    GroupManagementView(
+                        selectedGroup: Binding(
+                            get: { viewModel?.selectedGroup },
+                            set: { viewModel?.selectedGroup = $0 }
+                        )
+                    )
+                }
+                .confirmationDialog(
+                    AppCopy.moveToGroup,
+                    isPresented: Binding(
+                        get: { movingCard != nil },
+                        set: { if !$0 { movingCard = nil } }
+                    ),
+                    titleVisibility: .visible
+                ) {
+                    Button(AppCopy.ungrouped) { moveToGroup(nil) }
+                    ForEach(viewModel?.groups ?? [], id: \.self) { group in
+                        Button(group) { moveToGroup(group) }
+                    }
+                    Button(AppCopy.cancel, role: .cancel) { movingCard = nil }
                 }
                 .confirmationDialog(
                     AppCopy.deleteConfirmTitle,
@@ -82,7 +118,7 @@ struct HomeView: View {
                 }
             } else {
                 VStack(spacing: 0) {
-                    tagBar(viewModel)
+                    groupBar(viewModel)
                     List {
                         ForEach(viewModel.visibleCards) { card in
                             NavigationLink(value: card.id) {
@@ -98,6 +134,14 @@ struct HomeView: View {
                                     Label(AppCopy.delete, systemImage: "trash")
                                 }
                             }
+                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                                Button {
+                                    movingCard = card
+                                } label: {
+                                    Label(AppCopy.groupTitle, systemImage: "folder")
+                                }
+                                .tint(.blue)
+                            }
                         }
                     }
                     .listStyle(.plain)
@@ -109,34 +153,62 @@ struct HomeView: View {
         }
     }
 
-    private func tagBar(_ viewModel: HomeViewModel) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                tagChip(AppCopy.allTags, selected: viewModel.selectedTag == nil) {
-                    viewModel.selectedTag = nil
-                }
-                ForEach(viewModel.tags, id: \.self) { tag in
-                    tagChip(tag, selected: viewModel.selectedTag == tag) {
-                        viewModel.toggleTagFilter(tag)
+    private func groupBar(_ viewModel: HomeViewModel) -> some View {
+        HStack(spacing: 8) {
+            Menu {
+                Button {
+                    viewModel.selectGroup(nil)
+                } label: {
+                    if viewModel.selectedGroup == nil {
+                        Label("\(AppCopy.allGroups) \(viewModel.count(in: nil))", systemImage: "checkmark")
+                    } else {
+                        Text("\(AppCopy.allGroups) \(viewModel.count(in: nil))")
                     }
                 }
+                ForEach(viewModel.groups, id: \.self) { group in
+                    Button {
+                        viewModel.selectGroup(group)
+                    } label: {
+                        if viewModel.selectedGroup?.caseInsensitiveCompare(group) == .orderedSame {
+                            Label("\(group) \(viewModel.count(in: group))", systemImage: "checkmark")
+                        } else {
+                            Text("\(group) \(viewModel.count(in: group))")
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Text(viewModel.currentGroupTitle)
+                        .font(.subheadline.weight(.semibold))
+                    Text("\(viewModel.visibleCards.count)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.down")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+                .foregroundStyle(.primary)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .accessibilityIdentifier("BizScan.Home.GroupMenu")
+
+            Spacer(minLength: 0)
+
+            Button {
+                isGroupManagementPresented = true
+            } label: {
+                Label(AppCopy.groupManagement, systemImage: "folder")
+                    .font(.footnote)
+            }
+            .accessibilityIdentifier("BizScan.Home.GroupManage")
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
     }
 
-    private func tagChip(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.footnote.weight(selected ? .semibold : .regular))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(selected ? Color.accentColor.opacity(0.15) : Color(uiColor: .secondarySystemBackground))
-                .foregroundStyle(selected ? Color.accentColor : Color.primary)
-                .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
+    private func moveToGroup(_ group: String?) {
+        guard let card = movingCard else { return }
+        viewModel?.move(card, to: group)
+        movingCard = nil
     }
 
     private var scanButton: some View {

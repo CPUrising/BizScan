@@ -8,12 +8,14 @@ final class HomeViewModelTests: XCTestCase {
     private func makeCard(
         name: String,
         tags: [String] = [],
+        group: String? = nil,
         updatedAt: TimeInterval
     ) -> BusinessCard {
         BusinessCard(
             originalImagePath: "CardImages/\(name).jpg",
             name: name,
             tags: tags,
+            group: group,
             createdAt: Date(timeIntervalSince1970: updatedAt),
             updatedAt: Date(timeIntervalSince1970: updatedAt)
         )
@@ -44,20 +46,51 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertNil(try repository.fetch(id: first.id))
     }
 
-    func testToggleTagFilterShowsOnlyTaggedCards() throws {
-        let customer = makeCard(name: "Alice", tags: ["Customer"], updatedAt: 100)
-        let partner = makeCard(name: "Bob", tags: ["Partner"], updatedAt: 200)
+    func testGroupFilterShowsOnlyGroupCards() throws {
+        let customer = makeCard(name: "Alice", group: "客户", updatedAt: 100)
+        let partner = makeCard(name: "Bob", group: "合作伙伴", updatedAt: 200)
         let repository = InMemoryBusinessCardRepository(cards: [customer, partner])
         let viewModel = HomeViewModel(repository: repository, imageStore: InMemoryImageStore())
 
         viewModel.reload()
-        viewModel.toggleTagFilter("customer")
+        viewModel.selectGroup("客户")
 
         XCTAssertEqual(viewModel.visibleCards.map(\.name), ["Alice"])
+        XCTAssertEqual(viewModel.currentGroupTitle, "客户")
+        XCTAssertEqual(viewModel.count(in: "客户"), 1)
+        XCTAssertEqual(viewModel.count(in: nil), 2)
 
-        viewModel.toggleTagFilter("customer")
+        viewModel.selectGroup(nil)
 
-        XCTAssertNil(viewModel.selectedTag)
+        XCTAssertNil(viewModel.selectedGroup)
         XCTAssertEqual(viewModel.visibleCards.count, 2)
+    }
+
+    func testReloadResetsSelectionWhenGroupIsDeleted() throws {
+        let customer = makeCard(name: "Alice", group: "客户", updatedAt: 100)
+        let repository = InMemoryBusinessCardRepository(cards: [customer], groups: ["客户"])
+        let viewModel = HomeViewModel(repository: repository, imageStore: InMemoryImageStore())
+
+        viewModel.reload()
+        viewModel.selectGroup("客户")
+        try repository.deleteGroup("客户")
+        viewModel.reload()
+
+        XCTAssertNil(viewModel.selectedGroup)
+        XCTAssertTrue(viewModel.groups.isEmpty)
+        XCTAssertEqual(viewModel.visibleCards.count, 1)
+    }
+
+    func testMoveCardToGroup() throws {
+        let card = makeCard(name: "Alice", updatedAt: 100)
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = HomeViewModel(repository: repository, imageStore: InMemoryImageStore())
+
+        viewModel.reload()
+        viewModel.move(card, to: "客户")
+        viewModel.selectGroup("客户")
+
+        XCTAssertEqual(viewModel.visibleCards.map(\.name), ["Alice"])
+        XCTAssertEqual(try repository.fetch(id: card.id)?.group, "客户")
     }
 }

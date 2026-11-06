@@ -98,7 +98,12 @@ final class DetailViewModel {
            let image = imageStore.image(forRelativePath: processed) {
             return image
         }
-        return imageStore.image(forRelativePath: card.originalImagePath)
+        guard let original = card.originalImagePath else { return nil }
+        return imageStore.image(forRelativePath: original)
+    }
+
+    var groupDisplayName: String {
+        card?.group ?? AppCopy.ungrouped
     }
 
     var displayRows: [(String, String)] {

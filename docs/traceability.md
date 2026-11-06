@@ -1,6 +1,6 @@
-# 验收追踪矩阵（T01–T20）
+# 验收追踪矩阵（T01–T35）
 
-> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios。
+> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T23、`0018` 新增的 T34–T35。
 > 规则：每条 Txx 必须能在规范中找到场景，并在测试代码中找到实现；反之新增场景必须回填本表。
 > 状态：`未实现` / `已实现待执行` / `部分通过` / `通过` / `失败`（执行结果由 `docs/verify/<change>.md` 佐证；`已实现待执行` 表示测试代码已存在但从未运行）。
 
@@ -23,11 +23,16 @@
 | T13 | 打开名片 → 显示全部字段 | `specs/card-detail` → `T13 Detail` | `BizScanUITests/DetailUITests.testT13OpenDetailShowsSavedFields`、`testT13EmptyFieldsAreNotShown` | 通过（`0009`） |
 | T14 | 编辑姓名/公司 → 保存 → 更新 | `specs/card-detail` → `T14 Edit` | `BizScanUITests/DetailUITests.testT14EditNamePersistsInDetail` | 通过（`0009`） |
 | T15 | 搜索姓名/公司 → 返回正确名片 | `specs/search-tags` → `T15 按姓名搜索` / `按公司与号码搜索` | `BizScanUITests/SearchTagsUITests.testT15SearchByName`、`testT15SearchByCompany` | 通过（`0009`） |
-| T16 | 加标签 → 按标签筛选 | `specs/search-tags` → `T16 添加标签并按标签筛选` | `BizScanUITests/SearchTagsUITests.testT16TagFilterShowsOnlyTaggedCards` | 通过（`0009`） |
+| T16 | 添加标签 → 标签仅保留在编辑页 | `specs/search-tags` → `T16 添加标签并保留在编辑页` | `BizScanUITests/SearchTagsUITests.testT16TagIsEditableAndHiddenOnHome`、`RepositoryTests.testTagCreationIsCaseInsensitive` | 通过（`0017`，主页/详情不再展示标签） |
 | T17 | 删除名片 → 从列表消失 | `specs/card-list` → `T17 Delete` | `BizScanUITests/CardListUITests.testT17DeleteCardRemovesItFromList` | 通过（`0009`） |
 | T18 | Kill App → 重启 → 数据保持 | `specs/persistence` → `T18 Kill App 后重启` | `BizScanTests/PersistenceTests.testT18DataSurvivesContainerReopen`、`testT18TagsSurviveReopen`；`BizScanUITests/PersistenceUITests.testT18DataSurvivesRelaunch`；真机：`manual-device-checklist.md` 第 7 节 | 部分通过（`0011` L2 同 URL 重建容器；`0016` 模拟器 terminate/relaunch；真机 kill 待执行） |
 | T19 | 导出联系人/VCF → 字段映射正确 | `specs/export` → `T19 导出单张名片为 vCard` | `VCardBuilderTests.testT19FieldMapping`（L1）+ `BizScanTests/VCardExporterTests`（5 项，L2）；真机：`manual-device-checklist.md` 第 8 节 | 部分通过（`0011`，L1+L2；系统分享面板待执行） |
 | T20 | 取消/返回/权限拒绝/无法识别/空字段 | `specs/capture` → `T20 中途退出`<br>`specs/card-detection` → `T20 校正页重拍`<br>`specs/verification` → `空名片保存` | `BizScanUITests/CaptureUITests.testT20ExitWithoutDraft`（通过）<br>`BizScanTests/ReviewViewModelTests.testEmptyCardRequiresConfirmation`（通过）<br>`BizScanTests/ReviewViewModelTests.testFaxOnlyCardIsNotTreatedAsEmpty`（通过，`local-20261106`，关闭 K1）<br>`ImageCorrectorTests.testRotationQuarterTurnsSwapDimensions`、`CropViewModelTests.testT20ProcessProducesResultFromManualPoints`（`0013`，90° 旋转与手动四点）<br>`DetectionUITests.testRetakeFromAdjust`（待写） | 部分通过（`0009` 中途退出 + `0011` 空名片 L2 + `0013` 旋转/回退；校正页重拍待真机） |
+| T21 | 创建分组 → 按分组筛选 | `specs/card-list` → `T21 创建分组并按分组筛选` | `BizScanUITests/CardListUITests.testT21CreateGroupAndFilter`、`HomeViewModelTests.testGroupFilterShowsOnlyGroupCards`、`testMoveCardToGroup` | 通过（`0017`） |
+| T22 | 删除分组 → 名片回到未分组 | `specs/card-list` → `T22 删除分组后名片回到未分组` | `BizScanUITests/CardListUITests.testT22DeleteGroupMovesCardToUngrouped`、`RepositoryTests.testDeleteGroupClearsCardGroup` | 通过（`0017`） |
+| T23 | 打开名片 → 展示所属分组 | `specs/card-detail` → `T23 详情展示分组` | `BizScanUITests/DetailUITests.testT23DetailShowsGroup`、`RepositoryTests.testSaveCardKeepsGroup` | 通过（`0017`） |
+| T34 | 主页「+」→ 手动新建无原图名片 | `specs/card-list` → `T34 手动新建并保存`<br>`specs/card-model` → `T34 手动新建允许无原图` | `BizScanUITests/CardListUITests.testT34CreateCardManually`、`NewCardViewModelTests.testSaveCreatesCardWithoutImage`、`testNoGroupKeepsNilGroup` | 通过（`0018`；UI 用例只录入姓名，手机号由 L2 覆盖） |
+| T35 | 手动新建空卡 → 二次确认 | `specs/card-list` → `T35 手动新建空卡需确认` | `BizScanUITests/CardListUITests.testT35EmptyManualCardRequiresConfirmation`、`NewCardViewModelTests.testEmptyCardRequiresConfirmation` | 通过（`0018`） |
 
 ## 2. 概率性功能的评价项（不进入 100% 判定）
 

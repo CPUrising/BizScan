@@ -45,7 +45,7 @@ struct BizScanApp: App {
 
         do {
             try ensureApplicationSupportDirectory()
-            return try ModelContainer(for: BusinessCardEntity.self, TagEntity.self)
+            return try ModelContainer(for: BusinessCardEntity.self, TagEntity.self, CardGroupEntity.self)
         } catch {
             fatalError("无法创建 SwiftData 容器：\(error)")
         }
@@ -79,7 +79,7 @@ struct BizScanApp: App {
             }
         }
 
-        let schema = Schema([BusinessCardEntity.self, TagEntity.self])
+        let schema = Schema([BusinessCardEntity.self, TagEntity.self, CardGroupEntity.self])
         let configuration = ModelConfiguration(schema: schema, url: storeURL)
         do {
             let container = try ModelContainer(for: schema, configurations: configuration)
@@ -105,7 +105,8 @@ struct BizScanApp: App {
                 officePhones: ["021-8888-0000"],
                 emails: ["david.chen@example.com"],
                 website: "example.com",
-                tags: ["Customer"]
+                tags: ["Customer"],
+                group: "客户"
             ),
             BusinessCard(
                 originalImagePath: "seed/zhu.jpg",
@@ -123,16 +124,22 @@ struct BizScanApp: App {
                 jobTitle: "Designer",
                 emails: ["alice@example.com"],
                 tags: ["Partner"],
+                group: "合作伙伴",
                 notes: "Follow up next week"
             )
         ]
 
         var insertedTags: Set<String> = []
+        var insertedGroups: Set<String> = []
         for card in cards {
             context.insert(BusinessCardEntity(card: card))
             for tag in card.tags where !insertedTags.contains(tag.lowercased()) {
                 context.insert(TagEntity(name: tag))
                 insertedTags.insert(tag.lowercased())
+            }
+            if let group = card.group, !insertedGroups.contains(group.lowercased()) {
+                context.insert(CardGroupEntity(name: group))
+                insertedGroups.insert(group.lowercased())
             }
         }
         try? context.save()
@@ -144,6 +151,7 @@ struct BizScanApp: App {
             return try ModelContainer(
                 for: BusinessCardEntity.self,
                 TagEntity.self,
+                CardGroupEntity.self,
                 configurations: configuration
             )
         } catch {

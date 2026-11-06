@@ -109,7 +109,7 @@ final class ReviewViewModel {
 
         do {
             let id = existingCard?.id ?? UUID()
-            var card = existingCard ?? BusinessCard(id: id, originalImagePath: "")
+            var card = existingCard ?? BusinessCard(id: id, originalImagePath: nil)
 
             if existingCard == nil {
                 card.originalImagePath = try imageStore.saveImageData(originalData, cardID: id, kind: .original)

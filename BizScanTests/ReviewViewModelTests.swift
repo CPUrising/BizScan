@@ -62,10 +62,11 @@ final class ReviewViewModelTests: XCTestCase {
 
         XCTAssertTrue(viewModel.didSave)
         let stored = try XCTUnwrap(try repository.fetchAll().first)
-        XCTAssertFalse(stored.originalImagePath.isEmpty)
+        let originalPath = try XCTUnwrap(stored.originalImagePath)
+        XCTAssertFalse(originalPath.isEmpty)
         let processedPath = try XCTUnwrap(stored.processedImagePath)
         XCTAssertFalse(processedPath.isEmpty)
-        XCTAssertNotNil(imageStore.data(forRelativePath: stored.originalImagePath))
+        XCTAssertNotNil(imageStore.data(forRelativePath: originalPath))
         XCTAssertNotNil(imageStore.data(forRelativePath: processedPath))
     }
 
