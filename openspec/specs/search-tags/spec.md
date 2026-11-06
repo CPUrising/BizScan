@@ -38,32 +38,6 @@
 - **THEN** 列表 MUST 恢复为全部名片
 - **AND** 排序 MUST 与进入搜索前一致
 
-### Requirement: 标签管理
-
-系统 SHALL 支持创建标签、给名片打标签、按标签筛选与删除标签。
-
-#### Scenario: T16 添加标签并按标签筛选
-
-- **GIVEN** 用户打开某张名片的编辑页
-- **WHEN** 用户新建标签 `Conference` 并保存
-- **THEN** 该标签 MUST 出现在标签选择列表
-- **AND** 在名片夹按 `Conference` 筛选 MUST 返回该名片
-
-#### Scenario: 删除标签
-
-- **GIVEN** 标签 `Conference` 已被两张名片使用
-- **WHEN** 用户删除该标签
-- **THEN** 标签 MUST 从筛选栏消失
-- **AND** 两张名片的其余字段 MUST 不受影响
-- **AND** MUST NOT 删除名片记录
-
-#### Scenario: 重复标签
-
-- **GIVEN** 已存在标签 `Customer`
-- **WHEN** 用户再次创建同名标签
-- **THEN** 系统 MUST 复用已有标签
-- **AND** MUST NOT 产生重复项
-
 ### Requirement: 备注
 
 系统 SHALL 允许为名片添加、编辑与清空备注。
@@ -81,3 +55,30 @@
 - **WHEN** 用户删除全部备注文本并保存
 - **THEN** 备注 MUST 变为 `nil`
 - **AND** 详情页 MUST NOT 展示空的备注区块
+
+### Requirement: 标签编辑与保留
+
+系统 SHALL 允许在编辑页创建、删除标签并持久化；标签 MUST 仅用于数据保留，主页与详情 MUST NOT 展示标签或提供标签筛选入口。
+
+#### Scenario: T16 添加标签并保留在编辑页
+
+- **GIVEN** 用户打开某张名片的编辑页
+- **WHEN** 用户新建标签 `Conference` 并保存
+- **THEN** 重新打开编辑页 MUST 仍能看到该标签
+- **AND** 重启应用后标签 MUST 仍存在
+- **AND** 主页与详情 MUST NOT 展示该标签
+
+#### Scenario: 删除标签
+
+- **GIVEN** 标签 `Conference` 已被两张名片使用
+- **WHEN** 用户在编辑页删除该标签
+- **THEN** 两张名片的该标签 MUST 被移除
+- **AND** 其余字段 MUST 不受影响
+- **AND** MUST NOT 删除名片记录
+
+#### Scenario: 重复标签
+
+- **GIVEN** 已存在标签 `Customer`
+- **WHEN** 用户再次创建同名标签
+- **THEN** 系统 MUST 复用已有标签
+- **AND** MUST NOT 产生重复项

@@ -35,9 +35,11 @@
 
 系统 SHALL 在保存时生成一条唯一的名片记录，字段集合、类型与必填性 MUST 与「数据模型」一节一致；所有未识别字段 MUST 为 nil 或空数组。
 
+`originalImagePath` 的必填性 MUST 区分来源：扫描/导入来源 MUST 写入非空相对路径；手动新建来源 MUST 允许为 `nil`。
+
 #### Scenario: T12 保存后字段完整可读
 
-- **GIVEN** 用户已完成字段校正并点击保存
+- **GIVEN** 用户已完成字段校正并点击保存（扫描来源）
 - **WHEN** 系统创建名片记录
 - **THEN** 记录 MUST 包含 `id`、两张图像路径、`createdAt`
 - **AND** 所有未识别字段 MUST 为 `nil` 或空数组，而非空字符串占位
@@ -48,6 +50,14 @@
 - **WHEN** 记录被持久化
 - **THEN** 模型 MUST 只保存相对路径
 - **AND** 读取时 MUST 基于当前沙盒根目录解析，保证换设备/换容器路径后仍可访问
+
+#### Scenario: T34 手动新建允许无原图
+
+- **GIVEN** 用户通过「+」手动新建一张名片
+- **WHEN** 系统保存该记录
+- **THEN** `originalImagePath` MUST 为 `nil`
+- **AND** 记录 MUST 包含 `id`、`createdAt`
+- **AND** 详情与列表 MUST NOT 因缺少图像而崩溃
 
 ### Requirement: 禁止虚构字段
 
@@ -79,13 +89,49 @@
 - **THEN** `mobiles`、`officePhones`、`faxes` 各自保持出现顺序
 - **AND** 重复号码 MUST 在同一字段内去重，不得跨字段合并
 
-### Requirement: 更新时间语义
+### Requirement: 更新时间与展示排序
 
-系统 SHALL 在字段、标签或备注发生变化时更新 `updatedAt`，展示层按 `updatedAt` 倒序排列。
+系统 SHALL 在字段、标签、备注或分组发生变化时更新 `updatedAt`；主页展示 SHALL 按 `createdAt` 倒序分组，编辑 MUST NOT 改变名片所在的日期分组。
 
-#### Scenario: 编辑后排序前移
+#### Scenario: 编辑后更新时间变化但排序不变
 
 - **GIVEN** 名片夹中有三条记录
 - **WHEN** 用户编辑最早创建的一条并保存
 - **THEN** 该记录的 `updatedAt` MUST 更新
-- **AND** 名片夹列表 MUST 将其排到首位
+- **AND** 该记录 MUST 仍留在原创建日期分组内
+- **AND** 其余名片的相对顺序 MUST 不变
+
+### Requirement: 收藏标记
+
+系统 SHALL 在名片记录中保存收藏标记，默认 `false`，并在重启后保持。
+
+#### Scenario: 收藏标记持久化
+
+- **GIVEN** 名片初始未收藏
+- **WHEN** 用户收藏该名片并重启应用
+- **THEN** 记录 MUST 仍为已收藏
+- **AND** 旧数据 MUST 默认视为未收藏
+
+### Requirement: 待核对值记录
+
+系统 SHALL 在保存名片时记录来自低置信度识别或歧义解析的字段值，MUST NOT 记录未出现在名片上的值。
+
+#### Scenario: 低置信度电话被标记
+
+- **GIVEN** OCR 对某行电话的置信度为 0.5，且该值被写入 `mobiles`
+- **WHEN** 用户确认保存
+- **THEN** `unverifiedValues` MUST 包含该号码
+- **AND** 高置信度字段 MUST NOT 被标记
+
+#### Scenario: 歧义解析被标记
+
+- **GIVEN** 解析器把某行标记为 `ambiguous` 且该行值被归入 `officePhones`
+- **WHEN** 用户确认保存
+- **THEN** `unverifiedValues` MUST 包含该号码
+
+#### Scenario: 修正后不再标记
+
+- **GIVEN** 名片记录了待核对号码 `13504119bile`
+- **WHEN** 用户在编辑页把号码改为 `13504119001` 并保存
+- **THEN** `unverifiedValues` MUST NOT 再包含旧值
+- **AND** 该记录 MUST 持久化到重启之后
