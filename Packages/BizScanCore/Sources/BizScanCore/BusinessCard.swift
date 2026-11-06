@@ -26,6 +26,8 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
     public var tags: [String]
     /// 单一分组；`nil` 表示未分组。
     public var group: String?
+    /// 是否已收藏；默认未收藏。
+    public var isFavorite: Bool
     public var notes: String?
 
     public var createdAt: Date
@@ -48,6 +50,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
         postalCode: String? = nil,
         tags: [String] = [],
         group: String? = nil,
+        isFavorite: Bool = false,
         notes: String? = nil,
         createdAt: Date = Date(),
         updatedAt: Date? = nil
@@ -68,6 +71,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
         self.postalCode = postalCode
         self.tags = tags
         self.group = group
+        self.isFavorite = isFavorite
         self.notes = notes
         self.createdAt = createdAt
         self.updatedAt = updatedAt ?? createdAt

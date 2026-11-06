@@ -3,6 +3,59 @@ import Observation
 import UIKit
 import BizScanCore
 
+enum ContactKind: String, CaseIterable {
+    case mobile
+    case officePhone
+    case fax
+    case email
+    case website
+    case address
+    case postalCode
+
+    var title: String {
+        switch self {
+        case .mobile: return "手机"
+        case .officePhone: return "办公电话"
+        case .fax: return "传真"
+        case .email: return "Email"
+        case .website: return "网址"
+        case .address: return "地址"
+        case .postalCode: return "邮编"
+        }
+    }
+
+    var symbolName: String {
+        switch self {
+        case .mobile, .officePhone, .fax: return "phone"
+        case .email: return "envelope"
+        case .website: return "globe"
+        case .address, .postalCode: return "mappin.and.ellipse"
+        }
+    }
+
+    var badge: String? {
+        switch self {
+        case .mobile: return "Mobile"
+        case .officePhone: return "办公"
+        case .fax: return "传真"
+        default: return nil
+        }
+    }
+
+    var isPhone: Bool {
+        switch self {
+        case .mobile, .officePhone, .fax: return true
+        default: return false
+        }
+    }
+}
+
+struct ContactEntry: Identifiable {
+    let id: String
+    let kind: ContactKind
+    let value: String
+}
+
 @Observable
 @MainActor
 final class DetailViewModel {
@@ -92,6 +145,19 @@ final class DetailViewModel {
         }
     }
 
+    func toggleFavorite() {
+        guard var card else { return }
+        let previous = card
+        card.isFavorite.toggle()
+        do {
+            try repository.save(card)
+            self.card = card
+        } catch {
+            self.card = previous
+            errorMessage = error.localizedDescription
+        }
+    }
+
     func image() -> UIImage? {
         guard let card = card else { return nil }
         if let processed = card.processedImagePath,
@@ -102,26 +168,109 @@ final class DetailViewModel {
         return imageStore.image(forRelativePath: original)
     }
 
+    var hasImage: Bool { image() != nil }
+
+    var displayName: String {
+        card?.displayTitle(fallback: AppCopy.unnamedCard) ?? AppCopy.unnamedCard
+    }
+
+    /// 头像首字：姓名首字 → 公司首字 → 「名」。
+    var avatarInitial: String {
+        for candidate in [card?.name, card?.company] {
+            guard let text = candidate?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  let first = text.first else { continue }
+            return String(first)
+        }
+        return "名"
+    }
+
+    var subtitle: String? {
+        let jobTitle = card?.jobTitle?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return (jobTitle?.isEmpty == false) ? jobTitle : nil
+    }
+
+    var companyName: String? {
+        let company = card?.company?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return (company?.isEmpty == false) ? company : nil
+    }
+
+    var notesText: String? {
+        let notes = card?.notes?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return (notes?.isEmpty == false) ? notes : nil
+    }
+
     var groupDisplayName: String {
         card?.group ?? AppCopy.ungrouped
     }
 
-    var displayRows: [(String, String)] {
-        guard let card = card else { return [] }
-        var rows: [(String, String)] = []
-        if let name = card.name { rows.append(("姓名", name)) }
-        if let company = card.company { rows.append(("公司", company)) }
-        if let jobTitle = card.jobTitle { rows.append(("职位", jobTitle)) }
-        if let department = card.department { rows.append(("部门", department)) }
-        for phone in card.mobiles { rows.append(("手机", phone)) }
-        for phone in card.officePhones { rows.append(("办公电话", phone)) }
-        for fax in card.faxes { rows.append(("传真", fax)) }
-        for email in card.emails { rows.append(("邮箱", email)) }
-        if let website = card.website { rows.append(("网址", website)) }
-        if let address = card.address { rows.append(("地址", address)) }
-        if let postalCode = card.postalCode { rows.append(("邮编", postalCode)) }
-        if let notes = card.notes { rows.append(("备注", notes)) }
-        return rows
+    var isFavorite: Bool {
+        card?.isFavorite ?? false
+    }
+
+    var contactEntries: [ContactEntry] {
+        guard let card else { return [] }
+        var entries: [ContactEntry] = []
+        for (index, phone) in card.mobiles.enumerated() {
+            entries.append(ContactEntry(id: "mobile-\(index)", kind: .mobile, value: phone))
+        }
+        for (index, phone) in card.officePhones.enumerated() {
+            entries.append(ContactEntry(id: "office-\(index)", kind: .officePhone, value: phone))
+        }
+        for (index, fax) in card.faxes.enumerated() {
+            entries.append(ContactEntry(id: "fax-\(index)", kind: .fax, value: fax))
+        }
+        for (index, email) in card.emails.enumerated() {
+            entries.append(ContactEntry(id: "email-\(index)", kind: .email, value: email))
+        }
+        if let website = card.website, !website.isEmpty {
+            entries.append(ContactEntry(id: "website", kind: .website, value: website))
+        }
+        if let address = card.address, !address.isEmpty {
+            entries.append(ContactEntry(id: "address", kind: .address, value: address))
+        }
+        if let postalCode = card.postalCode, !postalCode.isEmpty {
+            entries.append(ContactEntry(id: "postal", kind: .postalCode, value: postalCode))
+        }
+        return entries
+    }
+
+    var primaryPhoneURL: URL? {
+        guard let phone = firstPhoneValue else { return nil }
+        let digits = phone.filter { "0123456789+".contains($0) }
+        return digits.isEmpty ? nil : URL(string: "tel://\(digits)")
+    }
+
+    var mapsURL: URL? {
+        guard let address = card?.address, !address.isEmpty else { return nil }
+        let encoded = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? address
+        return URL(string: "maps://?q=\(encoded)")
+    }
+
+    func actionURL(for entry: ContactEntry) -> URL? {
+        switch entry.kind {
+        case .mobile, .officePhone, .fax:
+            return phoneURL(for: entry.value)
+        case .email:
+            return URL(string: "mailto:\(entry.value)")
+        case .website:
+            let normalized = entry.value.contains("://") ? entry.value : "https://\(entry.value)"
+            return URL(string: normalized)
+        case .address:
+            let encoded = entry.value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? entry.value
+            return URL(string: "maps://?q=\(encoded)")
+        case .postalCode:
+            return nil
+        }
+    }
+
+    private var firstPhoneValue: String? {
+        guard let card else { return nil }
+        return (card.mobiles + card.officePhones + card.faxes).first { !$0.isEmpty }
+    }
+
+    private func phoneURL(for value: String) -> URL? {
+        let digits = value.filter { "0123456789+".contains($0) }
+        return digits.isEmpty ? nil : URL(string: "tel://\(digits)")
     }
 
     private func syncFields() {

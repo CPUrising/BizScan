@@ -50,7 +50,7 @@ final class SearchTagsUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts["Customer"].exists)
 
         app.staticTexts["David Chen"].tap()
-        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["名片详情"].waitForExistence(timeout: 10))
         app.buttons["编辑"].tap()
         XCTAssertTrue(app.navigationBars["编辑"].waitForExistence(timeout: 5))
 
@@ -61,7 +61,7 @@ final class SearchTagsUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Customer"].waitForExistence(timeout: 5))
 
         app.buttons["取消"].tap()
-        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["名片详情"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.staticTexts["Customer"].exists)
     }
 }

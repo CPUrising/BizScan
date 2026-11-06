@@ -26,10 +26,15 @@ final class CardListUITests: XCTestCase {
 
         app.staticTexts["David Chen"].tap()
 
-        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["名片详情"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["ABC Technologies"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Technical Director"].exists)
-        XCTAssertTrue(app.staticTexts["david.chen@example.com"].exists)
+        XCTAssertTrue(
+            app.descendants(matching: .any)
+                .matching(identifier: "BizScan.Detail.Contact.email-0")
+                .firstMatch
+                .exists
+        )
     }
 
     func testT17DeleteCardRemovesItFromList() {
@@ -126,7 +131,7 @@ final class CardListUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["David Chen"].waitForExistence(timeout: 5))
         app.staticTexts["David Chen"].tap()
 
-        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["名片详情"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["未分组"].waitForExistence(timeout: 5))
     }
 
@@ -146,7 +151,7 @@ final class CardListUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Manual Contact"].waitForExistence(timeout: 10))
 
         app.staticTexts["Manual Contact"].tap()
-        XCTAssertTrue(app.navigationBars["名片详情"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["名片详情"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Manual Contact"].waitForExistence(timeout: 5))
     }
 

@@ -24,7 +24,7 @@ final class DetailViewModelTests: XCTestCase {
         )
     }
 
-    func testLoadPopulatesDisplayRows() throws {
+    func testLoadPopulatesContactEntries() throws {
         let card = makeCard()
         let repository = InMemoryBusinessCardRepository(cards: [card])
         let viewModel = DetailViewModel(
@@ -38,13 +38,85 @@ final class DetailViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.name, "David Chen")
         XCTAssertEqual(viewModel.mobilesText, "+86 138 0000 0000")
         XCTAssertEqual(viewModel.tags, [])
+        XCTAssertEqual(viewModel.displayName, "David Chen")
+        XCTAssertEqual(viewModel.avatarInitial, "D")
 
-        let rows = viewModel.displayRows
-        XCTAssertTrue(rows.contains { $0.0 == "姓名" && $0.1 == "David Chen" })
-        XCTAssertTrue(rows.contains { $0.0 == "公司" && $0.1 == "ABC Technologies" })
-        XCTAssertTrue(rows.contains { $0.0 == "手机" && $0.1 == "+86 138 0000 0000" })
-        XCTAssertTrue(rows.contains { $0.0 == "传真" && $0.1 == "021-8888-0001" })
-        XCTAssertTrue(rows.contains { $0.0 == "备注" && $0.1 == "Follow up next week" })
+        let entries = viewModel.contactEntries
+        XCTAssertTrue(entries.contains { $0.kind == .mobile && $0.value == "+86 138 0000 0000" })
+        XCTAssertTrue(entries.contains { $0.kind == .officePhone && $0.value == "021-8888-0000" })
+        XCTAssertTrue(entries.contains { $0.kind == .fax && $0.value == "021-8888-0001" })
+        XCTAssertTrue(entries.contains { $0.kind == .email && $0.value == "david.chen@example.com" })
+        XCTAssertTrue(entries.contains { $0.kind == .address && $0.value.contains("Market Street") })
+        XCTAssertEqual(viewModel.notesText, "Follow up next week")
+    }
+
+    func testAvatarInitialFallsBackToCompany() throws {
+        let card = BusinessCard(
+            originalImagePath: nil,
+            company: "Northwind Studio"
+        )
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+
+        viewModel.load()
+
+        XCTAssertEqual(viewModel.avatarInitial, "N")
+        XCTAssertEqual(viewModel.displayName, "Northwind Studio")
+    }
+
+    func testQuickActionURLsFollowFieldPresence() throws {
+        let card = makeCard()
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+        viewModel.load()
+
+        XCTAssertEqual(viewModel.primaryPhoneURL?.absoluteString, "tel://+8613800000000")
+        XCTAssertNotNil(viewModel.mapsURL)
+        XCTAssertNotNil(viewModel.notesText)
+
+        let empty = BusinessCard(originalImagePath: nil)
+        let emptyRepository = InMemoryBusinessCardRepository(cards: [empty])
+        let emptyViewModel = DetailViewModel(
+            cardID: empty.id,
+            repository: emptyRepository,
+            imageStore: InMemoryImageStore()
+        )
+        emptyViewModel.load()
+
+        XCTAssertNil(emptyViewModel.primaryPhoneURL)
+        XCTAssertNil(emptyViewModel.mapsURL)
+        XCTAssertNil(emptyViewModel.notesText)
+    }
+
+    func testToggleFavoritePersists() throws {
+        let card = makeCard()
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+        viewModel.load()
+
+        XCTAssertFalse(viewModel.isFavorite)
+
+        viewModel.toggleFavorite()
+
+        XCTAssertTrue(viewModel.isFavorite)
+        XCTAssertEqual(try repository.fetch(id: card.id)?.isFavorite, true)
+
+        viewModel.toggleFavorite()
+
+        XCTAssertFalse(viewModel.isFavorite)
+        XCTAssertEqual(try repository.fetch(id: card.id)?.isFavorite, false)
     }
 
     func testCancelEditingRestoresOriginalValues() throws {
@@ -120,7 +192,7 @@ final class DetailViewModelTests: XCTestCase {
         viewModel.notes = "2026 Mobile Computing Conference"
         viewModel.save()
         XCTAssertEqual(try repository.fetch(id: card.id)?.notes, "2026 Mobile Computing Conference")
-        XCTAssertTrue(viewModel.displayRows.contains { $0.0 == "备注" && $0.1 == "2026 Mobile Computing Conference" })
+        XCTAssertEqual(viewModel.notesText, "2026 Mobile Computing Conference")
 
         viewModel.beginEditing()
         viewModel.notes = "Follow up next week"
@@ -131,7 +203,7 @@ final class DetailViewModelTests: XCTestCase {
         viewModel.notes = "   "
         viewModel.save()
         XCTAssertNil(try repository.fetch(id: card.id)?.notes)
-        XCTAssertFalse(viewModel.displayRows.contains { $0.0 == "备注" })
+        XCTAssertNil(viewModel.notesText)
     }
 
     func testAddTagThenSavePersistsToRepository() throws {

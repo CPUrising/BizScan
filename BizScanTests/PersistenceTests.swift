@@ -7,7 +7,7 @@ import BizScanCore
 @MainActor
 final class PersistenceTests: XCTestCase {
     private func makeSchema() -> Schema {
-        Schema([BusinessCardEntity.self, TagEntity.self])
+        Schema([BusinessCardEntity.self, TagEntity.self, CardGroupEntity.self])
     }
 
     private func reopenContainer(at url: URL) throws -> ModelContainer {
@@ -88,6 +88,36 @@ final class PersistenceTests: XCTestCase {
         )
 
         XCTAssertEqual(try reopenedRepository.allTags(), ["Conference"])
+    }
+
+    func testT27FavoriteSurvivesReopen() throws {
+        let pair = try TestSupport.makeTemporaryContainer()
+        let directory = pair.directory
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let url = directory.appendingPathComponent("store.sqlite")
+
+        var container: ModelContainer? = pair.container
+        var repository: SwiftDataBusinessCardRepository? = SwiftDataBusinessCardRepository(
+            context: ModelContext(container!),
+            imageStore: InMemoryImageStore()
+        )
+        var card = BusinessCard(originalImagePath: nil, name: "Alice", isFavorite: false)
+        try repository?.save(card)
+
+        card.isFavorite = true
+        try repository?.save(card)
+
+        repository = nil
+        container = nil
+
+        let reopened = try reopenContainer(at: url)
+        let reopenedRepository = SwiftDataBusinessCardRepository(
+            context: ModelContext(reopened),
+            imageStore: InMemoryImageStore()
+        )
+
+        XCTAssertEqual(try reopenedRepository.fetch(id: card.id)?.isFavorite, true)
     }
 
     func testFileImageStoreRoundTrip() throws {

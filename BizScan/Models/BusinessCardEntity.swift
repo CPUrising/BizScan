@@ -25,6 +25,7 @@ final class BusinessCardEntity {
 
     var tags: [String]
     var groupName: String?
+    var isFavorite: Bool = false
     var notes: String?
 
     var createdAt: Date
@@ -47,6 +48,7 @@ final class BusinessCardEntity {
         self.postalCode = card.postalCode
         self.tags = card.tags
         self.groupName = card.group
+        self.isFavorite = card.isFavorite
         self.notes = card.notes
         self.createdAt = card.createdAt
         self.updatedAt = card.updatedAt
@@ -70,6 +72,7 @@ final class BusinessCardEntity {
             postalCode: postalCode,
             tags: tags,
             group: groupName,
+            isFavorite: isFavorite,
             notes: notes,
             createdAt: createdAt,
             updatedAt: updatedAt
@@ -92,6 +95,7 @@ final class BusinessCardEntity {
         postalCode = card.postalCode
         tags = card.tags
         groupName = card.group
+        isFavorite = card.isFavorite
         notes = card.notes
         createdAt = card.createdAt
         updatedAt = card.updatedAt

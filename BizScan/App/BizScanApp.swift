@@ -100,9 +100,14 @@ struct BizScanApp: App {
                 from: DateComponents(year: 2026, month: 10, day: day, hour: 10)
             ) ?? Date()
         }
+        let davidID = UUID(uuidString: "11111111-1111-1111-1111-111111111111") ?? UUID()
+        let zhuID = UUID(uuidString: "22222222-2222-2222-2222-222222222222") ?? UUID()
+        let aliceID = UUID(uuidString: "33333333-3333-3333-3333-333333333333") ?? UUID()
+        let davidImagePath = seedCardImage(cardID: davidID)
         let cards = [
             BusinessCard(
-                originalImagePath: "seed/david.jpg",
+                id: davidID,
+                originalImagePath: davidImagePath,
                 name: "David Chen",
                 company: "ABC Technologies",
                 jobTitle: "Technical Director",
@@ -115,6 +120,7 @@ struct BizScanApp: App {
                 createdAt: seedDate(day: 26)
             ),
             BusinessCard(
+                id: zhuID,
                 originalImagePath: "seed/zhu.jpg",
                 name: "朱宏明",
                 company: "同济大学",
@@ -125,6 +131,7 @@ struct BizScanApp: App {
                 createdAt: seedDate(day: 27)
             ),
             BusinessCard(
+                id: aliceID,
                 originalImagePath: "seed/alice.jpg",
                 name: "Alice Wu",
                 company: "Northwind Studio",
@@ -151,6 +158,27 @@ struct BizScanApp: App {
             }
         }
         try? context.save()
+    }
+
+    /// 为 UI 测试生成一张确定性的名片图，用于覆盖「查看原图」。
+    private static func seedCardImage(cardID: UUID) -> String? {
+        let size = CGSize(width: 600, height: 380)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { context in
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 34, weight: .semibold),
+                .foregroundColor: UIColor.black
+            ]
+            NSString(string: "DAVID CHEN").draw(at: CGPoint(x: 32, y: 32), withAttributes: attributes)
+            NSString(string: "ABC Technologies").draw(
+                at: CGPoint(x: 32, y: 84),
+                withAttributes: attributes
+            )
+        }
+        guard let data = image.jpegData(compressionQuality: 0.9) else { return nil }
+        return try? FileImageStore().saveImageData(data, cardID: cardID, kind: .original)
     }
 
     private static func makeInMemoryContainer() -> ModelContainer {

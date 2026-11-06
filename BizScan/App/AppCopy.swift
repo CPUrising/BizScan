@@ -55,6 +55,12 @@ enum AppCopy {
 
     static let detailTitle = "名片详情"
     static let newCard = "新建名片"
+    static let viewOriginal = "查看原图"
+    static let notesTitle = "备注"
+    static let saveToContacts = "存入通讯录"
+    static let actionPhone = "电话"
+    static let actionAddress = "地址"
+    static let actionNotes = "备注"
     static let deleteConfirmTitle = "删除这张名片？"
     static let deleteConfirmMessage = "删除后无法恢复。"
     static let errorTitle = "出错了"

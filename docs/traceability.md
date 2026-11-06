@@ -1,6 +1,6 @@
 # 验收追踪矩阵（T01–T35）
 
-> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T25、T34–T35。
+> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T28、T34–T35。
 > 规则：每条 Txx 必须能在规范中找到场景，并在测试代码中找到实现；反之新增场景必须回填本表。
 > 状态：`未实现` / `已实现待执行` / `部分通过` / `通过` / `失败`（执行结果由 `docs/verify/<change>.md` 佐证；`已实现待执行` 表示测试代码已存在但从未运行）。
 
@@ -19,9 +19,9 @@
 | T09 | 无 Website → 不得虚构 | `specs/field-extraction` → `T09 无 Website` | `FieldParserTests.testT09MissingWebsiteIsNotFabricated`、`NoFabricationTests` | 通过（`0009`，虚构字段 0） |
 | T10 | 多电话 → Mobile/Office/Fax 分流 | `specs/field-extraction` → `T10 多号码分流` | `FieldParserTests.testT10MultiplePhonesAreClassified`、`PhoneClassifierTests` | 通过（`0009`，L1 单测） |
 | T11 | 人工修改 → 保存修改结果 | `specs/verification` → `T11 Manual Correction` | `BizScanTests/ReviewViewModelTests.testT11ManualCorrectionPersistsEditedFields`（`VerificationUITests` 待写） | 部分通过（`0011`，L2；校正页 UI 未执行） |
-| T12 | 确认保存 → 返回名片夹出现新名片 | `specs/card-list` → `T12 Save 后返回名片夹` | `ReviewViewModelTests.testT12FirstSavePersistsImagePathsAndRecord`、`HomeViewModelTests.testReloadSortsByUpdatedAtDescending`（`CardListUITests.testNewCardAppears` 待写） | 部分通过（`0011`，L2；列表跳转 UI 未执行） |
-| T13 | 打开名片 → 显示全部字段 | `specs/card-detail` → `T13 Detail` | `BizScanUITests/DetailUITests.testT13OpenDetailShowsSavedFields`、`testT13EmptyFieldsAreNotShown` | 通过（`0009`） |
-| T14 | 编辑姓名/公司 → 保存 → 更新 | `specs/card-detail` → `T14 Edit` | `BizScanUITests/DetailUITests.testT14EditNamePersistsInDetail` | 通过（`0009`） |
+| T12 | 确认保存 → 返回名片夹出现新名片 | `specs/card-list` → `T12 Save 后返回名片夹` | `ReviewViewModelTests.testT12FirstSavePersistsImagePathsAndRecord`、`HomeViewModelTests.testReloadSortsByCreatedAtDescending`（`CardListUITests.testNewCardAppears` 待写） | 部分通过（`0011`/`0019`，L2；列表跳转 UI 未执行） |
+| T13 | 打开名片 → 显示全部字段 | `specs/card-detail` → `T13 Detail` | `BizScanUITests/DetailUITests.testT13OpenDetailShowsSavedFields`、`testT13EmptyFieldsAreNotShown` | 通过（`0020`，自定义深色详情） |
+| T14 | 编辑姓名/公司 → 保存 → 更新 | `specs/card-detail` → `T14 Edit` | `BizScanUITests/DetailUITests.testT14EditNamePersistsInDetail` | 通过（`0020`，编辑入口改为快捷操作） |
 | T15 | 搜索姓名/公司 → 返回正确名片 | `specs/search-tags` → `T15 按姓名搜索` / `按公司与号码搜索` | `BizScanUITests/SearchTagsUITests.testT15SearchByName`、`testT15SearchByCompany` | 通过（`0009`） |
 | T16 | 添加标签 → 标签仅保留在编辑页 | `specs/search-tags` → `T16 添加标签并保留在编辑页` | `BizScanUITests/SearchTagsUITests.testT16TagIsEditableAndHiddenOnHome`、`RepositoryTests.testTagCreationIsCaseInsensitive` | 通过（`0017`，主页/详情不再展示标签） |
 | T17 | 删除名片 → 从列表消失 | `specs/card-list` → `T17 Delete` | `BizScanUITests/CardListUITests.testT17DeleteCardRemovesItFromList` | 通过（`0019`，改为行 `…` 菜单删除） |
@@ -33,6 +33,9 @@
 | T23 | 打开名片 → 展示所属分组 | `specs/card-detail` → `T23 详情展示分组` | `BizScanUITests/DetailUITests.testT23DetailShowsGroup`、`RepositoryTests.testSaveCardKeepsGroup` | 通过（`0017`） |
 | T24 | 主页按创建日期分组 | `specs/card-list` → `T24 主页按日期分组展示` | `BizScanUITests/CardListUITests.testT24HomeGroupsByCreatedDate`、`HomeViewModelTests.testSectionsGroupByCreatedDay`、`testEditingDoesNotMoveCardToAnotherDay` | 通过（`0019`） |
 | T25 | 主页深色外观与常驻入口 | `specs/card-list` → `T25 主页深色外观与常驻入口` | `BizScanUITests/CardListUITests.testT25HomeKeepsPersistentEntries` | 通过（`0019`，深色为功能性验证，颜色见截图） |
+| T26 | 详情核心资料与快捷操作 | `specs/card-detail` → `T26 详情核心资料与快捷操作` | `DetailUITests.testT26ProfileAndQuickActions`、`testT26AddressActionDisabledWithoutAddress` | 通过（`0020`） |
+| T27 | 收藏状态持久化 | `specs/card-detail` → `T27 收藏状态持久化`<br>`specs/card-model` → `收藏标记持久化` | `DetailUITests.testT27FavoritePersists`、`DetailViewModelTests.testToggleFavoritePersists`、`PersistenceTests.testT27FavoriteSurvivesReopen` | 通过（`0020`） |
+| T28 | 查看原图 | `specs/card-detail` → `T28 查看原图` | `DetailUITests.testT28ViewOriginalImage`、`testT26AddressActionDisabledWithoutAddress`（无图隐藏） | 通过（`0020`） |
 | T34 | 主页「+」→ 手动新建无原图名片 | `specs/card-list` → `T34 手动新建并保存`<br>`specs/card-model` → `T34 手动新建允许无原图` | `BizScanUITests/CardListUITests.testT34CreateCardManually`、`NewCardViewModelTests.testSaveCreatesCardWithoutImage`、`testNoGroupKeepsNilGroup` | 通过（`0018`；UI 用例只录入姓名，手机号由 L2 覆盖） |
 | T35 | 手动新建空卡 → 二次确认 | `specs/card-list` → `T35 手动新建空卡需确认` | `BizScanUITests/CardListUITests.testT35EmptyManualCardRequiresConfirmation`、`NewCardViewModelTests.testEmptyCardRequiresConfirmation` | 通过（`0018`） |
 
