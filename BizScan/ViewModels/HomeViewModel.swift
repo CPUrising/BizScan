@@ -26,6 +26,22 @@ final class HomeViewModel {
         return cards.filter { $0.group?.caseInsensitiveCompare(selectedGroup) == .orderedSame }
     }
 
+    var sections: [HomeCardSection] {
+        let sorted = visibleCards.sorted { $0.createdAt > $1.createdAt }
+        var sections: [HomeCardSection] = []
+        for card in sorted {
+            let day = Calendar.current.startOfDay(for: card.createdAt)
+            if let last = sections.indices.last, sections[last].day == day {
+                sections[last].cards.append(card)
+            } else {
+                sections.append(
+                    HomeCardSection(day: day, title: Self.dayFormatter.string(from: day), cards: [card])
+                )
+            }
+        }
+        return sections
+    }
+
     var currentGroupTitle: String {
         selectedGroup ?? AppCopy.allGroups
     }
@@ -83,4 +99,19 @@ final class HomeViewModel {
         guard let original = card.originalImagePath else { return nil }
         return imageStore.image(forRelativePath: original)
     }
+
+    private static let dayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+}
+
+struct HomeCardSection: Identifiable {
+    let day: Date
+    let title: String
+    var cards: [BusinessCard]
+
+    var id: Date { day }
 }

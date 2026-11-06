@@ -9,7 +9,7 @@ final class SearchTagsUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-ui-testing-seed"]
         app.launch()
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15))
         return app
     }
 

@@ -3,7 +3,7 @@ import Foundation
 /// 所有用户可见文案集中在此，便于对照参考 App 后统一修正，而不是散落在 View 里。
 enum AppCopy {
     static let appName = "BizScan"
-    static let cardHolder = "名片夹"
+    static let cardHolder = "名片"
 
     static let scanCard = "扫描名片"
     static let importPhoto = "从相册导入"
@@ -23,6 +23,9 @@ enum AppCopy {
 
     static let emptyTitle = "还没有名片"
     static let emptyMessage = "扫描或导入一张名片，开始建立你的名片夹。"
+    static let homeSearchPlaceholder = "请输入姓名/公司/职位搜索"
+    static let homeEmptyHint = "点击下方相机拍摄您的第一张名片"
+    static let emptyGroup = "该分组暂无名片"
     static let unnamedCard = "未命名名片"
     static let searchPlaceholder = "搜索姓名、公司、电话、邮箱"
     static let searchEmpty = "没有找到匹配的名片"

@@ -44,7 +44,8 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 | `Persistence/BusinessCardRepository` | T12/T17/T18、重启保持、文件清理 | `RepositoryTests`（6 项）+ `PersistenceTests`（4 项）+ `PersistenceUITests`（1 项） | 部分通过 | `RepositoryTests` 6 项（`0010`）、`PersistenceTests` 4 项（`0011`，SwiftData 真实落盘、同 URL 重建容器）、`PersistenceUITests.testT18DataSurvivesRelaunch`（`0016`，模拟器 terminate/relaunch）均通过；真机 kill 进程未验证 |
 | `ViewModels/ReviewViewModel` | T11 校正落库、T12 首次保存写图、空名片二次确认、连点不重复 | `ReviewViewModelTests`（6 项） | 通过 | `0011`，L2；校正页 UI 未自动化；仅传真号判定由 `local-20261106` 补测（K1） |
 | `ViewModels/DetailViewModel` | T13/T14/T16/T17、备注 | `DetailViewModelTests`（6 项） | 通过 | `0011`，L2；备注新增/编辑/清空由 `local-20261106` 补测 |
-| `ViewModels/HomeViewModel` | 列表排序、删除、分组筛选与移动 | `HomeViewModelTests`（6 项） | 通过 | `0011`/`0017`，L2；标签筛选用例已替换为分组筛选 |
+| `ViewModels/HomeViewModel` | 列表排序、删除、日期分组、分组筛选与移动 | `HomeViewModelTests`（7 项） | 通过 | `0011`/`0017`/`0019`，L2；排序依据由 `updatedAt` 改为 `createdAt` |
+| `Views/HomeView` | 深色外观、日期分组、常驻入口、行菜单删除 | `CardListUITests` / `LaunchUITests` | 部分通过 | `0019`，UI；深色配色未做像素级断言，以截图为准；空状态图标为系统线稿 |
 | `ViewModels/GroupViewModel` | 分组计数、新建去重、重命名冲突、删除后计数 | `GroupViewModelTests`（4 项） | 通过 | `0017`，L2 |
 | `ViewModels/NewCardViewModel` | 无图保存、空卡确认、分组写入、标签编辑 | `NewCardViewModelTests`（4 项） | 通过 | `0018`，L2；UI 层未覆盖多行手机号输入 |
 | `Views/EditCardView` | 编辑页标签删除按钮 | 无 | 未执行 | `0017` 起标签仅保留编辑能力，删除按钮缺少 UI 用例；仅仓储层 `testDeleteTagRemovesItFromCards` 覆盖 |

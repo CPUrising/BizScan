@@ -11,7 +11,7 @@ final class LaunchUITests: XCTestCase {
         app.launch()
 
         XCTAssertTrue(
-            app.navigationBars["名片夹"].waitForExistence(timeout: 15),
+            app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15),
             "应用启动后应进入名片夹"
         )
         // 标识符加在容器上会下发给子元素，容器本身不是 AX 元素，故按标识符在整棵树中查找

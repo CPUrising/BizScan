@@ -11,7 +11,7 @@ final class DetectionUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-ui-testing-seed", "-ui-testing-capture"]
         app.launch()
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15))
         return app
     }
 
@@ -31,7 +31,7 @@ final class DetectionUITests: XCTestCase {
         )
 
         app.buttons["BizScan.Scanner.Close"].tap()
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 10))
     }
 
     func testRotateNoticeThenConfirmEntersReview() {

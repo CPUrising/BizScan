@@ -24,6 +24,7 @@ struct DetailView: View {
         }
         .navigationTitle(AppCopy.detailTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(AppCopy.edit) {

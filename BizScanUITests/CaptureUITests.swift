@@ -9,7 +9,7 @@ final class CaptureUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-ui-testing-seed"]
         app.launch()
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15))
         return app
     }
 
@@ -46,7 +46,7 @@ final class CaptureUITests: XCTestCase {
         XCTAssertTrue(waitForScannerCloseButton(app), "进入扫描页后应可关闭")
 
         app.buttons["BizScan.Scanner.Close"].tap()
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 10))
     }
 
     func testT20ExitWithoutDraft() {
@@ -57,7 +57,7 @@ final class CaptureUITests: XCTestCase {
 
         app.buttons["BizScan.Scanner.Close"].tap()
 
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.staticTexts["David Chen"].exists, true, "退出扫描不应影响已有名片")
     }
 }

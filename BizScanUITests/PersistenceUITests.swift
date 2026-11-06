@@ -13,7 +13,7 @@ final class PersistenceUITests: XCTestCase {
         ]
         app.launch()
 
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["David Chen"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Alice Wu"].exists)
 
@@ -22,7 +22,7 @@ final class PersistenceUITests: XCTestCase {
         app.launchArguments = ["-ui-testing", "-ui-testing-persistent"]
         app.launch()
 
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["David Chen"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Alice Wu"].exists)
     }

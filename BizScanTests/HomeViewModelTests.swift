@@ -21,7 +21,7 @@ final class HomeViewModelTests: XCTestCase {
         )
     }
 
-    func testReloadSortsByUpdatedAtDescending() throws {
+    func testReloadSortsByCreatedAtDescending() throws {
         let older = makeCard(name: "Older", updatedAt: 100)
         let newer = makeCard(name: "Newer", updatedAt: 200)
         let repository = InMemoryBusinessCardRepository(cards: [older, newer])
@@ -30,7 +30,52 @@ final class HomeViewModelTests: XCTestCase {
         viewModel.reload()
 
         XCTAssertEqual(viewModel.cards.map(\.name), ["Newer", "Older"])
+        XCTAssertEqual(viewModel.sections.first?.cards.map(\.name), ["Newer", "Older"])
         XCTAssertFalse(viewModel.isEmpty)
+    }
+
+    func testSectionsGroupByCreatedDay() throws {
+        let dayOne = Calendar.current.date(from: DateComponents(year: 2026, month: 10, day: 26))!
+        let dayTwo = Calendar.current.date(from: DateComponents(year: 2026, month: 10, day: 27))!
+        let first = BusinessCard(
+            originalImagePath: nil,
+            name: "First",
+            createdAt: dayOne,
+            updatedAt: dayOne
+        )
+        let second = BusinessCard(
+            originalImagePath: nil,
+            name: "Second",
+            createdAt: dayTwo,
+            updatedAt: dayTwo
+        )
+        let repository = InMemoryBusinessCardRepository(cards: [first, second])
+        let viewModel = HomeViewModel(repository: repository, imageStore: InMemoryImageStore())
+
+        viewModel.reload()
+
+        XCTAssertEqual(viewModel.sections.map(\.title), ["2026-10-27", "2026-10-26"])
+        XCTAssertEqual(viewModel.sections.first?.cards.map(\.name), ["Second"])
+    }
+
+    func testEditingDoesNotMoveCardToAnotherDay() throws {
+        let created = Calendar.current.date(from: DateComponents(year: 2026, month: 10, day: 26))!
+        var card = BusinessCard(
+            originalImagePath: nil,
+            name: "Edited",
+            createdAt: created,
+            updatedAt: created
+        )
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = HomeViewModel(repository: repository, imageStore: InMemoryImageStore())
+        viewModel.reload()
+
+        card.name = "Edited Again"
+        card.touch()
+        try repository.save(card)
+        viewModel.reload()
+
+        XCTAssertEqual(viewModel.sections.map(\.title), ["2026-10-26"])
     }
 
     func testDeleteRemovesCardFromList() throws {

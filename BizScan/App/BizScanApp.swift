@@ -95,6 +95,11 @@ struct BizScanApp: App {
     /// UI 测试用的确定性数据；只写入内存容器或专用测试 store，不影响真实用户数据。
     private static func seed(_ container: ModelContainer) {
         let context = ModelContext(container)
+        func seedDate(day: Int) -> Date {
+            Calendar.current.date(
+                from: DateComponents(year: 2026, month: 10, day: day, hour: 10)
+            ) ?? Date()
+        }
         let cards = [
             BusinessCard(
                 originalImagePath: "seed/david.jpg",
@@ -106,7 +111,8 @@ struct BizScanApp: App {
                 emails: ["david.chen@example.com"],
                 website: "example.com",
                 tags: ["Customer"],
-                group: "客户"
+                group: "客户",
+                createdAt: seedDate(day: 26)
             ),
             BusinessCard(
                 originalImagePath: "seed/zhu.jpg",
@@ -115,7 +121,8 @@ struct BizScanApp: App {
                 jobTitle: "教授",
                 mobiles: ["139 0000 0000"],
                 emails: ["zhu@example.edu"],
-                tags: ["Professor"]
+                tags: ["Professor"],
+                createdAt: seedDate(day: 27)
             ),
             BusinessCard(
                 originalImagePath: "seed/alice.jpg",
@@ -125,7 +132,8 @@ struct BizScanApp: App {
                 emails: ["alice@example.com"],
                 tags: ["Partner"],
                 group: "合作伙伴",
-                notes: "Follow up next week"
+                notes: "Follow up next week",
+                createdAt: seedDate(day: 27)
             )
         ]
 

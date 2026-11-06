@@ -9,7 +9,7 @@ final class CardListUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-ui-testing-seed"]
         app.launch()
-        XCTAssertTrue(app.navigationBars["名片夹"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].waitForExistence(timeout: 15))
         return app
     }
 
@@ -37,7 +37,10 @@ final class CardListUITests: XCTestCase {
 
         let target = app.staticTexts["Alice Wu"]
         XCTAssertTrue(target.waitForExistence(timeout: 10))
-        target.swipeLeft()
+
+        let menu = app.buttons["BizScan.CardRow.Menu.Alice Wu"]
+        XCTAssertTrue(menu.waitForExistence(timeout: 5))
+        menu.tap()
 
         let deleteButton = app.buttons["删除"].firstMatch
         XCTAssertTrue(deleteButton.waitForExistence(timeout: 5))
@@ -82,11 +85,11 @@ final class CardListUITests: XCTestCase {
 
         let david = app.staticTexts["David Chen"]
         XCTAssertTrue(david.waitForExistence(timeout: 5))
-        david.swipeRight()
 
-        let groupAction = app.buttons["分组"].firstMatch
-        XCTAssertTrue(groupAction.waitForExistence(timeout: 5))
-        groupAction.tap()
+        let rowMenu = app.buttons["BizScan.CardRow.Menu.David Chen"]
+        XCTAssertTrue(rowMenu.waitForExistence(timeout: 5))
+        rowMenu.tap()
+        app.buttons["移动到分组"].tap()
         app.buttons["新分组"].tap()
 
         app.buttons["BizScan.Home.GroupMenu"].tap()
@@ -160,5 +163,25 @@ final class CardListUITests: XCTestCase {
         dialog.buttons["保存"].tap()
 
         XCTAssertTrue(app.staticTexts["未命名名片"].waitForExistence(timeout: 10))
+    }
+
+    func testT24HomeGroupsByCreatedDate() {
+        let app = launchSeeded()
+
+        let newer = app.staticTexts["2026-10-27"]
+        let older = app.staticTexts["2026-10-26"]
+        XCTAssertTrue(newer.waitForExistence(timeout: 10))
+        XCTAssertTrue(older.exists)
+        XCTAssertLessThan(newer.frame.minY, older.frame.minY)
+    }
+
+    func testT25HomeKeepsPersistentEntries() {
+        let app = launchSeeded()
+
+        XCTAssertTrue(app.staticTexts["名片"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["BizScan.Home.Search"].exists)
+        XCTAssertTrue(app.buttons["BizScan.Home.GroupManage"].exists)
+        XCTAssertTrue(app.buttons["BizScan.Home.Scan"].exists)
+        XCTAssertTrue(app.buttons["BizScan.Home.Add"].exists)
     }
 }
