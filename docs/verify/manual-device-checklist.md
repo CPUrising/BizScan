@@ -1,7 +1,8 @@
-# 真机人工验证清单
+# 真机验收程序（可转移）
 
+> **本文件的性质**：这是一份**待外部执行的验收程序**，不是未完成的工作项。本项目自始至终没有 iOS 真机，因此下列条目不产生任何结论；它们以 B 类的形式记录在 [`../acceptance-report.md`](../acceptance-report.md) 与 [`../verification-debt.md`](../verification-debt.md)。
 > 适用：模拟器无相机、系统 UI 无法自动化，或需要杀进程/系统分享面板的场景。
-> 本清单只提供步骤与回填表格，**不预填结论**。执行后请复制为 `docs/verify/manual-device-<YYYYMMDD>.md` 填写，并在 `docs/traceability.md` 对应 Txx 追加证据链接。
+> 执行后请复制为 `docs/verify/manual-device-<YYYYMMDD>.md` 填写，并在 `docs/traceability.md` 对应 Txx 把类别由 B 改为 A。
 > 前置：真机已安装 Debug 构建（Xcode 直接运行或 `xcrun devicectl device install app`），系统版本记入下表。
 
 ## 0. 执行信息
@@ -12,6 +13,13 @@
 | 系统版本 | 待填写 |
 | App 构建 | 待填写（commit / 构建时间） |
 | 执行人 / 时间 | 待填写 |
+
+## 0.1 执行约定
+
+- **不预填结论**：本文件中的"预期"是判定标准，不是已完成的事实；未执行前结果列保持空白。
+- **证据命名**：`T<编号>-<结果>-<序号>.<扩展名>`，例如 `T03-allow-01.mov`、`T31-success-01.png`；FAIL 必须附截图或录屏。
+- **判定方法**：每条以"预期"为唯一标准；观察到偏差时如实记 FAIL，并同步在 `../verification-debt.md` 登记为执行失败。
+- **环境记录**：设备型号、系统版本、构建号必填，否则该条不计入 A 类。
 
 ## 1. T03 相机权限允许
 

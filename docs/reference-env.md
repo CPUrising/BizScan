@@ -15,12 +15,13 @@
 
 | 资产                   | 期望位置                               | 状态  | 校验                              |
 | -------------------- | ---------------------------------- | --- | ------------------------------- |
-| 30\~50 张测试名片         | `fixtures/cards/`                  | 待接收 | 文件数 + SHA256 清单                 |
-| Ground Truth         | `fixtures/ground_truth/*.json`     | 待接收 | 与 `ground_truth.schema.json` 一致 |
-| Reference Test Suite | `fixtures/reference_test_suite.md` | 待接收 | T01–T20 逐条可执行                   |
-| 测试名片类别标注             | `fixtures/manifest.json`           | 待接收 | 中文/英文/双语/竖版/多电话/字段缺失/复杂背景       |
+| 30\~50 张测试名片         | `fixtures/cards/`                  | 未下发 | 文件数 + SHA256 清单                 |
+| Ground Truth         | `fixtures/ground_truth/*.json`     | 未下发 | 与 `ground_truth.schema.json` 一致 |
+| Reference Test Suite | `fixtures/reference_test_suite.md` | 未下发 | T01–T20 逐条可执行                   |
+| 测试名片类别标注             | `fixtures/manifest.json`           | 未下发 | 中文/英文/双语/竖版/多电话/字段缺失/复杂背景       |
 
-未收到教师资产前，允许先用 `fixtures/cards/` 下的合成名片样例跑通链路，但**不得**据此宣称准确率达标；报告必须标注"自建数据"。
+> "未下发"是已确认的事实（教师未提供），不是"未获取"或"待催办"。因此验收以 `要求/01.md` 第十七章原文为条目来源，自建等价用例映射见 [`acceptance-report.md`](acceptance-report.md)；不得宣称自建集等同教师 RTS。
+> 未收到教师资产前，允许先用 `fixtures/cards/` 下的合成名片样例跑通链路，但**不得**据此宣称准确率达标；报告必须标注"自建数据"。
 
 ## 3. 观察记录规范
 

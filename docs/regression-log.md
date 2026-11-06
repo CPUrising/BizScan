@@ -13,6 +13,8 @@
 | 2026-11-03 | `0016-persistence-hardening` | T18(模拟器 terminate/relaunch) + 62 core + 52 L2 + 12 UI | 0 | 2（真实名片评估，无本机素材） | [verify/0016](verify/0016-persistence-hardening.md) |
 | 2026-11-06 | `local-20261106` | 62 core + 54 L2（新增 2：传真号空卡判定、备注增改清空） | 0 | UI 全量（本轮 `--scope unit`）；T03–T05/T18 真机/T19 分享面板 | [verify/local-20261106](verify/local-20261106.md) |
 | 2026-11-06 | `local-20261106-ui` | T01,T02,T13,T14,T15,T16,T17,T18(模拟器重启),T20(中途退出) + 62 core + 12 UI | 0 | T03–T05,T18 真机,T19 分享面板 | [verify/local-20261106](verify/local-20261106.md) |
+| 2026-11-06 | `0021-review-flags` | T29 + T30(L2) + 69 core + 81 L2 + 26 UI | 0 | T31–T33 真机通讯录 | [verify/0021](verify/0021-review-flags.md) |
+| 2026-11-06 | `0022-save-to-contacts` | T31–T33(L2) + 69 core + 89 L2 + 26 UI | 0 | 真实通讯录写入（B 类） | [verify/0022](verify/0022-save-to-contacts.md) |
 
 ## 使用规则
 

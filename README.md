@@ -45,14 +45,26 @@
 | P1 | 黑盒观察与规范冻结（11 份能力规范、T01–T20） | — | 规范完成；观察待补 | `openspec/specs/`、`docs/traceability.md` |
 | P2a | 逻辑层 `BizScanCore`（模型、解析、vCard、搜索、标签） | `0010-toolchain-compile-fixes` | **单元测试通过（62/62）** | [`docs/verify/0010-toolchain-compile-fixes.md`](docs/verify/0010-toolchain-compile-fixes.md) |
 | P2b | 应用骨架与数据层 | `0001-app-skeleton` | 单元测试通过（L2 29/29）；UI 覆盖 T01/T13/T17 通过 | [`docs/verify/0001-app-skeleton.md`](docs/verify/0001-app-skeleton.md) |
-| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 编译通过；服务层测试未写 | [`0002-capture-import.md`](docs/verify/0002-capture-import.md) / [`0003-boundary-perspective.md`](docs/verify/0003-boundary-perspective.md) |
-| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析单元测试通过（13/13）；OCR 未验证 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md) |
-| P5 | 人工校正与落库 | `0006-verification-save` | T20（中途退出）通过；T11/T12 部分通过（L2，UI 未执行）；T18 由 `0016` 补模拟器重启 | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md) |
-| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | vCard 单测 L1 7/7 + L2 5/5；UI 覆盖 T14/T15/T16 通过；T19 分享面板未测 | [`docs/verify/0008-export.md`](docs/verify/0008-export.md) |
-| P7 | 验收、回归与归档 | `0009`、`0011`、`0012`、`0013`、`0014`、`0015`、`0016` | 进行中：core 62 + L2 54 + UI 12 全绿；T06/T07 服务层、合成基线与真实名片基线（`real-001`，14 例，虚构字段 0）完成；`0016` 完成持久化加固与 T18 模拟器重启；`local-20261106` 本地复跑 core 62 + L2 54 + UI 12 全绿，关闭 K1（仅传真号空卡判定）与备注缺口；`0001`–`0008` 报告已回填；仅剩 T03–T05、T18 真机、T19 分享面板与 30–50 张正式数据集待执行 | [`docs/verify/local-20261106.md`](docs/verify/local-20261106.md) / [`docs/verify/0016-persistence-hardening.md`](docs/verify/0016-persistence-hardening.md) |
-| P8 | 名片 UI 改版（分组 → 手动新建 → 主页 → 详情 → 待核对 → 通讯录） | `0017`、`0018`、`0019`、`0020`、`0021`、`0022` | 完成：`0017` 分组、`0018` 手动新建、`0019` 主页 1:1、`0020` 详情 1:1、`0021` 待核对、`0022` 存入通讯录，core 69 + L2 89 + UI 26 全绿（T21–T29、T34–T35 通过；T30、T31–T33 为 L2 + 真机清单） | [`docs/verify/0021-review-flags.md`](docs/verify/0021-review-flags.md) / [`docs/verify/0022-save-to-contacts.md`](docs/verify/0022-save-to-contacts.md) |
+| P3 | 采集与几何校正 | `0002-capture-import`、`0003-boundary-perspective` | 服务层测试已补（`0013`）；真机拍摄为 B 类 | [`0002-capture-import.md`](docs/verify/0002-capture-import.md) / [`docs/verify/0013-service-layer-coverage.md`](docs/verify/0013-service-layer-coverage.md) |
+| P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析 L1 全绿；OCR 由 `0013` + 两份评估基线覆盖，真实拍摄为 B 类 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md) |
+| P5 | 人工校正与落库 | `0006-verification-save` | T20（中途退出）A 类；T11/T12 由 L2 覆盖（B 类）；T18 由 `0016` 补模拟器重启（A 类） | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md) |
+| P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | vCard L1 7/7 + L2 5/5（B 类，分享面板未验证）；UI 覆盖 T14/T15/T16（A 类） | [`docs/verify/0008-export.md`](docs/verify/0008-export.md) |
+| P7 | 验收、回归与归档 | `0009`、`0011`、`0012`、`0013`、`0014`、`0015`、`0016` | 完成（自动化范围）：core 62 + L2 54 + UI 12 基线全绿；T06/T07 服务层、合成基线与真实名片基线（`real-001`，14 例，虚构字段 0）；`0016` 持久化加固与 T18 模拟器重启；`local-20261106` 关闭 K1 与备注缺口；`0001`–`0008` 报告已回填。真机项与教师数据集按 B/C 类登记，不再计为"待执行" | [`docs/verify/local-20261106.md`](docs/verify/local-20261106.md) / [`docs/acceptance-report.md`](docs/acceptance-report.md) |
+| P8 | 名片 UI 改版（分组 → 手动新建 → 主页 → 详情 → 待核对 → 通讯录） | `0017`、`0018`、`0019`、`0020`、`0021`、`0022` | 可执行范围内完成：core 69 + L2 89 + UI 26 全绿（T21–T29、T34–T35 为 A 类；T30、T31–T33 为 B 类） | [`docs/acceptance-report.md`](docs/acceptance-report.md) / [`docs/verify/0022-save-to-contacts.md`](docs/verify/0022-save-to-contacts.md) |
 
 > 「未验证」不是完成。所有未执行的测试登记在 **[`docs/verification-debt.md`](docs/verification-debt.md)**，必须由真实执行结果关闭。
+
+### 2.1 验收口径
+
+唯一对外结论见 **[`docs/acceptance-report.md`](docs/acceptance-report.md)**。结论分三类，不可混用：
+
+| 类别 | 含义 | 计入通过率 |
+|---|---|---|
+| **A 已验证** | 有真实执行证据（L1 / L2 / UI） | 是 |
+| **B 行为已覆盖，系统集成未验证** | 判定逻辑有测试；剩余依赖真机硬件或系统 App | 否 |
+| **C 环境不可达** | 基准或测试资产缺失（如教师 RTS 未下发） | 否 |
+
+三条环境约束固定在此声明：**无 iOS 真机**、**模拟器无相机与通讯录**、**教师未下发 Reference Test Suite 与 30–50 张正式测试名片**。这三项属外部约束，不构成交付缺口，处理方式见验收结论书第 4 节。
 
 Gate 定义见第 8 节。
 
@@ -63,7 +75,7 @@ Gate 定义见第 8 节。
 实现行为以锁定的参考版本为准，不跟随 CamCard 升级。逐项填写 `docs/reference-env.md`：
 参考版本、iOS 版本、设备/模拟器、App 语言、登录状态、免费功能边界、测试名片集、Reference Test Suite。
 
-> 状态：**部分填写**。实现环境已在 P0 冻结（macOS 26.3.1 + Xcode 26.1.1 + iPhone 16 / iOS 18.0）；参考 App 列与测试资产列仍为「待填写」，属 P1 观察缺口。未填写期间不得据此声明 OCR/字段准确率，自动化测试结论不受影响。
+> 状态：**实现环境已冻结；教师资产未下发**。实现环境为 macOS 26.3.1 + Xcode 26.1.1 + iPhone 16 / iOS 18.0；参考 App 版本列待填写，Reference Test Suite 与 30–50 张正式测试名片**确认未下发**（非"未获取"）。未下发期间不得据此声明教师口径的准确率，自动化测试结论不受影响。
 
 ---
 
@@ -206,7 +218,7 @@ bash scripts/verify.sh --scope unit --change <change-id>
 | G4 | P4 完成 | T07–T10 通过；字段级准确率基线报告产出；虚构字段测试为 0 |
 | G5 | P5 完成 | T11/T12/T18 通过；Kill App 后图像、字段、标签、备注完整 |
 | G6 | P6 完成 | T14–T17、T19 通过 |
-| G7 | P7 完成 | T01–T20 20/20；全量回归通过；全部 change 归档；`openspec/specs/` 与实现一致 |
+| G7 | P7 完成 | **A 类全部通过**（当前 23/35，0 失败）；B 类 12 项逐项登记且无阻断偏差；C 类基准缺口已声明；全量回归通过；全部 change 归档；`openspec/specs/` 与实现一致 |
 
 每个 Gate 完成后必须更新第 2 节的状态表并链接证据。
 
@@ -254,6 +266,8 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 
 准确率不达标不阻断归档，但必须记录原因与改进项；**虚构字段**视为阻断缺陷。
 
+> 教师未下发 30–50 张正式测试名片与 Ground Truth，因此当前所有指标均为**自建数据集绝对值**（合成 15 例、真实 14 例，样本 < 30 不报百分比），不得表述为教师口径或 CamCard 对比结果。
+
 ---
 
 ## 12. AI 协作与能力边界
@@ -285,6 +299,8 @@ T01–T20 的规范位置与测试类见 **[`docs/traceability.md`](docs/traceab
 - 本项目为黑盒行为复刻，**不包含** CamCard 的专有模型、算法与资源。
 - OCR 与字段抽取为概率性结果，允许与参考 App 不一致，但必须可解释、可校正、可评估。
 - 相机相关场景只能在真机或注入图片的测试路径验证；模拟器无相机。
+- 本项目无 iOS 真机，因此相机权限时序、真实通讯录写入、系统分享面板与系统 App 调起**未验证**，按 B 类登记；验收程序见 [`docs/verify/manual-device-checklist.md`](docs/verify/manual-device-checklist.md)。
+- 教师 Reference Test Suite 未下发，验收以 `要求/01.md` 原文为条目来源，结论口径见 [`docs/acceptance-report.md`](docs/acceptance-report.md)。
 - 参考项目 `CardScanner` 仅演示"固定取景框 + Vision OCR"，**不含**矩形检测、透视校正、持久化与分层架构；本项目在其基础上重写，不复用其单文件结构。
 
 ---
