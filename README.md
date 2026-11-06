@@ -49,7 +49,7 @@
 | P4 | OCR 与字段结构化 | `0004-ocr-pipeline`、`0005-field-parser` | 字段解析单元测试通过（13/13）；OCR 未验证 | [`0004-ocr-pipeline.md`](docs/verify/0004-ocr-pipeline.md) / [`0005-field-parser.md`](docs/verify/0005-field-parser.md) |
 | P5 | 人工校正与落库 | `0006-verification-save` | T20（中途退出）通过；T11/T12 部分通过（L2，UI 未执行）；T18 由 `0016` 补模拟器重启 | [`docs/verify/0006-verification-save.md`](docs/verify/0006-verification-save.md) |
 | P6 | 管理闭环与导出 | `0007-manage-search-tags`、`0008-export` | vCard 单测 L1 7/7 + L2 5/5；UI 覆盖 T14/T15/T16 通过；T19 分享面板未测 | [`docs/verify/0008-export.md`](docs/verify/0008-export.md) |
-| P7 | 验收、回归与归档 | `0009`、`0011`、`0012`、`0013`、`0014`、`0015`、`0016` | 进行中：core 62 + L2 52 + UI 12 全绿；T06/T07 服务层、合成基线与真实名片基线（`real-001`，14 例，虚构字段 0）完成；`0016` 完成持久化加固与 T18 模拟器重启；`0001`–`0008` 报告已回填；仅剩 T03–T05、T18 真机、T19 分享面板与 30–50 张正式数据集待执行 | [`docs/verify/0015-real-card-eval.md`](docs/verify/0015-real-card-eval.md) / [`docs/verify/0016-persistence-hardening.md`](docs/verify/0016-persistence-hardening.md) |
+| P7 | 验收、回归与归档 | `0009`、`0011`、`0012`、`0013`、`0014`、`0015`、`0016` | 进行中：core 62 + L2 54 + UI 12 全绿；T06/T07 服务层、合成基线与真实名片基线（`real-001`，14 例，虚构字段 0）完成；`0016` 完成持久化加固与 T18 模拟器重启；`local-20261106` 本地复跑 core 62 + L2 54 + UI 12 全绿，关闭 K1（仅传真号空卡判定）与备注缺口；`0001`–`0008` 报告已回填；仅剩 T03–T05、T18 真机、T19 分享面板与 30–50 张正式数据集待执行 | [`docs/verify/local-20261106.md`](docs/verify/local-20261106.md) / [`docs/verify/0016-persistence-hardening.md`](docs/verify/0016-persistence-hardening.md) |
 
 > 「未验证」不是完成。所有未执行的测试登记在 **[`docs/verification-debt.md`](docs/verification-debt.md)**，必须由真实执行结果关闭。
 

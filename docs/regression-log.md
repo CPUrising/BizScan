@@ -11,6 +11,8 @@
 | 2026-10-27 | `0014-ocr-eval-baseline` | T07 + 评估基线 15 例（虚构字段 0） + 62 core + 50 L2 + 11 UI | 0 | T03–T05,T18 真机,T19 分享面板 | [verify/0014](verify/0014-ocr-eval-baseline.md) |
 | 2026-10-27 | `0015-real-card-eval` | T07 + 真实名片基线 14 例（虚构字段 0） + 62 core + 52 L2 + 11 UI | 0 | CamCard 对比、30–50 张、T03–T05/T18/T19 真机 | [verify/0015](verify/0015-real-card-eval.md) |
 | 2026-11-03 | `0016-persistence-hardening` | T18(模拟器 terminate/relaunch) + 62 core + 52 L2 + 12 UI | 0 | 2（真实名片评估，无本机素材） | [verify/0016](verify/0016-persistence-hardening.md) |
+| 2026-11-06 | `local-20261106` | 62 core + 54 L2（新增 2：传真号空卡判定、备注增改清空） | 0 | UI 全量（本轮 `--scope unit`）；T03–T05/T18 真机/T19 分享面板 | [verify/local-20261106](verify/local-20261106.md) |
+| 2026-11-06 | `local-20261106-ui` | T01,T02,T13,T14,T15,T16,T17,T18(模拟器重启),T20(中途退出) + 62 core + 12 UI | 0 | T03–T05,T18 真机,T19 分享面板 | [verify/local-20261106](verify/local-20261106.md) |
 
 ## 使用规则
 
