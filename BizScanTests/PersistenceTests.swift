@@ -33,6 +33,7 @@ final class PersistenceTests: XCTestCase {
             mobiles: ["+86 138 0000 0000"],
             emails: ["david.chen@example.com"],
             tags: ["Customer"],
+            unverifiedValues: ["+86 138 0000 0000"],
             notes: "Follow up next week"
         )
 
@@ -59,6 +60,7 @@ final class PersistenceTests: XCTestCase {
         XCTAssertEqual(restored.mobiles, ["+86 138 0000 0000"])
         XCTAssertEqual(restored.emails, ["david.chen@example.com"])
         XCTAssertEqual(restored.tags, ["Customer"])
+        XCTAssertEqual(restored.unverifiedValues, ["+86 138 0000 0000"])
         XCTAssertEqual(restored.notes, "Follow up next week")
         XCTAssertEqual(restored.originalImagePath, "CardImages/original.jpg")
         XCTAssertEqual(restored.processedImagePath, "CardImages/processed.jpg")

@@ -388,6 +388,18 @@ struct DetailView: View {
                                     .fill(Theme.control)
                             )
                     }
+                    if entry.needsReview {
+                        Text(AppCopy.reviewBadge)
+                            .font(.system(size: 12))
+                            .foregroundStyle(Theme.amber)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                    .fill(Theme.amberSurface)
+                            )
+                            .accessibilityIdentifier("BizScan.Detail.ReviewBadge.\(entry.id)")
+                    }
                 }
 
                 Button {
@@ -403,6 +415,12 @@ struct DetailView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(viewModel.actionURL(for: entry) == nil)
+
+                if entry.needsReview {
+                    Text(AppCopy.reviewHint)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.textTertiaryDetail)
+                }
             }
             .padding(.vertical, 18)
 

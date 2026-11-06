@@ -11,6 +11,7 @@ final class ReviewViewModel {
     private let existingCard: BusinessCard?
     private let originalData: Data
     private let processedData: Data
+    private let detectedUnverifiedValues: [String]
 
     let parsed: ParsedCard
     let previewImage: UIImage
@@ -46,6 +47,10 @@ final class ReviewViewModel {
         self.existingCard = existingCard
         self.parsed = scanResult.parsed
         self.previewImage = scanResult.processedImage
+        self.detectedUnverifiedValues = UnverifiedValueDetector.detect(
+            parsed: scanResult.parsed,
+            observations: scanResult.observations
+        )
 
         guard let originalData = scanResult.originalImage.jpegData(compressionQuality: 0.9),
               let processedData = scanResult.processedImage.jpegData(compressionQuality: 0.9) else {
@@ -129,6 +134,10 @@ final class ReviewViewModel {
             card.postalCode = nilIfEmpty(postalCode)
             card.notes = nilIfEmpty(notes)
             card.tags = tags
+            card.unverifiedValues = Self.retained(
+                detectedUnverifiedValues,
+                in: card
+            )
             card.touch()
 
             try repository.save(card)
@@ -136,6 +145,13 @@ final class ReviewViewModel {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    private static func retained(_ values: [String], in card: BusinessCard) -> [String] {
+        let current = Set(
+            card.mobiles + card.officePhones + card.faxes + card.emails + [card.address].compactMap { $0 }
+        )
+        return values.filter { current.contains($0) }
     }
 
     private func splitLines(_ text: String) -> [String] {

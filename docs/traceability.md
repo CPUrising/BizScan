@@ -1,6 +1,6 @@
 # 验收追踪矩阵（T01–T35）
 
-> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T28、T34–T35。
+> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T30、T34–T35。
 > 规则：每条 Txx 必须能在规范中找到场景，并在测试代码中找到实现；反之新增场景必须回填本表。
 > 状态：`未实现` / `已实现待执行` / `部分通过` / `通过` / `失败`（执行结果由 `docs/verify/<change>.md` 佐证；`已实现待执行` 表示测试代码已存在但从未运行）。
 
@@ -36,6 +36,8 @@
 | T26 | 详情核心资料与快捷操作 | `specs/card-detail` → `T26 详情核心资料与快捷操作` | `DetailUITests.testT26ProfileAndQuickActions`、`testT26AddressActionDisabledWithoutAddress` | 通过（`0020`） |
 | T27 | 收藏状态持久化 | `specs/card-detail` → `T27 收藏状态持久化`<br>`specs/card-model` → `收藏标记持久化` | `DetailUITests.testT27FavoritePersists`、`DetailViewModelTests.testToggleFavoritePersists`、`PersistenceTests.testT27FavoriteSurvivesReopen` | 通过（`0020`） |
 | T28 | 查看原图 | `specs/card-detail` → `T28 查看原图` | `DetailUITests.testT28ViewOriginalImage`、`testT26AddressActionDisabledWithoutAddress`（无图隐藏） | 通过（`0020`） |
+| T29 | 低置信度字段展示待核对 | `specs/card-detail` → `T29 低置信度字段展示待核对`<br>`specs/card-model` → `低置信度电话被标记` | `DetailUITests.testT29ReviewBadgeIsShown`、`DetailViewModelTests.testContactEntriesCarryReviewFlag`、`UnverifiedValueDetectorTests` | 通过（`0021`） |
+| T30 | 编辑修正后待核对消失 | `specs/card-detail` → `T30 编辑修正后标记消失`<br>`specs/card-model` → `修正后不再标记` | `DetailViewModelTests.testSavingCorrectedValueClearsReviewFlag`、`ReviewViewModelTests.testCorrectedValueClearsUnverifiedFlag` | 部分通过（`0021`，L2；多行输入框无法稳定获得焦点，UI 用例未写） |
 | T34 | 主页「+」→ 手动新建无原图名片 | `specs/card-list` → `T34 手动新建并保存`<br>`specs/card-model` → `T34 手动新建允许无原图` | `BizScanUITests/CardListUITests.testT34CreateCardManually`、`NewCardViewModelTests.testSaveCreatesCardWithoutImage`、`testNoGroupKeepsNilGroup` | 通过（`0018`；UI 用例只录入姓名，手机号由 L2 覆盖） |
 | T35 | 手动新建空卡 → 二次确认 | `specs/card-list` → `T35 手动新建空卡需确认` | `BizScanUITests/CardListUITests.testT35EmptyManualCardRequiresConfirmation`、`NewCardViewModelTests.testEmptyCardRequiresConfirmation` | 通过（`0018`） |
 

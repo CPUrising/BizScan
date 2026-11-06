@@ -70,6 +70,48 @@ final class ReviewViewModelTests: XCTestCase {
         XCTAssertNotNil(imageStore.data(forRelativePath: processedPath))
     }
 
+    func testLowConfidencePhoneIsSavedAsUnverified() throws {
+        let repository = InMemoryBusinessCardRepository()
+        let scanResult = TestSupport.makeScanResult(
+            mobiles: ["13504119bile"],
+            observations: [
+                OCRObservation(text: "13504119bile", confidence: 0.45),
+                OCRObservation(text: "david@example.com", confidence: 1.0)
+            ]
+        )
+        let viewModel = try ReviewViewModel(
+            scanResult: scanResult,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+
+        viewModel.save()
+
+        let stored = try XCTUnwrap(try repository.fetchAll().first)
+        XCTAssertEqual(stored.unverifiedValues, ["13504119bile"])
+        XCTAssertFalse(stored.unverifiedValues.contains("david@example.com"))
+    }
+
+    func testCorrectedValueClearsUnverifiedFlag() throws {
+        let repository = InMemoryBusinessCardRepository()
+        let scanResult = TestSupport.makeScanResult(
+            mobiles: ["13504119bile"],
+            observations: [OCRObservation(text: "13504119bile", confidence: 0.4)]
+        )
+        let viewModel = try ReviewViewModel(
+            scanResult: scanResult,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+
+        viewModel.mobilesText = "13504119001"
+        viewModel.save()
+
+        let stored = try XCTUnwrap(try repository.fetchAll().first)
+        XCTAssertEqual(stored.mobiles, ["13504119001"])
+        XCTAssertTrue(stored.unverifiedValues.isEmpty)
+    }
+
     func testEmptyCardRequiresConfirmation() throws {
         let repository = InMemoryBusinessCardRepository()
         let viewModel = try ReviewViewModel(

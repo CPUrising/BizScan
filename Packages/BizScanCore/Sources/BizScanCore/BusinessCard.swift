@@ -28,6 +28,8 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
     public var group: String?
     /// 是否已收藏；默认未收藏。
     public var isFavorite: Bool
+    /// 来自低置信度识别或歧义解析、需要人工复核的字段值。
+    public var unverifiedValues: [String]
     public var notes: String?
 
     public var createdAt: Date
@@ -51,6 +53,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
         tags: [String] = [],
         group: String? = nil,
         isFavorite: Bool = false,
+        unverifiedValues: [String] = [],
         notes: String? = nil,
         createdAt: Date = Date(),
         updatedAt: Date? = nil
@@ -72,6 +75,7 @@ public struct BusinessCard: Identifiable, Codable, Equatable, Sendable {
         self.tags = tags
         self.group = group
         self.isFavorite = isFavorite
+        self.unverifiedValues = unverifiedValues
         self.notes = notes
         self.createdAt = createdAt
         self.updatedAt = updatedAt ?? createdAt

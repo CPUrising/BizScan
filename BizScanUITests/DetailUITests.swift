@@ -97,6 +97,14 @@ final class DetailUITests: XCTestCase {
         XCTAssertEqual(app.buttons["BizScan.Detail.Favorite"].value as? String, "已收藏")
     }
 
+    func testT29ReviewBadgeIsShown() {
+        let app = launchSeeded()
+        openDavid(app)
+
+        XCTAssertTrue(app.staticTexts["待核对"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["原始识别内容，可在编辑中修正"].exists)
+    }
+
     func testT28ViewOriginalImage() {
         let app = launchSeeded()
         openDavid(app)

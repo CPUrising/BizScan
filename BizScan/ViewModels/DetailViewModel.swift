@@ -54,6 +54,7 @@ struct ContactEntry: Identifiable {
     let id: String
     let kind: ContactKind
     let value: String
+    var needsReview: Bool = false
 }
 
 @Observable
@@ -125,6 +126,7 @@ final class DetailViewModel {
         card.postalCode = nilIfEmpty(postalCode)
         card.notes = nilIfEmpty(notes)
         card.tags = tags
+        card.unverifiedValues = retainedUnverifiedValues(in: card)
         card.touch()
 
         do {
@@ -209,27 +211,32 @@ final class DetailViewModel {
 
     var contactEntries: [ContactEntry] {
         guard let card else { return [] }
+        let unverified = Set(card.unverifiedValues)
+        func entry(_ id: String, _ kind: ContactKind, _ value: String) -> ContactEntry {
+            ContactEntry(id: id, kind: kind, value: value, needsReview: unverified.contains(value))
+        }
+
         var entries: [ContactEntry] = []
         for (index, phone) in card.mobiles.enumerated() {
-            entries.append(ContactEntry(id: "mobile-\(index)", kind: .mobile, value: phone))
+            entries.append(entry("mobile-\(index)", .mobile, phone))
         }
         for (index, phone) in card.officePhones.enumerated() {
-            entries.append(ContactEntry(id: "office-\(index)", kind: .officePhone, value: phone))
+            entries.append(entry("office-\(index)", .officePhone, phone))
         }
         for (index, fax) in card.faxes.enumerated() {
-            entries.append(ContactEntry(id: "fax-\(index)", kind: .fax, value: fax))
+            entries.append(entry("fax-\(index)", .fax, fax))
         }
         for (index, email) in card.emails.enumerated() {
-            entries.append(ContactEntry(id: "email-\(index)", kind: .email, value: email))
+            entries.append(entry("email-\(index)", .email, email))
         }
         if let website = card.website, !website.isEmpty {
-            entries.append(ContactEntry(id: "website", kind: .website, value: website))
+            entries.append(entry("website", .website, website))
         }
         if let address = card.address, !address.isEmpty {
-            entries.append(ContactEntry(id: "address", kind: .address, value: address))
+            entries.append(entry("address", .address, address))
         }
         if let postalCode = card.postalCode, !postalCode.isEmpty {
-            entries.append(ContactEntry(id: "postal", kind: .postalCode, value: postalCode))
+            entries.append(entry("postal", .postalCode, postalCode))
         }
         return entries
     }
@@ -301,6 +308,13 @@ final class DetailViewModel {
 
     func removeTag(_ tag: String) {
         tags.removeAll { $0.caseInsensitiveCompare(tag) == .orderedSame }
+    }
+
+    private func retainedUnverifiedValues(in card: BusinessCard) -> [String] {
+        let current = Set(
+            card.mobiles + card.officePhones + card.faxes + card.emails + [card.address].compactMap { $0 }
+        )
+        return card.unverifiedValues.filter { current.contains($0) }
     }
 
     private func splitLines(_ text: String) -> [String] {

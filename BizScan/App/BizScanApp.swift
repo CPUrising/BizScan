@@ -117,6 +117,7 @@ struct BizScanApp: App {
                 website: "example.com",
                 tags: ["Customer"],
                 group: "客户",
+                unverifiedValues: ["+86 138 0000 0000"],
                 createdAt: seedDate(day: 26)
             ),
             BusinessCard(

@@ -61,6 +61,8 @@ enum AppCopy {
     static let actionPhone = "电话"
     static let actionAddress = "地址"
     static let actionNotes = "备注"
+    static let reviewBadge = "待核对"
+    static let reviewHint = "原始识别内容，可在编辑中修正"
     static let deleteConfirmTitle = "删除这张名片？"
     static let deleteConfirmMessage = "删除后无法恢复。"
     static let errorTitle = "出错了"

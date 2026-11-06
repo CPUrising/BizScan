@@ -26,6 +26,7 @@ final class BusinessCardEntity {
     var tags: [String]
     var groupName: String?
     var isFavorite: Bool = false
+    var unverifiedValues: [String] = []
     var notes: String?
 
     var createdAt: Date
@@ -49,6 +50,7 @@ final class BusinessCardEntity {
         self.tags = card.tags
         self.groupName = card.group
         self.isFavorite = card.isFavorite
+        self.unverifiedValues = card.unverifiedValues
         self.notes = card.notes
         self.createdAt = card.createdAt
         self.updatedAt = card.updatedAt
@@ -73,6 +75,7 @@ final class BusinessCardEntity {
             tags: tags,
             group: groupName,
             isFavorite: isFavorite,
+            unverifiedValues: unverifiedValues,
             notes: notes,
             createdAt: createdAt,
             updatedAt: updatedAt
@@ -96,6 +99,7 @@ final class BusinessCardEntity {
         tags = card.tags
         groupName = card.group
         isFavorite = card.isFavorite
+        unverifiedValues = card.unverifiedValues
         notes = card.notes
         createdAt = card.createdAt
         updatedAt = card.updatedAt

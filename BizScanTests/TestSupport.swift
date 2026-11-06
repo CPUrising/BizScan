@@ -61,13 +61,14 @@ enum TestSupport {
         emails: [String] = ["david.chen@example.com"],
         website: String? = "example.com",
         address: String? = "123 Market Street, San Francisco",
-        postalCode: String? = "200000"
+        postalCode: String? = "200000",
+        observations: [OCRObservation] = []
     ) -> ScanResult {
         ScanResult(
             originalImage: makeImage(color: .white),
             processedImage: makeImage(color: .gray),
             quad: nil,
-            observations: [],
+            observations: observations,
             parsed: makeParsedCard(
                 name: name,
                 company: company,
@@ -91,7 +92,7 @@ enum TestSupport {
             .appendingPathComponent("BizScanPersistenceTests-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-        let schema = Schema([BusinessCardEntity.self, TagEntity.self])
+        let schema = Schema([BusinessCardEntity.self, TagEntity.self, CardGroupEntity.self])
         let url = directory.appendingPathComponent("store.sqlite")
         let container = try ModelContainer(
             for: schema,

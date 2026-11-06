@@ -96,6 +96,43 @@ final class DetailViewModelTests: XCTestCase {
         XCTAssertNil(emptyViewModel.notesText)
     }
 
+    func testContactEntriesCarryReviewFlag() throws {
+        var card = makeCard()
+        card.unverifiedValues = ["+86 138 0000 0000"]
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+        viewModel.load()
+
+        let mobile = try XCTUnwrap(viewModel.contactEntries.first { $0.kind == .mobile })
+        let office = try XCTUnwrap(viewModel.contactEntries.first { $0.kind == .officePhone })
+        XCTAssertTrue(mobile.needsReview)
+        XCTAssertFalse(office.needsReview)
+    }
+
+    func testSavingCorrectedValueClearsReviewFlag() throws {
+        var card = makeCard()
+        card.unverifiedValues = ["+86 138 0000 0000"]
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+        viewModel.load()
+
+        viewModel.beginEditing()
+        viewModel.mobilesText = "13800000001"
+        viewModel.save()
+
+        let stored = try XCTUnwrap(try repository.fetch(id: card.id))
+        XCTAssertTrue(stored.unverifiedValues.isEmpty)
+        XCTAssertEqual(viewModel.contactEntries.first { $0.kind == .mobile }?.needsReview, false)
+    }
+
     func testToggleFavoritePersists() throws {
         let card = makeCard()
         let repository = InMemoryBusinessCardRepository(cards: [card])
