@@ -30,7 +30,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()
@@ -59,7 +60,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()
@@ -74,7 +76,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
         viewModel.load()
 
@@ -87,7 +90,8 @@ final class DetailViewModelTests: XCTestCase {
         let emptyViewModel = DetailViewModel(
             cardID: empty.id,
             repository: emptyRepository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
         emptyViewModel.load()
 
@@ -103,7 +107,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
         viewModel.load()
 
@@ -120,7 +125,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
         viewModel.load()
 
@@ -133,13 +139,75 @@ final class DetailViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.contactEntries.first { $0.kind == .mobile }?.needsReview, false)
     }
 
+    func testSaveToContactsSuccessDisablesButton() async throws {
+        let card = makeCard()
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let contacts = FakeContactsService()
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore(),
+            contactsService: contacts
+        )
+        viewModel.load()
+
+        viewModel.saveToContacts()
+        await Task.yield()
+        try await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertTrue(viewModel.didSaveToContacts)
+        XCTAssertFalse(viewModel.isSavingToContacts)
+        XCTAssertEqual(contacts.savedCards.map(\.id), [card.id])
+    }
+
+    func testSaveToContactsAlreadyExistsShowsMessage() async throws {
+        let card = makeCard()
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let contacts = FakeContactsService()
+        contacts.result = .alreadyExists
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore(),
+            contactsService: contacts
+        )
+        viewModel.load()
+
+        viewModel.saveToContacts()
+        try await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertEqual(viewModel.contactsMessage, "该联系人已在通讯录中")
+        XCTAssertFalse(viewModel.didSaveToContacts)
+    }
+
+    func testSaveToContactsDeniedNeedsSettings() async throws {
+        let card = makeCard()
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let contacts = FakeContactsService()
+        contacts.error = ContactsServiceError.denied
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore(),
+            contactsService: contacts
+        )
+        viewModel.load()
+
+        viewModel.saveToContacts()
+        try await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertTrue(viewModel.contactsNeedsSettings)
+        XCTAssertFalse(viewModel.didSaveToContacts)
+    }
+
     func testToggleFavoritePersists() throws {
         let card = makeCard()
         let repository = InMemoryBusinessCardRepository(cards: [card])
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
         viewModel.load()
 
@@ -162,7 +230,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()
@@ -182,7 +251,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()
@@ -202,7 +272,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()
@@ -219,7 +290,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()
@@ -249,7 +321,8 @@ final class DetailViewModelTests: XCTestCase {
         let viewModel = DetailViewModel(
             cardID: card.id,
             repository: repository,
-            imageStore: InMemoryImageStore()
+            imageStore: InMemoryImageStore(),
+            contactsService: FakeContactsService()
         )
 
         viewModel.load()

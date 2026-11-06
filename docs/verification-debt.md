@@ -51,6 +51,8 @@ powershell -File scripts/verify-core.ps1           # Windows（需先装 Swift �
 | `ViewModels/GroupViewModel` | 分组计数、新建去重、重命名冲突、删除后计数 | `GroupViewModelTests`（4 项） | 通过 | `0017`，L2 |
 | `ViewModels/NewCardViewModel` | 无图保存、空卡确认、分组写入、标签编辑 | `NewCardViewModelTests`（4 项） | 通过 | `0018`，L2；UI 层未覆盖多行手机号输入 |
 | `Views/EditCardView` | 编辑页标签删除按钮 | 无 | 未执行 | `0017` 起标签仅保留编辑能力，删除按钮缺少 UI 用例；仅仓储层 `testDeleteTagRemovesItFromCards` 覆盖 |
+| `Services/ContactsMapper` | 名片 → CNContact 字段映射、号码归一、去重值 | `ContactsMapperTests`（5 项） | 通过 | `0022`，L2 |
+| 存入通讯录（T31–T33） | 真实写入、权限拒绝、重复联系人 | 无（L2 由 `DetailViewModelTests` 覆盖） | 未执行 | `0022`；需真机与真实通讯录，见 `manual-device-checklist.md` 第 8b 节 |
 | `Services/CardDetector` | T06 边界检测、八类拍摄条件 | `CardDetectorTests`（4 项） | 通过 | `0013`，L2；清晰/倾斜/无边界/错误透传；八类拍摄条件靠真机人工清单补充 |
 | `Services/ImageCorrector` | 透视/方向校正 | `ImageCorrectorTests`（3 项） | 通过 | `0013`，L2；透视输出尺寸、四档旋转、nil quad 原样 |
 | `Services/OCRService` | T07 原始文本与坐标 | `OCRServiceTests`（3 项）+ `OCREvaluationTests`（15 例） | 通过 | `0013`/`0014`，L2；真实 Vision，评估基线见 `docs/eval/ocr-field-baseline.md` |

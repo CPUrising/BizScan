@@ -64,7 +64,9 @@ final class DetailUITests: XCTestCase {
         XCTAssertTrue(app.buttons["BizScan.Detail.Quick.Address"].exists)
         XCTAssertTrue(app.buttons["BizScan.Detail.Quick.Notes"].exists)
         XCTAssertTrue(app.buttons["BizScan.Detail.Quick.Edit"].exists)
-        XCTAssertTrue(app.buttons["BizScan.Detail.SaveToContacts"].exists)
+        let saveToContacts = app.buttons["BizScan.Detail.SaveToContacts"]
+        XCTAssertTrue(saveToContacts.exists)
+        XCTAssertTrue(saveToContacts.isEnabled)
     }
 
     func testT26AddressActionDisabledWithoutAddress() {

@@ -62,12 +62,18 @@ struct ContactEntry: Identifiable {
 final class DetailViewModel {
     private let repository: BusinessCardRepository
     private let imageStore: ImageStoring
+    private let contactsService: ContactsSaving
 
     let cardID: UUID
     private(set) var card: BusinessCard?
     var isEditing = false
     var errorMessage: String?
     var didDelete = false
+
+    var isSavingToContacts = false
+    var didSaveToContacts = false
+    var contactsMessage: String?
+    var contactsNeedsSettings = false
 
     var name = ""
     var company = ""
@@ -84,10 +90,16 @@ final class DetailViewModel {
     var tags: [String] = []
     var newTag = ""
 
-    init(cardID: UUID, repository: BusinessCardRepository, imageStore: ImageStoring) {
+    init(
+        cardID: UUID,
+        repository: BusinessCardRepository,
+        imageStore: ImageStoring,
+        contactsService: ContactsSaving
+    ) {
         self.cardID = cardID
         self.repository = repository
         self.imageStore = imageStore
+        self.contactsService = contactsService
     }
 
     func load() {
@@ -144,6 +156,29 @@ final class DetailViewModel {
             didDelete = true
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    /// 写入系统通讯录；成功、已存在、未授权三种结果分别落到状态。
+    func saveToContacts() {
+        guard let card, !isSavingToContacts, !didSaveToContacts else { return }
+        isSavingToContacts = true
+
+        Task {
+            defer { isSavingToContacts = false }
+            do {
+                let result = try await contactsService.save(card)
+                switch result {
+                case .saved:
+                    didSaveToContacts = true
+                case .alreadyExists:
+                    contactsMessage = AppCopy.contactsAlreadyExists
+                }
+            } catch ContactsServiceError.denied {
+                contactsNeedsSettings = true
+            } catch {
+                contactsMessage = error.localizedDescription
+            }
         }
     }
 

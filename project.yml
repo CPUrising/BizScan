@@ -55,7 +55,7 @@ targets:
         NSCameraUsageDescription: BizScan 需要使用相机拍摄名片。
         NSPhotoLibraryUsageDescription: BizScan 需要访问照片库以导入名片图片。
         NSPhotoLibraryAddUsageDescription: BizScan 需要将名片图片保存到照片库。
-        NSContactsUsageDescription: BizScan 需要访问通讯录以导出名片联系人。
+        NSContactsUsageDescription: BizScan 需要访问通讯录，以便把名片存入联系人。
 
   BizScanTests:
     type: bundle.unit-test

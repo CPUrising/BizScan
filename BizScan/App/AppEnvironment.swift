@@ -9,9 +9,14 @@ final class AppEnvironment {
     let repository: BusinessCardRepository
     let imageStore: ImageStoring
 
-    init(repository: BusinessCardRepository, imageStore: ImageStoring) {
+    init(
+        repository: BusinessCardRepository,
+        imageStore: ImageStoring,
+        contactsService: ContactsSaving? = nil
+    ) {
         self.repository = repository
         self.imageStore = imageStore
+        self.contactsService = contactsService ?? SystemContactsService()
         self.cardDetector = VisionCardDetector()
         self.imageCorrector = CoreImageCorrector()
         self.ocrService = VisionOCRService()
@@ -22,6 +27,7 @@ final class AppEnvironment {
     let imageCorrector: ImageCorrecting
     let ocrService: OCRRecognizing
     let vcardExporter: VCardExporting
+    let contactsService: ContactsSaving
 
     func makePipeline() -> ScanPipeline {
         ScanPipeline(

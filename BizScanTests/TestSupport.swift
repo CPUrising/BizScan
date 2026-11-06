@@ -101,3 +101,17 @@ enum TestSupport {
         return (container, directory)
     }
 }
+
+/// 通讯录写入替身，避免单测触碰真实通讯录与权限弹窗。
+@MainActor
+final class FakeContactsService: ContactsSaving {
+    var result: ContactsSaveResult = .saved
+    var error: Error?
+    private(set) var savedCards: [BusinessCard] = []
+
+    func save(_ card: BusinessCard) async throws -> ContactsSaveResult {
+        if let error { throw error }
+        savedCards.append(card)
+        return result
+    }
+}

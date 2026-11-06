@@ -1,6 +1,6 @@
 # 验收追踪矩阵（T01–T35）
 
-> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T30、T34–T35。
+> 唯一口径：`要求/01.md` 第十七章定义的 20 个 Reference Test Scenarios，以及 `0017` 起 UI 改版新增的 T21–T35。
 > 规则：每条 Txx 必须能在规范中找到场景，并在测试代码中找到实现；反之新增场景必须回填本表。
 > 状态：`未实现` / `已实现待执行` / `部分通过` / `通过` / `失败`（执行结果由 `docs/verify/<change>.md` 佐证；`已实现待执行` 表示测试代码已存在但从未运行）。
 
@@ -40,6 +40,9 @@
 | T30 | 编辑修正后待核对消失 | `specs/card-detail` → `T30 编辑修正后标记消失`<br>`specs/card-model` → `修正后不再标记` | `DetailViewModelTests.testSavingCorrectedValueClearsReviewFlag`、`ReviewViewModelTests.testCorrectedValueClearsUnverifiedFlag` | 部分通过（`0021`，L2；多行输入框无法稳定获得焦点，UI 用例未写） |
 | T34 | 主页「+」→ 手动新建无原图名片 | `specs/card-list` → `T34 手动新建并保存`<br>`specs/card-model` → `T34 手动新建允许无原图` | `BizScanUITests/CardListUITests.testT34CreateCardManually`、`NewCardViewModelTests.testSaveCreatesCardWithoutImage`、`testNoGroupKeepsNilGroup` | 通过（`0018`；UI 用例只录入姓名，手机号由 L2 覆盖） |
 | T35 | 手动新建空卡 → 二次确认 | `specs/card-list` → `T35 手动新建空卡需确认` | `BizScanUITests/CardListUITests.testT35EmptyManualCardRequiresConfirmation`、`NewCardViewModelTests.testEmptyCardRequiresConfirmation` | 通过（`0018`） |
+| T31 | 存入通讯录成功 | `specs/card-detail` → `T31 存入通讯录成功` | `DetailViewModelTests.testSaveToContactsSuccessDisablesButton`、`ContactsMapperTests`（5 项）；真机：`manual-device-checklist.md` 第 8b 节 | 部分通过（`0022`，L2；真实写入待真机） |
+| T32 | 通讯录权限拒绝 | `specs/card-detail` → `T32 权限拒绝时引导设置` | `DetailViewModelTests.testSaveToContactsDeniedNeedsSettings`；真机：清单第 8b 节 | 部分通过（`0022`，L2；权限弹窗待真机） |
+| T33 | 重复联系人提示 | `specs/card-detail` → `T33 重复联系人提示已存在` | `DetailViewModelTests.testSaveToContactsAlreadyExistsShowsMessage`、`ContactsMapperTests.testComparableValuesNormalizePhonesAndEmails`；真机：清单第 8b 节 | 部分通过（`0022`，L2；通讯录比对待真机） |
 
 ## 2. 概率性功能的评价项（不进入 100% 判定）
 

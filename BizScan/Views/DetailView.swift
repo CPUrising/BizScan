@@ -31,7 +31,8 @@ struct DetailView: View {
                 viewModel = DetailViewModel(
                     cardID: cardID,
                     repository: environment.repository,
-                    imageStore: environment.imageStore
+                    imageStore: environment.imageStore,
+                    contactsService: environment.contactsService
                 )
             }
             viewModel?.load()
@@ -84,6 +85,32 @@ struct DetailView: View {
         } message: {
             Text(viewModel?.errorMessage ?? "")
         }
+        .alert(
+            AppCopy.contactsPermissionTitle,
+            isPresented: Binding(
+                get: { viewModel?.contactsNeedsSettings ?? false },
+                set: { if !$0 { viewModel?.contactsNeedsSettings = false } }
+            )
+        ) {
+            Button(AppCopy.contactsGoToSettings) {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    openURL(url)
+                }
+                viewModel?.contactsNeedsSettings = false
+            }
+            Button(AppCopy.cancel, role: .cancel) { viewModel?.contactsNeedsSettings = false }
+        } message: {
+            Text("请在系统设置中允许 BizScan 访问通讯录。")
+        }
+        .alert(
+            AppCopy.contactsAlreadyExists,
+            isPresented: Binding(
+                get: { viewModel?.contactsMessage != nil },
+                set: { if !$0 { viewModel?.contactsMessage = nil } }
+            )
+        ) {
+            Button(AppCopy.done, role: .cancel) { viewModel?.contactsMessage = nil }
+        }
     }
 
     private func content(_ viewModel: DetailViewModel) -> some View {
@@ -110,7 +137,7 @@ struct DetailView: View {
         }
         .background(Theme.pageDetail)
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            footer
+            footer(viewModel)
         }
     }
 
@@ -444,26 +471,33 @@ struct DetailView: View {
 
     // MARK: - 底部
 
-    private var footer: some View {
-        Button {
-            // 0022 接入系统通讯录
+    private func footer(_ viewModel: DetailViewModel) -> some View {
+        let isBusy = viewModel.isSavingToContacts || viewModel.didSaveToContacts
+        return Button {
+            viewModel.saveToContacts()
         } label: {
-            Text(AppCopy.saveToContacts)
+            Text(footerTitle(viewModel))
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Theme.textPrimaryDetail)
                 .frame(maxWidth: .infinity)
                 .frame(height: 47)
                 .background(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Theme.green.opacity(0.4))
+                        .fill(Theme.green.opacity(isBusy ? 0.6 : 1))
                 )
         }
         .buttonStyle(.plain)
-        .disabled(true)
+        .disabled(isBusy)
         .padding(.horizontal, 24)
         .padding(.vertical, 16)
         .background(Theme.surface)
         .accessibilityIdentifier("BizScan.Detail.SaveToContacts")
+    }
+
+    private func footerTitle(_ viewModel: DetailViewModel) -> String {
+        if viewModel.didSaveToContacts { return AppCopy.contactsSaved }
+        if viewModel.isSavingToContacts { return AppCopy.contactsSaving }
+        return AppCopy.saveToContacts
     }
 
     private func exportCard() {
