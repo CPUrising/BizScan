@@ -80,6 +80,7 @@ final class ReviewViewModel {
         return !hasText
             && splitLines(mobilesText).isEmpty
             && splitLines(officePhonesText).isEmpty
+            && splitLines(faxesText).isEmpty
             && splitLines(emailsText).isEmpty
     }
 

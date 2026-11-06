@@ -103,6 +103,37 @@ final class DetailViewModelTests: XCTestCase {
         XCTAssertNil(try repository.fetch(id: card.id))
     }
 
+    func testNotesCanBeAddedEditedAndCleared() throws {
+        var card = makeCard()
+        card.notes = nil
+        let repository = InMemoryBusinessCardRepository(cards: [card])
+        let viewModel = DetailViewModel(
+            cardID: card.id,
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+
+        viewModel.load()
+        XCTAssertEqual(viewModel.notes, "")
+
+        viewModel.beginEditing()
+        viewModel.notes = "2026 Mobile Computing Conference"
+        viewModel.save()
+        XCTAssertEqual(try repository.fetch(id: card.id)?.notes, "2026 Mobile Computing Conference")
+        XCTAssertTrue(viewModel.displayRows.contains { $0.0 == "备注" && $0.1 == "2026 Mobile Computing Conference" })
+
+        viewModel.beginEditing()
+        viewModel.notes = "Follow up next week"
+        viewModel.save()
+        XCTAssertEqual(try repository.fetch(id: card.id)?.notes, "Follow up next week")
+
+        viewModel.beginEditing()
+        viewModel.notes = "   "
+        viewModel.save()
+        XCTAssertNil(try repository.fetch(id: card.id)?.notes)
+        XCTAssertFalse(viewModel.displayRows.contains { $0.0 == "备注" })
+    }
+
     func testAddTagThenSavePersistsToRepository() throws {
         let card = makeCard()
         let repository = InMemoryBusinessCardRepository(cards: [card])

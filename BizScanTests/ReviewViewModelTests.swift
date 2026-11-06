@@ -83,6 +83,7 @@ final class ReviewViewModelTests: XCTestCase {
         viewModel.department = ""
         viewModel.mobilesText = ""
         viewModel.officePhonesText = ""
+        viewModel.faxesText = ""
         viewModel.emailsText = ""
         viewModel.website = ""
         viewModel.address = ""
@@ -98,6 +99,33 @@ final class ReviewViewModelTests: XCTestCase {
 
         XCTAssertTrue(viewModel.didSave)
         XCTAssertEqual(try repository.fetchAll().count, 1)
+    }
+
+    func testFaxOnlyCardIsNotTreatedAsEmpty() throws {
+        let repository = InMemoryBusinessCardRepository()
+        let viewModel = try ReviewViewModel(
+            scanResult: TestSupport.makeScanResult(),
+            repository: repository,
+            imageStore: InMemoryImageStore()
+        )
+
+        viewModel.name = ""
+        viewModel.company = ""
+        viewModel.jobTitle = ""
+        viewModel.department = ""
+        viewModel.mobilesText = ""
+        viewModel.officePhonesText = ""
+        viewModel.faxesText = "021-8888-0001"
+        viewModel.emailsText = ""
+        viewModel.website = ""
+        viewModel.address = ""
+        viewModel.postalCode = ""
+
+        viewModel.save()
+
+        XCTAssertFalse(viewModel.showsEmptyWarning)
+        XCTAssertTrue(viewModel.didSave)
+        XCTAssertEqual(try repository.fetchAll().first?.faxes, ["021-8888-0001"])
     }
 
     func testSavingExistingCardKeepsIDAndDoesNotDuplicate() throws {
